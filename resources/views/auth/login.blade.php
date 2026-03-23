@@ -5,12 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login — SchoolFinder Egypt</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
     <link
         href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    {{-- <link rel="stylesheet" href="{{ asset('css/login.css') }}"> --}}
-    @vite(['resources/css/login.css', 'resources/js/login.js'])
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net"> --}}
+
+
+    @vite(['resources/css/login.css'])
+    @stack('styles')
 </head>
 
 <body>
@@ -39,7 +43,8 @@
             adminDashboard: "{{ route('admin.dashboard') }}",
         };
     </script>
-    <script src="{{ asset('js/login.js') }}"></script>
+    @vite(['resources/js/login.js'])
+
 </body>
 
 </html>

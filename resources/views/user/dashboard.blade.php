@@ -9,7 +9,7 @@ window.IS_RTL = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};
 if (window.APP_LOCALE) localStorage.setItem('sf_locale', window.APP_LOCALE);
 </script>
 <title>My Dashboard — SchoolFinder Egypt</title>
-<script src="https://cdn.tailwindcss.com"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0F2942;--blue:#1A5276;--teal:#148F77;--td:#117a65;--light:#F0F6FF;--text:#1C2B3A;--muted:#5D7285;--border:#D6E4F0;--bg:#F0F4F8;--err:#e74c3c;--ok:#148F77;--warn:#E67E22;}

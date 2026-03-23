@@ -1,3 +1,6 @@
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "tailwindcss";
+
 :root {
     --navy: #0F2942;
     --teal: #148F77;
@@ -674,3 +677,4 @@ nav {
         padding: 2rem 1.5rem;
     }
 }
+
