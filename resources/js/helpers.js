@@ -1,3 +1,104 @@
+/**
+ * SchoolFinder Egypt — Shared UI Helpers
+ * Toast, language toggle base, and common utilities.
+ */
+
+// ── TOAST ─────────────────────────────────────────────────────
+let _toastTimer;
+
+/**
+ * Show a toast notification
+ * @param {string} msg  - Message to display
+ * @param {string} type - 'ok' | 'err' | 'inf'
+ */
+function toast(msg, type = "inf") {
+    const el = document.getElementById("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.className = `toast show ${type}`;
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => {
+        el.className = "toast";
+    }, 2600);
+}
+
+// ── LANGUAGE ──────────────────────────────────────────────────
+
+/**
+ * Apply a translation object to the DOM
+ * Finds elements by ID and sets their textContent
+ * @param {object} translations - key: elementId, value: text
+ * @param {string[]} skip       - keys to skip (e.g. err_ ok_ prefixes)
+ */
+function applyTranslations(translations, skip = []) {
+    Object.keys(translations).forEach((k) => {
+        if (skip.some((prefix) => k.startsWith(prefix))) return;
+        const el = document.getElementById(k);
+        if (el) el.textContent = translations[k];
+    });
+}
+
+/**
+ * Toggle RTL/LTR direction on the document
+ * @param {string} lang - 'ar' | 'en'
+ */
+function setDirection(lang) {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    const lbl = document.getElementById("lang-lbl");
+    if (lbl) lbl.textContent = lang === "ar" ? "AR" : "EN";
+}
+
+// ── PASSWORD EYE TOGGLE ───────────────────────────────────────
+function toggleEye(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const show = input.type === "password";
+    input.type = show ? "text" : "password";
+    btn.innerHTML = show
+        ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+        : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+// ── AUTH GUARDS ───────────────────────────────────────────────
+
+/**
+ * User auth guard — call at top of user dashboard
+ * Redirects to /login if no token found
+ */
+function guardUser() {
+    const token = localStorage.getItem("sf_token");
+    if (!token) {
+        document.body.style.visibility = "hidden";
+        window.location.replace("/login");
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Admin auth guard — call at top of admin dashboard
+ * Redirects to /login if no token or not admin role
+ */
+function guardAdmin() {
+    const token = localStorage.getItem("sf_token");
+    const user = JSON.parse(localStorage.getItem("sf_user") || "{}");
+    if (!token || user.role !== "admin") {
+        document.body.style.visibility = "hidden";
+        window.location.replace("/login");
+        return false;
+    }
+    return true;
+}
+
+// Make available globally
+window.toast = toast;
+window.applyTranslations = applyTranslations;
+window.setDirection = setDirection;
+window.toggleEye = toggleEye;
+window.guardUser = guardUser;
+window.guardAdmin = guardAdmin;
+
 /* ═══════════════════════════════════════
    GLOBAL MODAL SYSTEM
    Replaces all alert(), confirm(), prompt()
@@ -31,9 +132,10 @@ function sfShowModal({ icon='', title, message, fields=[], buttons=[] }) {
 }
 
 function sfModalAction(action) {
+    const resolve = _sfModalResolve;
     if (action === 'cancel') {
         sfCloseModal();
-        if (_sfModalResolve) _sfModalResolve({ action: 'cancel', values: {} });
+        if (resolve) resolve({ action: 'cancel', values: {} });
         return;
     }
     const values = {};
@@ -41,7 +143,7 @@ function sfModalAction(action) {
         values[el.id.replace('sf-field-', '')] = el.value.trim();
     });
     sfCloseModal();
-    if (_sfModalResolve) _sfModalResolve({ action, values });
+    if (resolve) resolve({ action, values });
 }
 
 function sfCloseModal() {
@@ -51,8 +153,9 @@ function sfCloseModal() {
 
 function sfModalOverlayClick(e) {
     if (e.target === document.getElementById('sf-modal-overlay')) {
+        const resolve = _sfModalResolve;
         sfCloseModal();
-        if (_sfModalResolve) _sfModalResolve({ action: 'cancel', values: {} });
+        if (resolve) resolve({ action: 'cancel', values: {} });
     }
 }
 
