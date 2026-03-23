@@ -1,0 +1,87 @@
+name: SchoolFinder Egypt CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: schoolfinder_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      # ── Setup PHP ──────────────────────────────────────────────────────────
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, mysql, pdo_mysql
+          coverage: none
+
+      # ── Checkout code ──────────────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Setup .env ─────────────────────────────────────────────────────────
+      - name: Copy .env
+        run: cp .env.example .env.testing
+
+      - name: Set environment variables
+        run: |
+          echo "APP_ENV=testing" >> .env.testing
+          echo "APP_KEY=" >> .env.testing
+          echo "DB_CONNECTION=mysql" >> .env.testing
+          echo "DB_HOST=127.0.0.1" >> .env.testing
+          echo "DB_PORT=3306" >> .env.testing
+          echo "DB_DATABASE=schoolfinder_test" >> .env.testing
+          echo "DB_USERNAME=root" >> .env.testing
+          echo "DB_PASSWORD=root" >> .env.testing
+
+      # ── Install dependencies ───────────────────────────────────────────────
+      - name: Install Composer dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      # ── Generate key ───────────────────────────────────────────────────────
+      - name: Generate application key
+        run: php artisan key:generate --env=testing
+
+      # ── Permissions ────────────────────────────────────────────────────────
+      - name: Set directory permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      # ── Database ───────────────────────────────────────────────────────────
+      - name: Run migrations
+        env:
+          APP_ENV: testing
+        run: php artisan migrate --env=testing --force
+
+      - name: Seed test data
+        env:
+          APP_ENV: testing
+        run: php artisan db:seed --env=testing --force
+
+      # ── Tests ──────────────────────────────────────────────────────────────
+      - name: Run PHPUnit tests
+        env:
+          APP_ENV: testing
+        run: php artisan test --env=testing
+
+      # ── Code quality (optional) ────────────────────────────────────────────
+      - name: Check code style
+        run: vendor/bin/pint --test
+        continue-on-error: true
