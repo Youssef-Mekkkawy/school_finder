@@ -10,7 +10,6 @@ export default defineConfig({
                 'resources/css/login.css',
                 'resources/js/app.js',
                 'resources/js/api.js',
-                'resources/js/helper.js',
                 'resources/js/login.js',
             ],
             refresh: true,
