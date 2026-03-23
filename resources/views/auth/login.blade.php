@@ -9,7 +9,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/login.css') }}"> --}}
+    @vite(['resources/css/login.css', 'resources/js/login.js'])
 </head>
 
 <body>
