@@ -1,0 +1,11 @@
+/*
+ * SchoolFinder Egypt
+ *
+ * All page CSS is inline inside each Blade layout file:
+ *   - layouts/app.blade.php    → homepage + user dashboard CSS
+ *   - layouts/guest.blade.php  → login page CSS
+ *   - layouts/admin.blade.php  → admin dashboard CSS
+ *
+ * This file is intentionally empty.
+ * Do NOT add @import 'tailwindcss' here — Tailwind is loaded via CDN.
+ */

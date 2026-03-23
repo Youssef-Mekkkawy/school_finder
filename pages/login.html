@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — SchoolFinder Egypt</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F2942;--teal:#148F77;--td:#117a65;--light:#F0F6FF;--text:#1C2B3A;--muted:#5D7285;--border:#D6E4F0;--bg:#F7FAFD;--err:#e74c3c;--ok:#148F77;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+h1,h2,h3,h4{font-family:'Sora',sans-serif;}
+
+/* NAV */
+nav{background:var(--navy);box-shadow:0 2px 20px rgba(15,41,66,.4);}
+.nav-i{max-width:1280px;margin:auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--teal),#1abc9c);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;color:white;font-size:1rem;}
+.logo-txt{font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;color:white;}
+.logo-txt span{color:#52d9bd;}
+.lang-btn{display:flex;align-items:center;gap:.4rem;padding:.34rem .85rem;background:rgba(255,255,255,.1);border-radius:20px;cursor:pointer;color:#a8c4d8;font-size:.8rem;font-weight:600;border:none;transition:all .2s;}
+.lang-btn:hover{background:rgba(255,255,255,.18);color:white;}
+
+/* LAYOUT */
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:2.5rem 1.5rem;}
+.wrap{display:grid;grid-template-columns:1fr 1fr;max-width:960px;width:100%;background:white;border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(15,41,66,.14);border:1px solid var(--border);}
+
+/* LEFT PANEL */
+.panel-left{background:linear-gradient(160deg,var(--navy) 0%,#1a3a5c 55%,#1a5276 100%);padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+.panel-left::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");}
+.panel-left-inner{position:relative;z-index:1;}
+.panel-badge{display:inline-flex;align-items:center;gap:.45rem;background:rgba(20,143,119,.2);border:1px solid rgba(20,143,119,.4);border-radius:20px;padding:.3rem .85rem;font-size:.78rem;color:#52d9bd;font-weight:500;margin-bottom:2rem;}
+.panel-left h2{font-size:1.65rem;font-weight:800;color:white;line-height:1.3;margin-bottom:.85rem;}
+.panel-left h2 span{color:#52d9bd;}
+.panel-left p{color:#a8c4d8;font-size:.9rem;line-height:1.7;margin-bottom:2rem;}
+.feature-list{display:flex;flex-direction:column;gap:.75rem;}
+.feature{display:flex;align-items:center;gap:.7rem;color:#c8dde9;font-size:.87rem;}
+.feature-dot{width:22px;height:22px;background:rgba(20,143,119,.25);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.panel-stats{display:flex;gap:1.5rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.12);}
+.pstat{text-align:center;}
+.pstat-n{font-family:'Sora',sans-serif;font-weight:800;font-size:1.2rem;color:white;}
+.pstat-l{font-size:.75rem;color:#7a9ab5;margin-top:.1rem;}
+
+/* RIGHT PANEL — FORM */
+.panel-right{padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center;}
+.form-header{margin-bottom:2rem;}
+.form-header h3{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:.35rem;}
+.form-header p{color:var(--muted);font-size:.9rem;}
+
+/* TABS */
+.tabs{display:flex;background:var(--light);border-radius:10px;padding:.22rem;margin-bottom:1.8rem;gap:.2rem;}
+.tab{flex:1;padding:.5rem;border:none;background:transparent;border-radius:8px;font-family:'Sora',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;color:var(--muted);transition:all .2s;}
+.tab.act{background:white;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+
+/* FORM FIELDS */
+.field{margin-bottom:1.1rem;}
+.field label{display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:.4rem;}
+.field-wrap{position:relative;display:flex;align-items:center;}
+.field-icon{position:absolute;left:.85rem;color:var(--muted);pointer-events:none;}
+.field input,.field select{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .95rem .65rem 2.6rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:all .2s;background:white;}
+.field input:focus,.field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(20,143,119,.1);}
+.field input.err-field{border-color:var(--err);box-shadow:0 0 0 3px rgba(231,76,60,.08);}
+.field input.ok-field{border-color:var(--ok);}
+.field-msg{font-size:.76rem;margin-top:.3rem;padding-left:.2rem;}
+.field-msg.err{color:var(--err);}
+.field-msg.ok{color:var(--ok);}
+.eye-btn{position:absolute;right:.85rem;background:none;border:none;cursor:pointer;color:var(--muted);transition:color .2s;padding:.2rem;}
+.eye-btn:hover{color:var(--navy);}
+
+/* ROLE SELECTOR */
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem;}
+.role-card{border:1.5px solid var(--border);border-radius:10px;padding:.75rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.65rem;}
+.role-card:hover{border-color:var(--teal);}
+.role-card.sel{border-color:var(--teal);background:#E8F5F2;}
+.role-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.role-name{font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;color:var(--navy);}
+.role-desc{font-size:.72rem;color:var(--muted);}
+
+/* PASSWORD STRENGTH */
+.strength-bar{display:flex;gap:.25rem;margin-top:.4rem;}
+.sb{height:3px;flex:1;border-radius:2px;background:var(--border);transition:background .3s;}
+.sb.weak{background:#e74c3c;}
+.sb.med{background:#f39c12;}
+.sb.strong{background:var(--ok);}
+.strength-txt{font-size:.73rem;margin-top:.3rem;}
+
+/* SUBMIT */
+.sub-btn{width:100%;background:linear-gradient(135deg,var(--teal),var(--td));color:white;border:none;border-radius:10px;padding:.75rem;font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s;margin-top:.3rem;position:relative;overflow:hidden;}
+.sub-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(20,143,119,.35);}
+.sub-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+.sub-btn .spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;}
+.sub-btn.loading .btn-txt{display:none;}
+.sub-btn.loading .spinner{display:block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* DIVIDER */
+.or{display:flex;align-items:center;gap:.8rem;margin:1.2rem 0;color:var(--muted);font-size:.82rem;}
+.or::before,.or::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* FORGOT */
+.forgot{text-align:right;margin-top:-.4rem;margin-bottom:.8rem;}
+.forgot a{font-size:.8rem;color:var(--teal);text-decoration:none;font-weight:500;}
+.forgot a:hover{text-decoration:underline;}
+
+/* REMEMBER */
+.check-row{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;}
+.check-row input{width:15px;height:15px;accent-color:var(--teal);cursor:pointer;}
+.check-row label{font-size:.83rem;color:var(--muted);cursor:pointer;}
+
+/* SWITCH */
+.switch{text-align:center;font-size:.85rem;color:var(--muted);margin-top:1.2rem;}
+.switch a{color:var(--teal);font-weight:600;text-decoration:none;cursor:pointer;}
+.switch a:hover{text-decoration:underline;}
+
+/* TERMS */
+.terms{font-size:.78rem;color:var(--muted);text-align:center;margin-top:.8rem;line-height:1.5;}
+.terms a{color:var(--teal);text-decoration:none;}
+
+/* ALERT */
+.alert{border-radius:10px;padding:.75rem 1rem;font-size:.85rem;margin-bottom:1.1rem;display:none;align-items:center;gap:.6rem;}
+.alert.show{display:flex;}
+.alert.err-a{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;}
+.alert.ok-a{background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;}
+
+/* FOOTER */
+.foot{padding:1.2rem 2rem;text-align:center;font-size:.78rem;color:#9ab5c8;border-top:1px solid var(--border);background:white;}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:.62rem 1.05rem;border-radius:10px;font-size:.83rem;z-index:400;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .3s,transform .3s;opacity:0;transform:translateY(8px);pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.ok{border-left:3px solid #52d9bd;}
+.toast.err{border-left:3px solid #e74c3c;}
+
+@media(max-width:720px){
+  .wrap{grid-template-columns:1fr;}
+  .panel-left{display:none;}
+  .panel-right{padding:2rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-i">
+    <a href="homepage.html" class="logo">
+      <div class="logo-icon">SF</div>
+      <span class="logo-txt">School<span>Finder</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:.8rem">
+      <button class="lang-btn" onclick="toggleLang()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        <span id="lang-lbl">EN</span>
+      </button>
+      <a href="homepage.html" style="color:#a8c4d8;font-size:.85rem;text-decoration:none;font-weight:500;transition:color .2s" id="nav-back">← Back to Schools</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="wrap">
+
+    <!-- LEFT PANEL -->
+    <div class="panel-left">
+      <div class="panel-left-inner">
+        <div class="panel-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span id="pb-txt">Trusted by Parents in Cairo</span>
+        </div>
+        <h2 id="pl-title">Welcome to <span>SchoolFinder</span> Egypt</h2>
+        <p id="pl-sub">Your account gives you access to favorites, reviews, appointment booking, and school comparison tools.</p>
+        <div class="feature-list">
+          <div class="feature">
+            <div class="feature-dot">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#52d9bd" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <span id="f1">Save favorite schools and compare them</span>
+          </div>
+          <div class="feature">
+            <div class="feature-dot">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#52d9bd" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <span id="f2">Write and read honest parent reviews</span>
+          </div>
+          <div class="feature">
+            <div class="feature-dot">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#52d9bd" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <span id="f3">Book school visits directly from the app</span>
+          </div>
+          <div class="feature">
+            <div class="feature-dot">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#52d9bd" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <span id="f4">Get notified when school fees are updated</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel-stats">
+        <div class="pstat"><div class="pstat-n">105+</div><div class="pstat-l" id="ps1">Schools</div></div>
+        <div class="pstat"><div class="pstat-n">500+</div><div class="pstat-l" id="ps2">Reviews</div></div>
+        <div class="pstat"><div class="pstat-n">Free</div><div class="pstat-l" id="ps3">Always</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="panel-right">
+
+      <div class="form-header">
+        <h3 id="form-title">Welcome back</h3>
+        <p id="form-sub">Sign in to your SchoolFinder account</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab act" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="tab" id="tab-register" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- ALERT -->
+      <div class="alert" id="alert">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span id="alert-msg"></span>
+      </div>
+
+      <!-- ── LOGIN FORM ── -->
+      <form id="loginForm" onsubmit="submitLogin(event)" novalidate>
+
+        <!-- Role Selector (shows on login too for demo) -->
+        <div style="margin-bottom:1.1rem">
+          <label style="display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:.5rem" id="role-lbl">Login as</label>
+          <div class="role-grid">
+            <div class="role-card sel" id="role-user" onclick="selectRole('user')">
+              <div class="role-icon" style="background:#E8F5F2">👨‍👩‍👧</div>
+              <div><div class="role-name" id="rn-user">Parent / Student</div><div class="role-desc" id="rd-user">Browse & compare schools</div></div>
+            </div>
+            <div class="role-card" id="role-admin" onclick="selectRole('admin')">
+              <div class="role-icon" style="background:#EEF2FF">🛡️</div>
+              <div><div class="role-name" id="rn-admin">Admin</div><div class="role-desc" id="rd-admin">Manage platform data</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field">
+          <label id="lbl-email">Email Address</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            <input type="email" id="loginEmail" placeholder="your@email.com" oninput="validateEmail(this)">
+          </div>
+          <div class="field-msg" id="email-msg"></div>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label id="lbl-pass">Password</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="loginPass" placeholder="••••••••" oninput="clearFieldErr(this)">
+            <button type="button" class="eye-btn" onclick="toggleEye('loginPass',this)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="field-msg" id="pass-msg"></div>
+        </div>
+
+        <!-- Remember + Forgot -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <div class="check-row" style="margin-bottom:0">
+            <input type="checkbox" id="remember">
+            <label for="remember" id="lbl-rem">Remember me</label>
+          </div>
+          <div class="forgot"><a href="#" onclick="showForgot();return false;" id="lnk-forgot">Forgot password?</a></div>
+        </div>
+
+        <button type="submit" class="sub-btn" id="login-btn">
+          <span class="btn-txt" id="login-btn-txt">Sign In →</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="switch" style="margin-top:1rem">
+          <span id="sw-login-txt">Don't have an account?</span>
+          <a onclick="switchTab('register')" id="sw-login-lnk"> Register for free</a>
+        </div>
+      </form>
+
+      <!-- ── REGISTER FORM ── -->
+      <form id="registerForm" style="display:none" onsubmit="submitRegister(event)" novalidate>
+
+        <!-- Full Name -->
+        <div class="field">
+          <label id="lbl-name">Full Name</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="regName" placeholder="Omar Ahmed" oninput="validateName(this)">
+          </div>
+          <div class="field-msg" id="name-msg"></div>
+        </div>
+
+        <!-- Email -->
+        <div class="field">
+          <label id="lbl-remail">Email Address</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            <input type="email" id="regEmail" placeholder="your@email.com" oninput="validateEmail(this)">
+          </div>
+          <div class="field-msg" id="remail-msg"></div>
+        </div>
+
+        <!-- Phone -->
+        <div class="field">
+          <label id="lbl-phone">Phone Number <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l1.09-1.09a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <input type="tel" id="regPhone" placeholder="+20 1XX XXX XXXX">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label id="lbl-rpass">Password</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="regPass" placeholder="Min. 8 characters" oninput="checkStrength(this)">
+            <button type="button" class="eye-btn" onclick="toggleEye('regPass',this)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="strength-bar"><div class="sb" id="sb1"></div><div class="sb" id="sb2"></div><div class="sb" id="sb3"></div><div class="sb" id="sb4"></div></div>
+          <div class="strength-txt" id="str-txt" style="color:var(--muted)"></div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="field">
+          <label id="lbl-cpass">Confirm Password</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="regConf" placeholder="Repeat password" oninput="checkMatch(this)">
+            <button type="button" class="eye-btn" onclick="toggleEye('regConf',this)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="field-msg" id="conf-msg"></div>
+        </div>
+
+        <!-- Language Preference -->
+        <div class="field">
+          <label id="lbl-lang-pref">Preferred Language</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+            <select id="regLang" style="padding-left:2.6rem">
+              <option value="en">English</option>
+              <option value="ar">العربية (Arabic)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div class="check-row" style="margin-bottom:1rem;align-items:flex-start">
+          <input type="checkbox" id="agreeTerms" style="margin-top:.2rem">
+          <label for="agreeTerms" id="lbl-terms" style="font-size:.8rem;color:var(--muted);line-height:1.5">I agree to the <a href="#" style="color:var(--teal);text-decoration:none">Terms of Service</a> and <a href="#" style="color:var(--teal);text-decoration:none">Privacy Policy</a></label>
+        </div>
+
+        <button type="submit" class="sub-btn" id="reg-btn">
+          <span class="btn-txt" id="reg-btn-txt">Create Account →</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="switch" style="margin-top:1rem">
+          <span id="sw-reg-txt">Already have an account?</span>
+          <a onclick="switchTab('login')" id="sw-reg-lnk"> Sign in here</a>
+        </div>
+      </form>
+
+      <!-- FORGOT PASSWORD FORM -->
+      <form id="forgotForm" style="display:none" onsubmit="submitForgot(event)" novalidate>
+        <div style="text-align:center;margin-bottom:1.5rem">
+          <div style="width:52px;height:52px;background:#E8F5F2;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+          </div>
+          <h4 id="fg-title" style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem">Forgot Password?</h4>
+          <p id="fg-sub" style="font-size:.85rem;color:var(--muted)">Enter your email and we'll send you a reset link.</p>
+        </div>
+        <div class="field">
+          <label id="fg-lbl">Email Address</label>
+          <div class="field-wrap">
+            <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            <input type="email" id="forgotEmail" placeholder="your@email.com">
+          </div>
+        </div>
+        <button type="submit" class="sub-btn">
+          <span class="btn-txt" id="fg-btn-txt">Send Reset Link →</span>
+          <div class="spinner"></div>
+        </button>
+        <div style="text-align:center;margin-top:1rem">
+          <a onclick="switchTab('login')" style="font-size:.83rem;color:var(--teal);cursor:pointer;font-weight:500" id="fg-back">← Back to Login</a>
+        </div>
+      </form>
+
+    </div><!-- end panel-right -->
+  </div><!-- end wrap -->
+</div><!-- end main -->
+
+<div class="foot">© 2026 SchoolFinder Egypt — International Schools Database in Cairo</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════
+   TRANSLATIONS
+   ═══════════════════════════════ */
+const TR = {
+  en:{
+    "pb-txt":"Trusted by Parents in Cairo",
+    "pl-title":`Welcome to <span>SchoolFinder</span> Egypt`,
+    "pl-sub":"Your account gives you access to favorites, reviews, appointment booking, and school comparison tools.",
+    f1:"Save favorite schools and compare them",
+    f2:"Write and read honest parent reviews",
+    f3:"Book school visits directly from the app",
+    f4:"Get notified when school fees are updated",
+    ps1:"Schools", ps2:"Reviews", ps3:"Always",
+    "form-title":"Welcome back","form-sub":"Sign in to your SchoolFinder account",
+    "tab-login":"Login","tab-register":"Register",
+    "role-lbl":"Login as",
+    "rn-user":"Parent / Student","rd-user":"Browse & compare schools",
+    "rn-admin":"Admin","rd-admin":"Manage platform data",
+    "lbl-email":"Email Address","lbl-pass":"Password",
+    "lbl-rem":"Remember me","lnk-forgot":"Forgot password?",
+    "login-btn-txt":"Sign In →",
+    "sw-login-txt":"Don't have an account?","sw-login-lnk":"Register for free",
+    "lbl-name":"Full Name","lbl-remail":"Email Address",
+    "lbl-phone":"Phone Number","lbl-rpass":"Password",
+    "lbl-cpass":"Confirm Password","lbl-lang-pref":"Preferred Language",
+    "lbl-terms":"I agree to the Terms of Service and Privacy Policy",
+    "reg-btn-txt":"Create Account →",
+    "sw-reg-txt":"Already have an account?","sw-reg-lnk":"Sign in here",
+    "fg-title":"Forgot Password?","fg-sub":"Enter your email and we'll send you a reset link.",
+    "fg-lbl":"Email Address","fg-btn-txt":"Send Reset Link →","fg-back":"← Back to Login",
+    "nav-back":"← Back to Schools",
+    err_email:"Please enter a valid email address.",
+    err_pass:"Password must be at least 8 characters.",
+    err_name:"Please enter your full name.",
+    err_match:"Passwords do not match.",
+    err_terms:"Please accept the terms to continue.",
+    err_fields:"Please fill in all required fields.",
+    err_login:"Invalid email or password. Try: user@test.com / password123",
+    err_admin:"Invalid admin credentials. Try: admin@schoolfinder.com / admin123",
+    ok_login:"Login successful! Redirecting...",
+    ok_register:"Account created! Welcome to SchoolFinder.",
+    ok_forgot:"Reset link sent! Check your email.",
+    str_weak:"Weak", str_med:"Medium", str_strong:"Strong", str_vstrong:"Very Strong",
+  },
+  ar:{
+    "pb-txt":"موثوق به من آلاف الآباء في القاهرة",
+    "pl-title":`مرحباً بك في <span>SchoolFinder</span> مصر`,
+    "pl-sub":"حسابك يمنحك الوصول إلى المفضلة والتقييمات وحجز المواعيد ومقارنة المدارس.",
+    f1:"احفظ مدارسك المفضلة وقارنها",
+    f2:"اكتب واقرأ تقييمات صادقة من أولياء الأمور",
+    f3:"احجز زيارات للمدارس مباشرة من التطبيق",
+    f4:"احصل على إشعارات عند تحديث مصاريف المدارس",
+    ps1:"مدرسة", ps2:"تقييم", ps3:"دائماً",
+    "form-title":"مرحباً بعودتك","form-sub":"سجل الدخول إلى حسابك",
+    "tab-login":"تسجيل الدخول","tab-register":"إنشاء حساب",
+    "role-lbl":"تسجيل الدخول كـ",
+    "rn-user":"ولي أمر / طالب","rd-user":"تصفح ومقارنة المدارس",
+    "rn-admin":"مسؤول","rd-admin":"إدارة بيانات المنصة",
+    "lbl-email":"البريد الإلكتروني","lbl-pass":"كلمة المرور",
+    "lbl-rem":"تذكرني","lnk-forgot":"نسيت كلمة المرور؟",
+    "login-btn-txt":"تسجيل الدخول →",
+    "sw-login-txt":"ليس لديك حساب؟","sw-login-lnk":"إنشاء حساب مجاني",
+    "lbl-name":"الاسم الكامل","lbl-remail":"البريد الإلكتروني",
+    "lbl-phone":"رقم الهاتف","lbl-rpass":"كلمة المرور",
+    "lbl-cpass":"تأكيد كلمة المرور","lbl-lang-pref":"اللغة المفضلة",
+    "lbl-terms":"أوافق على شروط الخدمة وسياسة الخصوصية",
+    "reg-btn-txt":"إنشاء الحساب →",
+    "sw-reg-txt":"لديك حساب بالفعل؟","sw-reg-lnk":"تسجيل الدخول هنا",
+    "fg-title":"نسيت كلمة المرور؟","fg-sub":"أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.",
+    "fg-lbl":"البريد الإلكتروني","fg-btn-txt":"إرسال رابط الإعادة →","fg-back":"← العودة لتسجيل الدخول",
+    "nav-back":"← العودة للمدارس",
+    err_email:"يرجى إدخال بريد إلكتروني صحيح.",
+    err_pass:"يجب أن تكون كلمة المرور 8 أحرف على الأقل.",
+    err_name:"يرجى إدخال اسمك الكامل.",
+    err_match:"كلمتا المرور غير متطابقتين.",
+    err_terms:"يرجى قبول الشروط للمتابعة.",
+    err_fields:"يرجى ملء جميع الحقول المطلوبة.",
+    err_login:"بيانات الدخول غير صحيحة. جرب: user@test.com / password123",
+    err_admin:"بيانات المسؤول غير صحيحة. جرب: admin@schoolfinder.com / admin123",
+    ok_login:"تم تسجيل الدخول بنجاح! جاري التحويل...",
+    ok_register:"تم إنشاء الحساب! مرحباً بك في SchoolFinder.",
+    ok_forgot:"تم إرسال رابط الإعادة! تحقق من بريدك.",
+    str_weak:"ضعيفة", str_med:"متوسطة", str_strong:"قوية", str_vstrong:"قوية جداً",
+  }
+};
+
+/* ═══════════════════════════════
+   STATE
+   ═══════════════════════════════ */
+let lang = 'en';
+let activeTab = 'login';
+let selectedRole = 'user';
+
+/* DUMMY CREDENTIALS — replace with Laravel API later */
+const CREDS = {
+  user:  { email:'user@test.com',  pass:'password123', redirect:'user-dashboard.html' },
+  admin: { email:'admin@schoolfinder.com', pass:'admin123', redirect:'admin-dashboard.html' },
+};
+
+const t = k => (TR[lang][k] || TR.en[k] || k);
+
+/* ═══════════════════════════════
+   LANGUAGE
+   ═══════════════════════════════ */
+function toggleLang() {
+  lang = lang === 'en' ? 'ar' : 'en';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('lang-lbl').textContent = lang === 'en' ? 'EN' : 'AR';
+  applyTR();
+}
+function applyTR() {
+  Object.keys(TR.en).forEach(k => {
+    if (k.startsWith('err_') || k.startsWith('ok_') || k.startsWith('str_')) return;
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (k === 'pl-title') { el.innerHTML = t(k); return; }
+    if (k === 'lbl-terms') { el.innerHTML = `I agree to the <a href="#" style="color:var(--teal);text-decoration:none">${lang==='ar'?'شروط الخدمة':'Terms of Service'}</a> ${lang==='ar'?'و':'and'} <a href="#" style="color:var(--teal);text-decoration:none">${lang==='ar'?'سياسة الخصوصية':'Privacy Policy'}</a>`; return; }
+    el.textContent = t(k);
+  });
+}
+
+/* ═══════════════════════════════
+   TABS
+   ═══════════════════════════════ */
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('loginForm').style.display    = tab==='login'    ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab==='register' ? 'block' : 'none';
+  document.getElementById('forgotForm').style.display   = tab==='forgot'   ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('act', tab==='login');
+  document.getElementById('tab-register').classList.toggle('act', tab==='register');
+  document.getElementById('tabs-row')?.classList.toggle('hidden', tab==='forgot');
+  hideAlert();
+  if (tab==='login') {
+    document.getElementById('form-title').textContent = t('form-title');
+    document.getElementById('form-sub').textContent   = t('form-sub');
+  } else if (tab==='register') {
+    document.getElementById('form-title').textContent = lang==='ar'?'إنشاء حساب جديد':'Create your account';
+    document.getElementById('form-sub').textContent   = lang==='ar'?'انضم إلى SchoolFinder مجاناً':'Join SchoolFinder for free';
+  }
+}
+
+/* ═══════════════════════════════
+   ROLE
+   ═══════════════════════════════ */
+function selectRole(r) {
+  selectedRole = r;
+  document.getElementById('role-user').classList.toggle('sel', r==='user');
+  document.getElementById('role-admin').classList.toggle('sel', r==='admin');
+}
+
+/* ═══════════════════════════════
+   VALIDATION HELPERS
+   ═══════════════════════════════ */
+function showFieldErr(input, msgId, msg) {
+  input.classList.add('err-field');
+  input.classList.remove('ok-field');
+  const el = document.getElementById(msgId);
+  if (el) { el.textContent = msg; el.className = 'field-msg err'; }
+}
+function showFieldOk(input, msgId) {
+  input.classList.remove('err-field');
+  input.classList.add('ok-field');
+  const el = document.getElementById(msgId);
+  if (el) { el.textContent = '✓'; el.className = 'field-msg ok'; }
+}
+function clearFieldErr(input) {
+  input.classList.remove('err-field','ok-field');
+  const map = { loginPass:'pass-msg', regPass:'rpass-msg', regConf:'conf-msg' };
+  const el = document.getElementById(map[input.id]);
+  if (el) { el.textContent=''; el.className='field-msg'; }
+}
+
+function validateEmail(input) {
+  const v = input.value.trim();
+  const msgId = input.id==='loginEmail' ? 'email-msg' : 'remail-msg';
+  if (!v) { clearFieldErr(input); return; }
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  ok ? showFieldOk(input, msgId) : showFieldErr(input, msgId, t('err_email'));
+}
+function validateName(input) {
+  const v = input.value.trim();
+  if (!v) { clearFieldErr(input); return; }
+  v.length >= 2 ? showFieldOk(input,'name-msg') : showFieldErr(input,'name-msg',t('err_name'));
+}
+function checkMatch(input) {
+  const pass = document.getElementById('regPass').value;
+  if (!input.value) { clearFieldErr(input); return; }
+  input.value === pass ? showFieldOk(input,'conf-msg') : showFieldErr(input,'conf-msg',t('err_match'));
+}
+
+/* ═══════════════════════════════
+   PASSWORD STRENGTH
+   ═══════════════════════════════ */
+function checkStrength(input) {
+  const v = input.value;
+  let score = 0;
+  if (v.length >= 8) score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+  const bars = [1,2,3,4].map(i => document.getElementById('sb'+i));
+  const cls = score<=1?'weak':score===2?'med':'strong';
+  const labels = [t('str_weak'),t('str_weak'),t('str_med'),t('str_strong'),t('str_vstrong')];
+  const colors = { weak:'#e74c3c', med:'#f39c12', strong:'var(--ok)' };
+  bars.forEach((b,i) => { b.className = 'sb'; if(i < score) b.classList.add(cls); });
+  const txt = document.getElementById('str-txt');
+  txt.textContent = v.length ? labels[score] : '';
+  txt.style.color = colors[cls]||'var(--ok)';
+}
+
+/* ═══════════════════════════════
+   EYE TOGGLE
+   ═══════════════════════════════ */
+function toggleEye(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  btn.innerHTML = show
+    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+/* ═══════════════════════════════
+   ALERT
+   ═══════════════════════════════ */
+function showAlert(msg, type='err') {
+  const el = document.getElementById('alert');
+  document.getElementById('alert-msg').textContent = msg;
+  el.className = `alert show ${type==='err'?'err-a':'ok-a'}`;
+}
+function hideAlert() {
+  document.getElementById('alert').className = 'alert';
+}
+
+/* ═══════════════════════════════
+   SUBMIT LOGIN
+   (Dummy — replace with fetch('/api/auth/login'))
+   ═══════════════════════════════ */
+function submitLogin(e) {
+  e.preventDefault();
+  hideAlert();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  if (!email || !pass) { showAlert(t('err_fields')); return; }
+
+  const btn = document.getElementById('login-btn');
+  btn.classList.add('loading'); btn.disabled = true;
+
+  /* Simulate API call — remove when connecting to Laravel */
+  setTimeout(() => {
+    btn.classList.remove('loading'); btn.disabled = false;
+    const cred = CREDS[selectedRole];
+    if (email === cred.email && pass === cred.pass) {
+      /* Success */
+      localStorage.setItem('sf_user', JSON.stringify({ email, role: selectedRole, name: selectedRole==='admin'?'Admin User':'Omar Ahmed' }));
+      showAlert(t('ok_login'), 'ok');
+      toast(t('ok_login'), 'ok');
+      setTimeout(() => { window.location.href = cred.redirect; }, 1200);
+    } else {
+      const msg = selectedRole === 'admin' ? t('err_admin') : t('err_login');
+      showAlert(msg);
+      document.getElementById('loginPass').classList.add('err-field');
+    }
+  }, 1000);
+}
+
+/* ═══════════════════════════════
+   SUBMIT REGISTER
+   (Dummy — replace with fetch('/api/auth/register'))
+   ═══════════════════════════════ */
+function submitRegister(e) {
+  e.preventDefault();
+  hideAlert();
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPass').value;
+  const conf  = document.getElementById('regConf').value;
+  const agree = document.getElementById('agreeTerms').checked;
+
+  if (!name || !email || !pass || !conf) { showAlert(t('err_fields')); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert(t('err_email')); return; }
+  if (pass.length < 8) { showAlert(t('err_pass')); return; }
+  if (pass !== conf) { showAlert(t('err_match')); return; }
+  if (!agree) { showAlert(t('err_terms')); return; }
+
+  const btn = document.getElementById('reg-btn');
+  btn.classList.add('loading'); btn.disabled = true;
+
+  setTimeout(() => {
+    btn.classList.remove('loading'); btn.disabled = false;
+    localStorage.setItem('sf_user', JSON.stringify({ email, name, role:'user' }));
+    showAlert(t('ok_register'), 'ok');
+    toast(t('ok_register'), 'ok');
+    setTimeout(() => { window.location.href = 'user-dashboard.html'; }, 1300);
+  }, 1100);
+}
+
+/* ═══════════════════════════════
+   SUBMIT FORGOT
+   ═══════════════════════════════ */
+function showForgot() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('forgotForm').style.display = 'block';
+  document.getElementById('tab-login').classList.remove('act');
+  document.getElementById('tab-register').classList.remove('act');
+}
+function submitForgot(e) {
+  e.preventDefault();
+  const email = document.getElementById('forgotEmail').value.trim();
+  if (!email) { showAlert(t('err_fields')); return; }
+  const btn = e.target.querySelector('.sub-btn');
+  btn.classList.add('loading'); btn.disabled = true;
+  setTimeout(() => {
+    btn.classList.remove('loading'); btn.disabled = false;
+    showAlert(t('ok_forgot'), 'ok');
+    toast(t('ok_forgot'), 'ok');
+  }, 900);
+}
+
+/* ═══════════════════════════════
+   TOAST
+   ═══════════════════════════════ */
+let ttimer;
+function toast(msg, type='inf') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  clearTimeout(ttimer);
+  ttimer = setTimeout(() => el.className = 'toast', 2600);
+}
+
+/* ═══════════════════════════════
+   INIT — check if already logged in
+   ═══════════════════════════════ */
+const sfUser = JSON.parse(localStorage.getItem('sf_user') || 'null');
+if (sfUser) {
+  const redirect = sfUser.role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
+  // Optional: auto-redirect if already logged in
+  // window.location.href = redirect;
+}
+applyTR();
+</script>
+</body>
+</html>

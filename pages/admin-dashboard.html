@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — SchoolFinder Egypt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0F2942;
+            --blue: #1A5276;
+            --teal: #148F77;
+            --td: #117a65;
+            --light: #F0F6FF;
+            --text: #1C2B3A;
+            --muted: #5D7285;
+            --border: #D6E4F0;
+            --bg: #F0F4F8;
+            --warn: #E67E22;
+            --err: #e74c3c;
+            --ok: #148F77;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: 'Sora', sans-serif;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 240px;
+            background: var(--navy);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 50;
+            transition: transform .3s;
+        }
+
+        [dir="rtl"] .sidebar {
+            left: auto;
+            right: 0;
+        }
+
+        [dir="rtl"] .main {
+            margin-left: 0;
+            margin-right: 240px;
+        }
+
+        [dir="rtl"] .sb-item {
+            border-left: none;
+            border-right: 3px solid transparent;
+        }
+
+        [dir="rtl"] .sb-item.act {
+            border-right-color: var(--teal);
+        }
+
+        [dir="rtl"] .sb-badge-count {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        [dir="rtl"] .sb-badge {
+            margin-left: 0;
+            margin-right: .4rem;
+        }
+
+        .sb-logo {
+            padding: 1.4rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            overflow: hidden;
+        }
+
+        .sb-logo .logo-txt {
+            white-space: nowrap;
+        }
+
+        .sb-badge {
+            background: rgba(231, 76, 60, .2);
+            color: #f87171;
+            font-size: .62rem;
+            font-weight: 700;
+            padding: .15rem .45rem;
+            border-radius: 5px;
+            margin-left: auto;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--teal), #1abc9c);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            color: white;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .logo-txt {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .logo-txt span {
+            color: #52d9bd;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .sb-section {
+            padding: .4rem 1rem .2rem;
+            font-size: .68rem;
+            font-weight: 700;
+            color: #4a6a82;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-top: .4rem;
+        }
+
+        .sb-item {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            padding: .62rem 1.2rem;
+            color: #a8c4d8;
+            text-decoration: none;
+            font-size: .88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .2s;
+            border-left: 3px solid transparent;
+            margin: 1px 0;
+        }
+
+        .sb-item:hover {
+            color: white;
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .sb-item.act {
+            color: white;
+            background: rgba(20, 143, 119, .18);
+            border-left-color: var(--teal);
+        }
+
+        .sb-item svg {
+            flex-shrink: 0;
+            opacity: .7;
+        }
+
+        .sb-item.act svg,
+        .sb-item:hover svg {
+            opacity: 1;
+        }
+
+        .sb-badge-count {
+            margin-left: auto;
+            background: var(--err);
+            color: white;
+            font-size: .65rem;
+            font-weight: 700;
+            padding: .12rem .45rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .sb-badge-ok {
+            background: var(--teal);
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            padding: .6rem .5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .sb-user:hover {
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .sb-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            color: white;
+            font-size: .85rem;
+            flex-shrink: 0;
+        }
+
+        .sb-uname {
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: .84rem;
+            color: white;
+        }
+
+        .sb-urole {
+            font-size: .72rem;
+            color: #52d9bd;
+        }
+
+        /* ── MAIN ── */
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: .85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, .05);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .page-title {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--navy);
+        }
+
+        .breadcrumb {
+            font-size: .8rem;
+            color: var(--muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .topbar-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            border: 1.5px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all .2s;
+            position: relative;
+        }
+
+        .topbar-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background: var(--err);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .32rem .8rem;
+            background: var(--light);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: .8rem;
+            font-weight: 600;
+            transition: all .2s;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        /* ── CONTENT ── */
+        .content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        /* ── STAT CARDS ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.3rem 1.4rem;
+            border: 1.5px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: all .2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-card.c1::after {
+            background: linear-gradient(90deg, var(--teal), #1abc9c);
+        }
+
+        .stat-card.c2::after {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+
+        .stat-card.c3::after {
+            background: linear-gradient(90deg, var(--warn), #d35400);
+        }
+
+        .stat-card.c4::after {
+            background: linear-gradient(90deg, #9b59b6, #8e44ad);
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: .9rem;
+        }
+
+        .si1 {
+            background: #E8F5F2;
+        }
+
+        .si2 {
+            background: #EBF5FB;
+        }
+
+        .si3 {
+            background: #FEF3E2;
+        }
+
+        .si4 {
+            background: #F5EEF8;
+        }
+
+        .stat-val {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 1.65rem;
+            color: var(--navy);
+            line-height: 1;
+        }
+
+        .stat-lbl {
+            font-size: .82rem;
+            color: var(--muted);
+            margin-top: .3rem;
+        }
+
+        .stat-delta {
+            font-size: .74rem;
+            font-weight: 600;
+            margin-top: .4rem;
+        }
+
+        .delta-up {
+            color: var(--ok);
+        }
+
+        .delta-dn {
+            color: var(--err);
+        }
+
+        /* ── SECTION CARD ── */
+        .sec-card {
+            background: white;
+            border-radius: 14px;
+            border: 1.5px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .sec-head {
+            padding: 1.1rem 1.4rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: .7rem;
+        }
+
+        .sec-head h3 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: .97rem;
+            color: var(--navy);
+        }
+
+        .sec-head-actions {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+        }
+
+        .btn-sm {
+            padding: .38rem .9rem;
+            border-radius: 8px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: all .2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+        }
+
+        .btn-teal {
+            background: var(--teal);
+            color: white;
+        }
+
+        .btn-teal:hover {
+            background: var(--td);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--navy);
+            border: 1.5px solid var(--border) !important;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--teal) !important;
+            color: var(--teal);
+        }
+
+        .btn-red {
+            background: #FEF2F2;
+            color: var(--err);
+        }
+
+        .btn-red:hover {
+            background: var(--err);
+            color: white;
+        }
+
+        .btn-warn {
+            background: #FEF3E2;
+            color: var(--warn);
+        }
+
+        .btn-warn:hover {
+            background: var(--warn);
+            color: white;
+        }
+
+        /* ── SEARCH BAR ── */
+        .tbl-search {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            background: var(--light);
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            padding: .42rem .85rem;
+            font-size: .85rem;
+            min-width: 200px;
+        }
+
+        .tbl-search input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .85rem;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .tbl-search input::placeholder {
+            color: #8fa8bb;
+        }
+
+        /* ── TABLE ── */
+        .tbl-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: #F8FAFF;
+            border-bottom: 2px solid var(--border);
+        }
+
+        th {
+            padding: .7rem 1rem;
+            text-align: left;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: .77rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: .75rem 1rem;
+            font-size: .86rem;
+            color: var(--text);
+            border-bottom: 1px solid #F0F6FF;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #FAFCFF;
+        }
+
+        .tbl-name {
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .tbl-sub {
+            font-size: .75rem;
+            color: var(--muted);
+            margin-top: .1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: .7rem;
+            font-weight: 600;
+            padding: .2rem .65rem;
+            border-radius: 20px;
+        }
+
+        .b-british {
+            background: #EEF2FF;
+            color: #3730A3;
+        }
+
+        .b-american {
+            background: #FFF7ED;
+            color: #9A3412;
+        }
+
+        .b-german {
+            background: #F0FDF4;
+            color: #166534;
+        }
+
+        .b-french {
+            background: #FFF1F2;
+            color: #9F1239;
+        }
+
+        .b-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .b-confirmed {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .b-cancelled {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .b-approved {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .b-review {
+            background: #EDE9FE;
+            color: #4C1D95;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: .35rem;
+            flex-wrap: nowrap;
+        }
+
+        .icon-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            border: 1.5px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all .2s;
+            flex-shrink: 0;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .icon-btn.del:hover {
+            border-color: var(--err);
+            color: var(--err);
+        }
+
+        .icon-btn.app:hover {
+            border-color: var(--ok);
+            color: var(--ok);
+        }
+
+        .stars {
+            color: #f39c12;
+            font-size: .85rem;
+        }
+
+        /* ── PAGINATION ── */
+        .tbl-foot {
+            padding: .85rem 1.4rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+
+        .tbl-info {
+            font-size: .82rem;
+            color: var(--muted);
+        }
+
+        .pg {
+            display: flex;
+            gap: .35rem;
+        }
+
+        .pgb {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: .8rem;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            color: var(--muted);
+            transition: all .2s;
+        }
+
+        .pgb:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .pgb.on {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: white;
+        }
+
+        /* ── MODAL ── */
+        .ov {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .ov.open {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 580px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
+        }
+
+        .modal.wide {
+            max-width: 740px;
+        }
+
+        .mh {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .mh h3 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--navy);
+        }
+
+        .mclose {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            border: 1.5px solid var(--border);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            transition: all .2s;
+        }
+
+        .mclose:hover {
+            border-color: var(--err);
+            color: var(--err);
+        }
+
+        .mb {
+            padding: 1.3rem 1.5rem;
+        }
+
+        .field {
+            margin-bottom: 1rem;
+        }
+
+        .field label {
+            display: block;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: .38rem;
+        }
+
+        .fi {
+            width: 100%;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            padding: .6rem .85rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .88rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .fi:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(20, 143, 119, .08);
+        }
+
+        .fi-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .8rem;
+        }
+
+        .fi-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: .8rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: .6rem;
+            padding-top: .8rem;
+            border-top: 1px solid var(--border);
+            margin-top: .8rem;
+        }
+
+        /* ── CONFIRM MODAL ── */
+        .confirm-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.4rem;
+        }
+
+        .confirm-icon.del {
+            background: #FEE2E2;
+        }
+
+        .confirm-icon.warn {
+            background: #FEF3E2;
+        }
+
+        /* ── NOTIFY MODAL ── */
+        .notif-preview {
+            background: var(--light);
+            border-radius: 10px;
+            padding: .85rem;
+            font-size: .84rem;
+            color: var(--text);
+            margin-top: .5rem;
+            border: 1.5px solid var(--border);
+            line-height: 1.6;
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--navy);
+            color: white;
+            padding: .65rem 1.1rem;
+            border-radius: 10px;
+            font-size: .83rem;
+            z-index: 400;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+            transition: opacity .3s, transform .3s;
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+            max-width: 300px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.ok {
+            border-left: 3px solid #52d9bd;
+        }
+
+        .toast.err {
+            border-left: 3px solid #e74c3c;
+        }
+
+        .toast.inf {
+            border-left: 3px solid #3498db;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--muted);
+        }
+
+        .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: .8rem;
+        }
+
+        .empty h4 {
+            font-size: .97rem;
+            color: var(--navy);
+            margin-bottom: .3rem;
+        }
+
+        /* ── QUICK CHART (CSS bars) ── */
+        .chart-row {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            margin-bottom: .7rem;
+        }
+
+        .chart-label {
+            font-size: .82rem;
+            color: var(--text);
+            width: 100px;
+            flex-shrink: 0;
+        }
+
+        .chart-bar-wrap {
+            flex: 1;
+            background: #F0F6FF;
+            border-radius: 6px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            height: 100%;
+            border-radius: 6px;
+            transition: width .6s ease;
+        }
+
+        .chart-val {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--navy);
+            width: 36px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        @media(max-width:900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width:600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── SIDEBAR ── -->
+    <div class="sidebar" id="sidebar">
+        <div class="sb-logo">
+            <div class="logo-icon">SF</div>
+            <div>
+                <div class="logo-txt">School<span>Finder</span></div>
+            </div>
+            <span class="sb-badge">Admin</span>
+        </div>
+
+        <nav class="sb-nav">
+            <div class="sb-section" id="sbs-main">Main</div>
+            <div class="sb-item act" onclick="showPage('dashboard',this)" id="si-dashboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                <span id="sl-dash">Dashboard</span>
+            </div>
+
+            <div class="sb-section" id="sbs-manage">Manage</div>
+            <div class="sb-item" onclick="showPage('schools',this)" id="si-schools">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9,22 9,12 15,12 15,22" />
+                </svg>
+                <span id="sl-schools">Schools</span>
+            </div>
+            <div class="sb-item" onclick="showPage('homepage',this)" id="si-homepage">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <path d="M3 9h18M9 21V9" />
+                </svg>
+                <span id="sl-homepage">Homepage</span>
+            </div>
+            <div class="sb-item" onclick="showPage('reviews',this)" id="si-reviews">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                <span id="sl-reviews">Reviews</span>
+                <span class="sb-badge-count" id="rev-badge">2</span>
+            </div>
+            <div class="sb-item" onclick="showPage('appointments',this)" id="si-appts">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span id="sl-appts">Appointments</span>
+                <span class="sb-badge-count" id="appt-badge">3</span>
+            </div>
+            <div class="sb-item" onclick="showPage('users',this)" id="si-users">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <span id="sl-users">Users</span>
+            </div>
+            <div class="sb-item" onclick="showPage('notifications',this)" id="si-notifs">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span id="sl-notifs">Notifications</span>
+            </div>
+
+            <div class="sb-section" id="sbs-sys">System</div>
+            <div class="sb-item" onclick="window.location.href='homepage.html'" id="si-site">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <span id="sl-site">View Website</span>
+            </div>
+            <div class="sb-item" onclick="doLogout()" id="si-logout">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16,17 21,12 16,7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                <span id="sl-logout">Logout</span>
+            </div>
+        </nav>
+
+        <div class="sb-footer">
+            <div class="sb-user">
+                <div class="sb-avatar">A</div>
+                <div>
+                    <div class="sb-uname" id="admin-name">Admin User</div>
+                    <div class="sb-urole">Administrator</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MAIN ── -->
+    <div class="main">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-btn" style="display:none" id="menu-btn"
+                    onclick="document.getElementById('sidebar').classList.toggle('open')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+                <div>
+                    <div class="page-title" id="page-title">Dashboard</div>
+                    <div class="breadcrumb" id="breadcrumb">Admin / Dashboard</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="lang-btn" onclick="toggleLang()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+                    </svg>
+                    <span id="lang-lbl">EN</span>
+                </button>
+                <div class="topbar-btn" onclick="showPage('notifications',document.getElementById('si-notifs'))">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    <div class="notif-dot"></div>
+                </div>
+                <a href="login.html" style="text-decoration:none">
+                    <div class="sb-avatar" style="width:32px;height:32px;font-size:.8rem;cursor:pointer">A</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="content" id="content">
+
+            <!-- ══ DASHBOARD PAGE ══ -->
+            <div id="page-dashboard">
+
+                <!-- STATS -->
+                <div class="stats-grid">
+                    <div class="stat-card c1">
+                        <div class="stat-icon si1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="var(--teal)" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9,22 9,12 15,12 15,22" />
+                            </svg></div>
+                        <div class="stat-val" id="sc-total">5</div>
+                        <div class="stat-lbl" id="sc-lbl">Total Schools</div>
+                        <div class="stat-delta delta-up" id="sc-delta">↑ Demo data</div>
+                    </div>
+                    <div class="stat-card c2">
+                        <div class="stat-icon si2"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="#3498db" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg></div>
+                        <div class="stat-val" id="us-total">12</div>
+                        <div class="stat-lbl" id="us-lbl">Registered Users</div>
+                        <div class="stat-delta delta-up" id="us-delta">↑ +3 this week</div>
+                    </div>
+                    <div class="stat-card c3">
+                        <div class="stat-icon si3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="var(--warn)" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            </svg></div>
+                        <div class="stat-val" id="rv-total">11</div>
+                        <div class="stat-lbl" id="rv-lbl">Total Reviews</div>
+                        <div class="stat-delta" style="color:var(--warn)" id="rv-delta">⚠ 2 pending approval</div>
+                    </div>
+                    <div class="stat-card c4">
+                        <div class="stat-icon si4"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="#9b59b6" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg></div>
+                        <div class="stat-val" id="ap-total">5</div>
+                        <div class="stat-lbl" id="ap-lbl">Appointments</div>
+                        <div class="stat-delta" style="color:#9b59b6" id="ap-delta">3 pending review</div>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem">
+
+                    <!-- Schools by Type -->
+                    <div class="sec-card">
+                        <div class="sec-head">
+                            <h3 id="ch1-title">Schools by Type</h3>
+                        </div>
+                        <div style="padding:1.2rem 1.4rem" id="type-chart">
+                            <div class="chart-row"><span class="chart-label">British</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:60%;background:linear-gradient(90deg,#3730A3,#6366f1)"></div>
+                                </div><span class="chart-val">3</span>
+                            </div>
+                            <div class="chart-row"><span class="chart-label">American</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:20%;background:linear-gradient(90deg,#9A3412,#f97316)"></div>
+                                </div><span class="chart-val">1</span>
+                            </div>
+                            <div class="chart-row"><span class="chart-label">German</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:20%;background:linear-gradient(90deg,var(--teal),#1abc9c)"></div>
+                                </div><span class="chart-val">1</span>
+                            </div>
+                            <div class="chart-row"><span class="chart-label">French</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:20%;background:linear-gradient(90deg,#9F1239,#f43f5e)"></div>
+                                </div><span class="chart-val">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Rated -->
+                    <div class="sec-card">
+                        <div class="sec-head">
+                            <h3 id="ch2-title">Top Rated Schools</h3>
+                        </div>
+                        <div style="padding:1.2rem 1.4rem" id="rating-chart">
+                            <div class="chart-row"><span class="chart-label" style="font-size:.75rem;width:130px">Cairo
+                                    American</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:96%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+                                </div><span class="chart-val">4.8</span>
+                            </div>
+                            <div class="chart-row"><span class="chart-label" style="font-size:.75rem;width:130px">BISC
+                                    Cairo</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:94%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+                                </div><span class="chart-val">4.7</span>
+                            </div>
+                            <div class="chart-row"><span class="chart-label" style="font-size:.75rem;width:130px">Rahn
+                                    Schulen</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:92%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+                                </div><span class="chart-val">4.6</span>
+                            </div>
+                            <div class="chart-row"><span class="chart-label" style="font-size:.75rem;width:130px">El
+                                    Alsson</span>
+                                <div class="chart-bar-wrap">
+                                    <div class="chart-bar"
+                                        style="width:90%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+                                </div><span class="chart-val">4.5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="sec-card">
+                    <div class="sec-head">
+                        <h3 id="ra-title">Recent Activity</h3>
+                        <button class="btn-sm btn-outline"
+                            onclick="showPage('appointments',document.getElementById('si-appts'))" id="ra-view">View
+                            All</button>
+                    </div>
+                    <div class="tbl-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="th-user">User</th>
+                                    <th id="th-action">Action</th>
+                                    <th id="th-school">School</th>
+                                    <th id="th-time">Time</th>
+                                    <th id="th-status">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ SCHOOLS PAGE ══ -->
+            <div id="page-schools" style="display:none">
+                <div class="sec-card">
+                    <div class="sec-head">
+                        <h3 id="sc-page-title">All Schools</h3>
+                        <div class="sec-head-actions">
+                            <div class="tbl-search">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.35-4.35" />
+                                </svg>
+                                <input type="text" id="school-search" placeholder="Search schools..."
+                                    oninput="filterSchoolTable()">
+                            </div>
+                            <button class="btn-sm btn-teal" onclick="openSchoolModal()" id="add-school-btn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                                <span id="add-btn-txt">Add School</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tbl-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="th-sc-name">School Name</th>
+                                    <th id="th-sc-type">Type</th>
+                                    <th id="th-sc-loc">Location</th>
+                                    <th id="th-sc-fee">Fee Range</th>
+                                    <th id="th-sc-rat">Rating</th>
+                                    <th id="th-sc-act">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schools-body"></tbody>
+                        </table>
+                    </div>
+                    <div class="tbl-foot">
+                        <span class="tbl-info" id="sc-tbl-info">Showing 5 of 5 schools</span>
+                        <div class="pg">
+                            <div class="pgb on">1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ REVIEWS PAGE ══ -->
+            <div id="page-reviews" style="display:none">
+                <div class="sec-card">
+                    <div class="sec-head">
+                        <h3 id="rv-page-title">Manage Reviews</h3>
+                        <div class="sec-head-actions">
+                            <select class="btn-sm btn-outline" id="rev-filter" onchange="filterRevTable()"
+                                style="cursor:pointer;border:1.5px solid var(--border)!important;">
+                                <option value="all" id="rf-all">All</option>
+                                <option value="pending" id="rf-pend">Pending</option>
+                                <option value="approved" id="rf-app">Approved</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tbl-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="th-rv-user">User</th>
+                                    <th id="th-rv-school">School</th>
+                                    <th id="th-rv-rating">Rating</th>
+                                    <th id="th-rv-comment">Comment</th>
+                                    <th id="th-rv-status">Status</th>
+                                    <th id="th-rv-act">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviews-body"></tbody>
+                        </table>
+                    </div>
+                    <div class="tbl-foot">
+                        <span class="tbl-info" id="rv-tbl-info">Showing all reviews</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ APPOINTMENTS PAGE ══ -->
+            <div id="page-appointments" style="display:none">
+                <div class="sec-card">
+                    <div class="sec-head">
+                        <h3 id="ap-page-title">Manage Appointments</h3>
+                        <div class="sec-head-actions">
+                            <select class="btn-sm btn-outline" id="appt-filter" onchange="filterApptTable()"
+                                style="cursor:pointer;border:1.5px solid var(--border)!important;">
+                                <option value="all" id="af-all">All</option>
+                                <option value="pending" id="af-pend">Pending</option>
+                                <option value="confirmed" id="af-conf">Confirmed</option>
+                                <option value="cancelled" id="af-canc">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tbl-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="th-ap-user">User</th>
+                                    <th id="th-ap-school">School</th>
+                                    <th id="th-ap-date">Date</th>
+                                    <th id="th-ap-msg">Message</th>
+                                    <th id="th-ap-status">Status</th>
+                                    <th id="th-ap-act">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appts-body"></tbody>
+                        </table>
+                    </div>
+                    <div class="tbl-foot">
+                        <span class="tbl-info" id="ap-tbl-info">Showing all appointments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ USERS PAGE ══ -->
+            <div id="page-users" style="display:none">
+                <div class="sec-card">
+                    <div class="sec-head">
+                        <h3 id="us-page-title">Registered Users</h3>
+                        <div class="sec-head-actions">
+                            <div class="tbl-search">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.35-4.35" />
+                                </svg>
+                                <input type="text" id="user-search" placeholder="Search users..."
+                                    oninput="filterUserTable()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tbl-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="th-us-name">Name</th>
+                                    <th id="th-us-email">Email</th>
+                                    <th id="th-us-joined">Joined</th>
+                                    <th id="th-us-favs">Favorites</th>
+                                    <th id="th-us-revs">Reviews</th>
+                                    <th id="th-us-act">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-body"></tbody>
+                        </table>
+                    </div>
+                    <div class="tbl-foot"><span class="tbl-info" id="us-tbl-info">Showing all users</span></div>
+                </div>
+            </div>
+
+            <!-- ══ NOTIFICATIONS PAGE ══ -->
+            <div id="page-notifications" style="display:none">
+                <div class="sec-card">
+                    <div class="sec-head">
+                        <h3 id="nt-page-title">Send Notification</h3>
+                    </div>
+                    <div style="padding:1.4rem 1.5rem;max-width:600px">
+                        <div class="field">
+                            <label id="nt-target-lbl">Send To</label>
+                            <select class="fi" id="nt-target">
+                                <option value="all" id="nt-all">All Users</option>
+                                <option value="user" id="nt-user">Specific User</option>
+                            </select>
+                        </div>
+                        <div class="field" id="nt-user-field" style="display:none">
+                            <label id="nt-user-lbl">Select User</label>
+                            <select class="fi" id="nt-user-sel">
+                                <option>Omar Ahmed — omar@test.com</option>
+                                <option>Sara Mohamed — sara@test.com</option>
+                                <option>Layla Hassan — layla@test.com</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label id="nt-title-lbl">Notification Title</label>
+                            <input class="fi" type="text" id="nt-title"
+                                placeholder="e.g. Fee Update — BISC Cairo 2026/2027" oninput="updatePreview()">
+                        </div>
+                        <div class="field">
+                            <label id="nt-msg-lbl">Message</label>
+                            <textarea class="fi" id="nt-msg" rows="4"
+                                placeholder="Write your notification message here..." oninput="updatePreview()"
+                                style="resize:none"></textarea>
+                        </div>
+                        <div class="field">
+                            <label id="nt-prev-lbl">Preview</label>
+                            <div class="notif-preview" id="nt-preview">
+                                <div style="font-weight:600;font-size:.88rem;color:var(--navy);margin-bottom:.3rem"
+                                    id="prev-title">Notification Title</div>
+                                <div style="font-size:.84rem;color:var(--muted)" id="prev-msg">Your message will appear
+                                    here...</div>
+                            </div>
+                        </div>
+                        <button class="btn-sm btn-teal" style="padding:.55rem 1.4rem;font-size:.88rem"
+                            onclick="sendNotification()" id="send-notif-btn">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22,2 15,22 11,13 2,9" />
+                            </svg>
+                            <span id="send-btn-txt">Send Notification</span>
+                        </button>
+                    </div>
+                    <!-- Notification History -->
+                    <div style="border-top:1px solid var(--border)">
+                        <div class="sec-head">
+                            <h3 id="nh-title">Notification History</h3>
+                        </div>
+                        <div class="tbl-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th id="th-nt-title">Title</th>
+                                        <th id="th-nt-target">Target</th>
+                                        <th id="th-nt-sent">Sent At</th>
+                                        <th id="th-nt-read">Read Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notif-history"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end content -->
+
+        <!-- ══ HOMEPAGE MANAGEMENT PAGE ══ -->
+        <div id="page-homepage" style="display:none" class="content" style="padding:0">
+
+            <!-- Hero Section -->
+            <div class="sec-card">
+                <div class="sec-head">
+                    <div>
+                        <h3 id="hp-hero-title">Hero Section</h3>
+                        <div style="font-size:.78rem;color:var(--muted);margin-top:.15rem" id="hp-hero-sub">Edit the
+                            main banner text visitors see first</div>
+                    </div>
+                    <button class="btn-sm btn-teal" onclick="saveHero()" id="hp-save-hero">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17,21 17,13 7,13 7,21" />
+                            <polyline points="7,3 7,8 15,8" />
+                        </svg>
+                        <span id="hp-save-hero-txt">Save Hero</span>
+                    </button>
+                </div>
+                <div style="padding:1.4rem 1.5rem">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                        <div class="field">
+                            <label id="hp-badge-lbl">Badge Text</label>
+                            <input class="fi" type="text" id="hp-badge" value="105+ International Schools in Cairo">
+                        </div>
+                        <div class="field">
+                            <label id="hp-title-lbl">Hero Title</label>
+                            <input class="fi" type="text" id="hp-title"
+                                value="Find the Perfect International School for Your Child">
+                        </div>
+                        <div class="field" style="grid-column:1/-1">
+                            <label id="hp-subtitle-lbl">Hero Subtitle</label>
+                            <textarea class="fi" id="hp-subtitle" rows="2"
+                                style="resize:none">Search, compare, and evaluate international schools in Cairo — all in one place. Save hours of research with powerful filters and real parent reviews.</textarea>
+                        </div>
+                        <div class="field">
+                            <label id="hp-btn-lbl">Search Button Text</label>
+                            <input class="fi" type="text" id="hp-btn" value="Search Schools →">
+                        </div>
+                        <div class="field">
+                            <label id="hp-cta-lbl">CTA Primary Button</label>
+                            <input class="fi" type="text" id="hp-cta" value="Browse All Schools">
+                        </div>
+                    </div>
+                    <!-- Live Preview -->
+                    <div
+                        style="margin-top:1rem;background:linear-gradient(160deg,var(--navy),#1a5276);border-radius:12px;padding:1.5rem 2rem;text-align:center;position:relative;overflow:hidden">
+                        <div style="background:rgba(20,143,119,.2);border:1px solid rgba(20,143,119,.4);border-radius:20px;display:inline-flex;align-items:center;gap:.4rem;padding:.28rem .8rem;font-size:.75rem;color:#52d9bd;margin-bottom:.8rem"
+                            id="prev-badge">105+ International Schools in Cairo</div>
+                        <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:1.2rem;color:white;margin-bottom:.4rem"
+                            id="prev-title">Find the Perfect International School for Your Child</div>
+                        <div style="font-size:.8rem;color:#a8c4d8;margin-bottom:.8rem" id="prev-subtitle">Search,
+                            compare, and evaluate international schools in Cairo — all in one place.</div>
+                        <div style="display:inline-block;background:var(--teal);color:white;border-radius:8px;padding:.4rem 1.2rem;font-size:.8rem;font-weight:600"
+                            id="prev-btn">Search Schools →</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="sec-card">
+                <div class="sec-head">
+                    <div>
+                        <h3 id="hp-stats-title">Stats Bar</h3>
+                        <div style="font-size:.78rem;color:var(--muted);margin-top:.15rem" id="hp-stats-sub">Numbers
+                            shown in the stats bar below the hero</div>
+                    </div>
+                    <button class="btn-sm btn-teal" onclick="saveStats()" id="hp-save-stats">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17,21 17,13 7,13 7,21" />
+                            <polyline points="7,3 7,8 15,8" />
+                        </svg>
+                        <span id="hp-save-stats-txt">Save Stats</span>
+                    </button>
+                </div>
+                <div style="padding:1.4rem 1.5rem">
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem" id="stats-fields">
+                        <div class="field"><label>Stat 1 — Value</label><input class="fi" type="text" id="st1-val"
+                                value="105+"></div>
+                        <div class="field"><label>Stat 1 — Label</label><input class="fi" type="text" id="st1-lbl"
+                                value="International Schools"></div>
+                        <div class="field"><label>Stat 2 — Value</label><input class="fi" type="text" id="st2-val"
+                                value="7"></div>
+                        <div class="field"><label>Stat 2 — Label</label><input class="fi" type="text" id="st2-lbl"
+                                value="Curriculum Types"></div>
+                        <div class="field"><label>Stat 3 — Value</label><input class="fi" type="text" id="st3-val"
+                                value="500+"></div>
+                        <div class="field"><label>Stat 3 — Label</label><input class="fi" type="text" id="st3-lbl"
+                                value="Parent Reviews"></div>
+                        <div class="field"><label>Stat 4 — Value</label><input class="fi" type="text" id="st4-val"
+                                value="Free"></div>
+                        <div class="field"><label>Stat 4 — Label</label><input class="fi" type="text" id="st4-lbl"
+                                value="Always Free to Use"></div>
+                    </div>
+                    <!-- Preview -->
+                    <div style="margin-top:.8rem;background:#F8FAFF;border:1.5px solid var(--border);border-radius:10px;padding:.9rem 1.5rem;display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap"
+                        id="stats-preview">
+                        <div style="text-align:center">
+                            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy)"
+                                id="pst1-val">105+</div>
+                            <div style="font-size:.78rem;color:var(--muted)" id="pst1-lbl">International Schools</div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy)"
+                                id="pst2-val">7</div>
+                            <div style="font-size:.78rem;color:var(--muted)" id="pst2-lbl">Curriculum Types</div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy)"
+                                id="pst3-val">500+</div>
+                            <div style="font-size:.78rem;color:var(--muted)" id="pst3-lbl">Parent Reviews</div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy)"
+                                id="pst4-val">Free</div>
+                            <div style="font-size:.78rem;color:var(--muted)" id="pst4-lbl">Always Free to Use</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Type Cards -->
+            <div class="sec-card">
+                <div class="sec-head">
+                    <div>
+                        <h3 id="hp-types-title">Type Cards</h3>
+                        <div style="font-size:.78rem;color:var(--muted);margin-top:.15rem" id="hp-types-sub">Edit the
+                            curriculum type cards shown on the homepage</div>
+                    </div>
+                    <button class="btn-sm btn-teal" onclick="saveTypes()" id="hp-save-types">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17,21 17,13 7,13 7,21" />
+                            <polyline points="7,3 7,8 15,8" />
+                        </svg>
+                        <span id="hp-save-types-txt">Save Types</span>
+                    </button>
+                </div>
+                <div style="padding:1.4rem 1.5rem">
+                    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem" id="types-fields"></div>
+                    <!-- Preview -->
+                    <div style="margin-top:1rem">
+                        <div
+                            style="font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.04em">
+                            Preview</div>
+                        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem" id="types-preview">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Schools -->
+            <div class="sec-card">
+                <div class="sec-head">
+                    <div>
+                        <h3 id="hp-feat-title">Featured Schools</h3>
+                        <div style="font-size:.78rem;color:var(--muted);margin-top:.15rem" id="hp-feat-sub">Choose which
+                            schools appear as featured on the homepage (max 6)</div>
+                    </div>
+                    <button class="btn-sm btn-teal" onclick="saveFeatured()" id="hp-save-feat">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17,21 17,13 7,13 7,21" />
+                            <polyline points="7,3 7,8 15,8" />
+                        </svg>
+                        <span id="hp-save-feat-txt">Save Featured</span>
+                    </button>
+                </div>
+                <div style="padding:1.4rem 1.5rem">
+                    <div style="font-size:.83rem;color:var(--muted);margin-bottom:.9rem" id="hp-feat-hint">Check the
+                        schools you want to feature on the homepage. Max 6 schools.</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem" id="feat-checkboxes"></div>
+                </div>
+            </div>
+
+        </div><!-- end page-homepage -->
+    </div><!-- end main -->
+
+    <!-- ══ SCHOOL MODAL ══ -->
+    <div class="ov" id="schoolModal" onclick="if(event.target===this)this.classList.remove('open')">
+        <div class="modal wide">
+            <div class="mh">
+                <h3 id="school-modal-title">Add School</h3>
+                <button class="mclose"
+                    onclick="document.getElementById('schoolModal').classList.remove('open')">✕</button>
+            </div>
+            <div class="mb">
+                <input type="hidden" id="edit-school-id">
+                <div class="fi-2">
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-name">School Name</label>
+                        <input class="fi" type="text" id="fm-name-input" placeholder="Full school name">
+                    </div>
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-type">School Type</label>
+                        <select class="fi" id="fm-type-input">
+                            <option>British</option>
+                            <option>American</option>
+                            <option>German</option>
+                            <option>French</option>
+                            <option>Multinational</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fi-2">
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-area">Area</label>
+                        <input class="fi" type="text" id="fm-area-input" placeholder="e.g. New Cairo">
+                    </div>
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-loc">Location</label>
+                        <select class="fi" id="fm-loc-input">
+                            <option>New Cairo</option>
+                            <option>Maadi</option>
+                            <option>Sheikh Zayed</option>
+                            <option>6th of October</option>
+                            <option>El-Shorouk</option>
+                            <option>Heliopolis</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fi-3">
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-fee-min">Fee Min (EGP K)</label>
+                        <input class="fi" type="number" id="fm-fee-min-input" placeholder="e.g. 150">
+                    </div>
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-fee-max">Fee Max (EGP K)</label>
+                        <input class="fi" type="number" id="fm-fee-max-input" placeholder="e.g. 350">
+                    </div>
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-cur">Currency</label>
+                        <select class="fi" id="fm-cur-input">
+                            <option>EGP</option>
+                            <option>USD</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fi-2">
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-age">Age Range</label>
+                        <input class="fi" type="text" id="fm-age-input" placeholder="e.g. 3 – 18">
+                    </div>
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-class">Class Size</label>
+                        <input class="fi" type="number" id="fm-class-input" placeholder="e.g. 20">
+                    </div>
+                </div>
+                <div class="fi-2">
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-email">Email</label>
+                        <input class="fi" type="email" id="fm-email-input" placeholder="school@email.com">
+                    </div>
+                    <div class="field" style="margin-bottom:.8rem">
+                        <label id="fm-phone">Phone</label>
+                        <input class="fi" type="text" id="fm-phone-input" placeholder="+20 X XXXX XXXX">
+                    </div>
+                </div>
+                <div class="field" style="margin-bottom:.8rem">
+                    <label id="fm-website">Website</label>
+                    <input class="fi" type="url" id="fm-website-input" placeholder="https://school.com">
+                </div>
+                <div class="field" style="margin-bottom:.8rem">
+                    <label id="fm-curricula">Curricula (comma separated)</label>
+                    <input class="fi" type="text" id="fm-curricula-input" placeholder="IGCSE, IB Diploma">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-sm btn-outline"
+                        onclick="document.getElementById('schoolModal').classList.remove('open')"
+                        id="fm-cancel">Cancel</button>
+                    <button class="btn-sm btn-teal" onclick="saveSchool()" id="fm-save">Save School</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ CONFIRM DELETE MODAL ══ -->
+    <div class="ov" id="confirmModal" onclick="if(event.target===this)this.classList.remove('open')">
+        <div class="modal" style="max-width:400px">
+            <div class="mb" style="text-align:center;padding:2rem 1.5rem">
+                <div class="confirm-icon del">🗑️</div>
+                <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem"
+                    id="confirm-title">Delete School?</h3>
+                <p style="font-size:.87rem;color:var(--muted);margin-bottom:1.5rem" id="confirm-sub">This action cannot
+                    be undone.</p>
+                <div style="display:flex;gap:.7rem;justify-content:center">
+                    <button class="btn-sm btn-outline" style="padding:.55rem 1.3rem"
+                        onclick="document.getElementById('confirmModal').classList.remove('open')"
+                        id="conf-cancel">Cancel</button>
+                    <button class="btn-sm" style="background:var(--err);color:white;padding:.55rem 1.3rem"
+                        onclick="confirmDelete()" id="conf-delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /* ═══════════════════════════════════════
+           DUMMY DATA
+           ═══════════════════════════════════════ */
+        let SCHOOLS = [
+            { id: 1, name: "The British International School Cairo", type: "British", area: "Beverly Hills, Sheikh Zayed", loc: "Sheikh Zayed", curricula: "IGCSE, IB", feeMin: 420, feeMax: 1097, cur: "EGP", rating: 4.7, email: "admissions@bisc.edu.eg", phone: "+202 3857 0000", website: "https://www.bisc.edu.eg", ageRange: "3–18", classSize: 18 },
+            { id: 2, name: "Cairo American College", type: "American", area: "Maadi, Cairo", loc: "Maadi", curricula: "American Diploma, IB", feeMin: 700, feeMax: 900, cur: "USD", rating: 4.8, email: "info@cacegypt.org", phone: "+202 2755 0000", website: "https://www.cacegypt.org", ageRange: "4–18", classSize: 15 },
+            { id: 3, name: "Rahn Schulen Kairo", type: "German", area: "El-Shorouk City", loc: "El-Shorouk", curricula: "IB, Abitur", feeMin: 137, feeMax: 217, cur: "EGP", rating: 4.6, email: "info@rsk-kairo.de", phone: "+202 2630 0000", website: "https://rsk-kairo.de", ageRange: "3–18", classSize: null },
+            { id: 4, name: "El Alsson British & American School", type: "British", area: "NewGiza, 6th of October", loc: "6th of October", curricula: "IGCSE, IB, American Diploma", feeMin: 218, feeMax: 352, cur: "EGP", rating: 4.5, email: "info@alsson.com", phone: "+2 16127", website: "https://www.alsson.com", ageRange: "3–18", classSize: 22 },
+            { id: 5, name: "Lycée Français Simone de Beauvoir", type: "French", area: "Maadi, Cairo", loc: "Maadi", curricula: "French Bac", feeMin: 94, feeMax: 207, cur: "EGP", rating: 4.3, email: "info@lycee-beauvoir.edu.eg", phone: "+202 2537 0000", website: "https://lycee-beauvoir.edu.eg", ageRange: "3–18", classSize: null },
+        ];
+
+        let REVIEWS = [
+            { id: 1, user: "Ahmed K.", school: "BISC Cairo", rating: 5, comment: "Excellent school with amazing facilities.", status: "approved", date: "2026-01-10" },
+            { id: 2, user: "Sara M.", school: "BISC Cairo", rating: 4, comment: "Great curriculum and organized administration.", status: "pending", date: "2026-01-14" },
+            { id: 3, user: "Layla T.", school: "Cairo American College", rating: 5, comment: "Best school in Cairo! Incredible community.", status: "approved", date: "2026-01-08" },
+            { id: 4, user: "John P.", school: "Cairo American College", rating: 5, comment: "Exceptional teachers and international environment.", status: "approved", date: "2025-12-20" },
+            { id: 5, user: "Nadia H.", school: "Cairo American College", rating: 4, comment: "Very good but fees are quite high.", status: "pending", date: "2026-01-15" },
+            { id: 6, user: "Mona R.", school: "Rahn Schulen Kairo", rating: 5, comment: "Excellent German education.", status: "approved", date: "2026-01-05" },
+            { id: 7, user: "Karim A.", school: "Rahn Schulen Kairo", rating: 4, comment: "Great bilingual program.", status: "approved", date: "2025-12-28" },
+            { id: 8, user: "Dina F.", school: "El Alsson", rating: 5, comment: "Fantastic school! My kids love it.", status: "approved", date: "2026-01-12" },
+            { id: 9, user: "Omar S.", school: "El Alsson", rating: 4, comment: "Good location with solid academics.", status: "approved", date: "2025-12-30" },
+            { id: 10, user: "Pierre L.", school: "Lycée Français", rating: 5, comment: "Excellent French education.", status: "approved", date: "2026-01-03" },
+            { id: 11, user: "Yasmine B.", school: "Lycée Français", rating: 4, comment: "Great French community.", status: "approved", date: "2025-12-25" },
+        ];
+
+        let APPOINTMENTS = [
+            { id: 1, user: "Ahmed K.", email: "ahmed@test.com", school: "BISC Cairo", date: "2026-02-10", msg: "I would like to arrange a visit for my daughter.", status: "confirmed" },
+            { id: 2, user: "Sara M.", email: "sara@test.com", school: "Cairo American College", date: "2026-02-12", msg: "Interested in the IB program details.", status: "pending" },
+            { id: 3, user: "Layla T.", email: "layla@test.com", school: "El Alsson", date: "2026-02-14", msg: "Can we schedule a tour of the campus?", status: "pending" },
+            { id: 4, user: "Omar S.", email: "omar@test.com", school: "Rahn Schulen Kairo", date: "2026-01-28", msg: "Need info about the German Abitur track.", status: "cancelled" },
+            { id: 5, user: "Nadia H.", email: "nadia@test.com", school: "Lycée Français", date: "2026-02-18", msg: "Looking for information about fees and admissions.", status: "pending" },
+        ];
+
+        let USERS = [
+            { id: 1, name: "Ahmed Kamal", email: "ahmed@test.com", joined: "2026-01-05", favs: 3, reviews: 2 },
+            { id: 2, name: "Sara Mohamed", email: "sara@test.com", joined: "2026-01-08", favs: 1, reviews: 1 },
+            { id: 3, name: "Layla Tarek", email: "layla@test.com", joined: "2026-01-10", favs: 4, reviews: 2 },
+            { id: 4, name: "Omar Samir", email: "omar@test.com", joined: "2025-12-20", favs: 2, reviews: 1 },
+            { id: 5, name: "Nadia Hassan", email: "nadia@test.com", joined: "2026-01-14", favs: 1, reviews: 1 },
+            { id: 6, name: "Pierre Leclerc", email: "pierre@test.com", joined: "2025-12-15", favs: 2, reviews: 2 },
+            { id: 7, name: "Yasmine Badr", email: "yasmine@test.com", joined: "2025-12-25", favs: 3, reviews: 1 },
+            { id: 8, name: "Karim Abbas", email: "karim@test.com", joined: "2025-12-28", favs: 2, reviews: 1 },
+            { id: 9, name: "Mona Riad", email: "mona@test.com", joined: "2026-01-03", favs: 1, reviews: 1 },
+            { id: 10, name: "Dina Fawzy", email: "dina@test.com", joined: "2026-01-12", favs: 3, reviews: 1 },
+            { id: 11, name: "John Parker", email: "john@test.com", joined: "2025-12-18", favs: 2, reviews: 1 },
+            { id: 12, name: "Omar Ahmed Gooda", email: "user@test.com", joined: "2026-01-15", favs: 5, reviews: 0 },
+        ];
+
+        let NOTIF_HISTORY = [
+            { title: "Fee Update — BISC Cairo 2026/2027", target: "All Users", sent: "2026-01-10 09:00", read: "8/12" },
+            { title: "New School Added: Kent College West Cairo", target: "All Users", sent: "2026-01-05 14:30", read: "10/12" },
+        ];
+
+        let ACTIVITY = [
+            { user: "Nadia H.", action: "Appointment Request", school: "Lycée Français", time: "2h ago", status: "pending" },
+            { user: "Sara M.", action: "New Review", school: "Cairo American", time: "3h ago", status: "pending" },
+            { user: "Layla T.", action: "Appointment Request", school: "El Alsson", time: "5h ago", status: "pending" },
+            { user: "Ahmed K.", action: "Saved Favorite", school: "BISC Cairo", time: "1d ago", status: "approved" },
+            { user: "Omar S.", action: "Appointment Request", school: "Rahn Schulen", time: "2d ago", status: "cancelled" },
+        ];
+
+        /* ═══════════════════════════════════════
+           TRANSLATIONS
+           ═══════════════════════════════════════ */
+        const TR = {
+            en: {
+                "sl-dash": "Dashboard", "sl-schools": "Schools", "sl-reviews": "Reviews", "sl-appts": "Appointments",
+                "sl-users": "Users", "sl-notifs": "Notifications", "sl-site": "View Website", "sl-logout": "Logout",
+                "sbs-main": "Main", "sbs-manage": "Manage", "sbs-sys": "System",
+                "sc-lbl": "Total Schools", "us-lbl": "Registered Users", "rv-lbl": "Total Reviews", "ap-lbl": "Appointments",
+                "sc-delta": "↑ Demo data", "us-delta": "↑ +3 this week", "rv-delta": "⚠ 2 pending approval", "ap-delta": "3 pending review",
+                "ch1-title": "Schools by Type", "ch2-title": "Top Rated Schools", "ra-title": "Recent Activity", "ra-view": "View All",
+                "th-user": "User", "th-action": "Action", "th-school": "School", "th-time": "Time", "th-status": "Status",
+                "sc-page-title": "All Schools", "add-btn-txt": "Add School",
+                "th-sc-name": "School Name", "th-sc-type": "Type", "th-sc-loc": "Location", "th-sc-fee": "Fees", "th-sc-rat": "Rating", "th-sc-act": "Actions",
+                "rv-page-title": "Manage Reviews", "rf-all": "All", "rf-pend": "Pending", "rf-app": "Approved",
+                "th-rv-user": "User", "th-rv-school": "School", "th-rv-rating": "Rating", "th-rv-comment": "Comment", "th-rv-status": "Status", "th-rv-act": "Actions",
+                "ap-page-title": "Manage Appointments", "af-all": "All", "af-pend": "Pending", "af-conf": "Confirmed", "af-canc": "Cancelled",
+                "th-ap-user": "User", "th-ap-school": "School", "th-ap-date": "Date", "th-ap-msg": "Message", "th-ap-status": "Status", "th-ap-act": "Actions",
+                "us-page-title": "Registered Users",
+                "th-us-name": "Name", "th-us-email": "Email", "th-us-joined": "Joined", "th-us-favs": "Favorites", "th-us-revs": "Reviews", "th-us-act": "Actions",
+                "nt-page-title": "Send Notification", "nt-target-lbl": "Send To", "nt-all": "All Users", "nt-user": "Specific User",
+                "nt-user-lbl": "Select User", "nt-title-lbl": "Title", "nt-msg-lbl": "Message", "nt-prev-lbl": "Preview",
+                "send-btn-txt": "Send Notification", "nh-title": "Notification History",
+                "th-nt-title": "Title", "th-nt-target": "Target", "th-nt-sent": "Sent At", "th-nt-read": "Read Rate",
+                "school-modal-title": "Add School", "fm-name": "School Name", "fm-type": "Type", "fm-area": "Area",
+                "fm-loc": "Location", "fm-fee-min": "Fee Min (EGP K)", "fm-fee-max": "Fee Max (EGP K)", "fm-cur": "Currency",
+                "fm-age": "Age Range", "fm-class": "Class Size", "fm-email": "Email", "fm-phone": "Phone",
+                "fm-website": "Website", "fm-curricula": "Curricula", "fm-cancel": "Cancel", "fm-save": "Save School",
+                "conf-cancel": "Cancel", "conf-delete": "Delete",
+                ok_school_add: "School added successfully!", ok_school_edit: "School updated!", ok_school_del: "School deleted.",
+                ok_rev_approve: "Review approved!", ok_rev_del: "Review deleted.",
+                ok_appt_confirm: "Appointment confirmed!", ok_appt_cancel: "Appointment cancelled.",
+                ok_notif: "Notification sent to all users!",
+                ok_user_del: "User removed.",
+                notif_empty: "Please fill in title and message.",
+                "sl-homepage": "Homepage",
+                "hp-hero-title": "Hero Section", "hp-hero-sub": "Edit the main banner text visitors see first",
+                "hp-save-hero-txt": "Save Hero", "hp-badge-lbl": "Badge Text", "hp-title-lbl": "Hero Title",
+                "hp-subtitle-lbl": "Hero Subtitle", "hp-btn-lbl": "Search Button Text", "hp-cta-lbl": "CTA Primary Button",
+                "hp-stats-title": "Stats Bar", "hp-stats-sub": "Numbers shown in the stats bar below the hero", "hp-save-stats-txt": "Save Stats",
+                "hp-types-title": "Type Cards", "hp-types-sub": "Edit the curriculum type cards shown on the homepage", "hp-save-types-txt": "Save Types",
+                "hp-feat-title": "Featured Schools", "hp-feat-sub": "Choose which schools appear as featured on the homepage (max 6)", "hp-save-feat-txt": "Save Featured",
+                "hp-feat-hint": "Check the schools you want to feature on the homepage. Max 6 schools.",
+                ok_hp_hero: "Hero section saved!", ok_hp_stats: "Stats bar saved!", ok_hp_types: "Type cards saved!", ok_hp_feat: "Featured schools saved!", hp_feat_max: "Maximum 6 featured schools allowed.",
+            },
+            ar: {
+                "sl-dash": "لوحة التحكم", "sl-schools": "المدارس", "sl-reviews": "التقييمات", "sl-appts": "المواعيد",
+                "sl-users": "المستخدمون", "sl-notifs": "الإشعارات", "sl-site": "عرض الموقع", "sl-logout": "تسجيل الخروج",
+                "sbs-main": "الرئيسية", "sbs-manage": "الإدارة", "sbs-sys": "النظام",
+                "sc-lbl": "إجمالي المدارس", "us-lbl": "المستخدمون المسجلون", "rv-lbl": "إجمالي التقييمات", "ap-lbl": "المواعيد",
+                "sc-delta": "↑ بيانات تجريبية", "us-delta": "↑ +3 هذا الأسبوع", "rv-delta": "⚠ 2 بانتظار الموافقة", "ap-delta": "3 قيد المراجعة",
+                "ch1-title": "المدارس حسب النوع", "ch2-title": "الأعلى تقييماً", "ra-title": "النشاط الأخير", "ra-view": "عرض الكل",
+                "th-user": "المستخدم", "th-action": "الإجراء", "th-school": "المدرسة", "th-time": "الوقت", "th-status": "الحالة",
+                "sc-page-title": "كل المدارس", "add-btn-txt": "إضافة مدرسة",
+                "th-sc-name": "اسم المدرسة", "th-sc-type": "النوع", "th-sc-loc": "الموقع", "th-sc-fee": "المصاريف", "th-sc-rat": "التقييم", "th-sc-act": "الإجراءات",
+                "rv-page-title": "إدارة التقييمات", "rf-all": "الكل", "rf-pend": "قيد الانتظار", "rf-app": "موافق عليها",
+                "th-rv-user": "المستخدم", "th-rv-school": "المدرسة", "th-rv-rating": "التقييم", "th-rv-comment": "التعليق", "th-rv-status": "الحالة", "th-rv-act": "الإجراءات",
+                "ap-page-title": "إدارة المواعيد", "af-all": "الكل", "af-pend": "قيد الانتظار", "af-conf": "مؤكد", "af-canc": "ملغي",
+                "th-ap-user": "المستخدم", "th-ap-school": "المدرسة", "th-ap-date": "التاريخ", "th-ap-msg": "الرسالة", "th-ap-status": "الحالة", "th-ap-act": "الإجراءات",
+                "us-page-title": "المستخدمون المسجلون",
+                "th-us-name": "الاسم", "th-us-email": "البريد الإلكتروني", "th-us-joined": "تاريخ الانضمام", "th-us-favs": "المفضلة", "th-us-revs": "التقييمات", "th-us-act": "الإجراءات",
+                "nt-page-title": "إرسال إشعار", "nt-target-lbl": "إرسال إلى", "nt-all": "كل المستخدمين", "nt-user": "مستخدم محدد",
+                "nt-user-lbl": "اختر مستخدم", "nt-title-lbl": "العنوان", "nt-msg-lbl": "الرسالة", "nt-prev-lbl": "معاينة",
+                "send-btn-txt": "إرسال الإشعار", "nh-title": "سجل الإشعارات",
+                "th-nt-title": "العنوان", "th-nt-target": "المستهدف", "th-nt-sent": "وقت الإرسال", "th-nt-read": "نسبة القراءة",
+                "school-modal-title": "إضافة مدرسة", "fm-name": "اسم المدرسة", "fm-type": "النوع", "fm-area": "المنطقة",
+                "fm-loc": "الموقع", "fm-fee-min": "الحد الأدنى للمصاريف", "fm-fee-max": "الحد الأقصى للمصاريف", "fm-cur": "العملة",
+                "fm-age": "الفئة العمرية", "fm-class": "حجم الفصل", "fm-email": "البريد", "fm-phone": "الهاتف",
+                "fm-website": "الموقع", "fm-curricula": "المناهج", "fm-cancel": "إلغاء", "fm-save": "حفظ المدرسة",
+                "conf-cancel": "إلغاء", "conf-delete": "حذف",
+                ok_school_add: "تم إضافة المدرسة بنجاح!", ok_school_edit: "تم تحديث المدرسة!", ok_school_del: "تم حذف المدرسة.",
+                ok_rev_approve: "تمت الموافقة على التقييم!", ok_rev_del: "تم حذف التقييم.",
+                ok_appt_confirm: "تم تأكيد الموعد!", ok_appt_cancel: "تم إلغاء الموعد.",
+                ok_notif: "تم إرسال الإشعار لجميع المستخدمين!",
+                ok_user_del: "تم حذف المستخدم.",
+                notif_empty: "يرجى ملء العنوان والرسالة.",
+                "sl-homepage": "الصفحة الرئيسية",
+                "hp-hero-title": "قسم الهيرو", "hp-hero-sub": "تعديل النص الرئيسي الذي يراه الزوار أولاً",
+                "hp-save-hero-txt": "حفظ الهيرو", "hp-badge-lbl": "نص الشارة", "hp-title-lbl": "عنوان الهيرو",
+                "hp-subtitle-lbl": "العنوان الفرعي", "hp-btn-lbl": "نص زر البحث", "hp-cta-lbl": "زر الدعوة للعمل",
+                "hp-stats-title": "شريط الإحصائيات", "hp-stats-sub": "الأرقام المعروضة في شريط الإحصائيات", "hp-save-stats-txt": "حفظ الإحصائيات",
+                "hp-types-title": "بطاقات الأنواع", "hp-types-sub": "تعديل بطاقات أنواع المناهج على الصفحة الرئيسية", "hp-save-types-txt": "حفظ الأنواع",
+                "hp-feat-title": "المدارس المميزة", "hp-feat-sub": "اختر المدارس التي تظهر كمميزة على الصفحة الرئيسية (حد أقصى 6)", "hp-save-feat-txt": "حفظ المميزة",
+                "hp-feat-hint": "اختر المدارس التي تريد تمييزها على الصفحة الرئيسية. الحد الأقصى 6 مدارس.",
+                ok_hp_hero: "تم حفظ قسم الهيرو!", ok_hp_stats: "تم حفظ شريط الإحصائيات!", ok_hp_types: "تم حفظ بطاقات الأنواع!", ok_hp_feat: "تم حفظ المدارس المميزة!", hp_feat_max: "الحد الأقصى 6 مدارس مميزة.",
+            }
+        };
+
+        /* ═══════════════════════════════════════
+           STATE
+           ═══════════════════════════════════════ */
+        let lang = 'en', activePage = 'dashboard', deleteTarget = null, deleteType = null;
+        const t = k => (TR[lang][k] || TR.en[k] || k);
+
+        /* ═══════════════════════════════════════
+           LANGUAGE
+           ═══════════════════════════════════════ */
+        function toggleLang() {
+            lang = lang === 'en' ? 'ar' : 'en';
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('lang-lbl').textContent = lang === 'en' ? 'EN' : 'AR';
+            applyTR();
+            renderCurrentPage();
+        }
+        function applyTR() {
+            Object.keys(TR.en).forEach(k => {
+                if (k.startsWith('ok_') || k.startsWith('notif_')) return;
+                const el = document.getElementById(k);
+                if (el) el.textContent = t(k);
+            });
+        }
+
+        /* ═══════════════════════════════════════
+           PAGE NAVIGATION
+           ═══════════════════════════════════════ */
+        const PAGES = ['dashboard', 'schools', 'reviews', 'appointments', 'users', 'notifications', 'homepage'];
+        function showPage(page, el) {
+            PAGES.forEach(p => {
+                const pg = document.getElementById('page-' + p);
+                if (pg) pg.style.display = p === page ? 'block' : 'none';
+            });
+            document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('act'));
+            if (el) el.classList.add('act');
+            activePage = page;
+            const titles = { dashboard: 'Dashboard', schools: 'Schools', reviews: 'Reviews', appointments: 'Appointments', users: 'Users', notifications: 'Notifications', homepage: 'Homepage' };
+            document.getElementById('page-title').textContent = titles[page] || page;
+            document.getElementById('breadcrumb').textContent = `Admin / ${titles[page] || page}`;
+            // homepage page is outside .content — handle visibility
+            const hpPage = document.getElementById('page-homepage');
+            const mainContent = document.getElementById('content');
+            if (page === 'homepage') {
+                mainContent.style.display = 'none';
+                hpPage.style.display = 'block';
+                hpPage.style.padding = '2rem';
+                renderHomepageMgr();
+            } else {
+                mainContent.style.display = 'block';
+                hpPage.style.display = 'none';
+                renderCurrentPage();
+            }
+        }
+        function renderCurrentPage() {
+            if (activePage === 'dashboard') renderActivity();
+            else if (activePage === 'schools') renderSchoolTable();
+            else if (activePage === 'reviews') renderRevTable();
+            else if (activePage === 'appointments') renderApptTable();
+            else if (activePage === 'users') renderUserTable();
+            else if (activePage === 'notifications') renderNotifHistory();
+        }
+
+        /* ═══════════════════════════════════════
+           ACTIVITY TABLE
+           ═══════════════════════════════════════ */
+        function renderActivity() {
+            document.getElementById('activity-body').innerHTML = ACTIVITY.map(a => `
+    <tr>
+      <td><div class="tbl-name">${a.user}</div></td>
+      <td>${a.action}</td>
+      <td><div class="tbl-sub">${a.school}</div></td>
+      <td style="color:var(--muted);font-size:.8rem">${a.time}</td>
+      <td><span class="badge b-${a.status}">${a.status}</span></td>
+    </tr>`).join('');
+        }
+
+        /* ═══════════════════════════════════════
+           SCHOOLS TABLE
+           ═══════════════════════════════════════ */
+        function renderSchoolTable(data = SCHOOLS) {
+            const typeClass = { British: 'b-british', American: 'b-american', German: 'b-german', French: 'b-french' };
+            document.getElementById('schools-body').innerHTML = data.map(s => `
+    <tr>
+      <td>
+        <div class="tbl-name">${s.name}</div>
+        <div class="tbl-sub">${s.area}</div>
+      </td>
+      <td><span class="badge ${typeClass[s.type] || 'b-british'}">${s.type}</span></td>
+      <td style="font-size:.83rem;color:var(--muted)">${s.loc}</td>
+      <td style="font-size:.83rem">${s.cur === 'USD' ? '$' + s.feeMin + 'K–$' + s.feeMax + 'K' : 'EGP ' + s.feeMin + 'K–' + s.feeMax + 'K'}</td>
+      <td><span class="stars">${'★'.repeat(Math.floor(s.rating))}</span> <strong style="font-size:.82rem">${s.rating}</strong></td>
+      <td>
+        <div class="action-btns">
+          <div class="icon-btn" onclick="openSchoolModal(${s.id})" title="Edit">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <div class="icon-btn del" onclick="askDelete('school',${s.id},'${s.name}')" title="Delete">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </div>
+        </div>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">No schools found</td></tr>';
+            document.getElementById('sc-tbl-info').textContent = `Showing ${data.length} of ${SCHOOLS.length} schools`;
+        }
+        function filterSchoolTable() {
+            const q = document.getElementById('school-search').value.toLowerCase();
+            renderSchoolTable(SCHOOLS.filter(s => s.name.toLowerCase().includes(q) || s.type.toLowerCase().includes(q) || s.loc.toLowerCase().includes(q)));
+        }
+
+        /* ═══════════════════════════════════════
+           SCHOOL MODAL (Add / Edit)
+           ═══════════════════════════════════════ */
+        function openSchoolModal(id = null) {
+            const modal = document.getElementById('schoolModal');
+            const titleEl = document.getElementById('school-modal-title');
+            if (id) {
+                const s = SCHOOLS.find(x => x.id === id);
+                titleEl.textContent = lang === 'ar' ? 'تعديل المدرسة' : 'Edit School';
+                document.getElementById('edit-school-id').value = id;
+                document.getElementById('fm-name-input').value = s.name;
+                document.getElementById('fm-type-input').value = s.type;
+                document.getElementById('fm-area-input').value = s.area;
+                document.getElementById('fm-loc-input').value = s.loc;
+                document.getElementById('fm-fee-min-input').value = s.feeMin;
+                document.getElementById('fm-fee-max-input').value = s.feeMax;
+                document.getElementById('fm-cur-input').value = s.cur;
+                document.getElementById('fm-age-input').value = s.ageRange || '';
+                document.getElementById('fm-class-input').value = s.classSize || '';
+                document.getElementById('fm-email-input').value = s.email || '';
+                document.getElementById('fm-phone-input').value = s.phone || '';
+                document.getElementById('fm-website-input').value = s.website || '';
+                document.getElementById('fm-curricula-input').value = s.curricula || '';
+            } else {
+                titleEl.textContent = lang === 'ar' ? 'إضافة مدرسة' : 'Add School';
+                document.getElementById('edit-school-id').value = '';
+                ['fm-name-input', 'fm-area-input', 'fm-fee-min-input', 'fm-fee-max-input', 'fm-age-input', 'fm-class-input', 'fm-email-input', 'fm-phone-input', 'fm-website-input', 'fm-curricula-input'].forEach(id => document.getElementById(id).value = '');
+                document.getElementById('fm-type-input').value = 'British';
+                document.getElementById('fm-loc-input').value = 'New Cairo';
+                document.getElementById('fm-cur-input').value = 'EGP';
+            }
+            modal.classList.add('open');
+        }
+        function saveSchool() {
+            const editId = document.getElementById('edit-school-id').value;
+            const newSchool = {
+                id: editId ? parseInt(editId) : Date.now(),
+                name: document.getElementById('fm-name-input').value || 'New School',
+                type: document.getElementById('fm-type-input').value,
+                area: document.getElementById('fm-area-input').value || 'Cairo',
+                loc: document.getElementById('fm-loc-input').value,
+                curricula: document.getElementById('fm-curricula-input').value,
+                feeMin: parseInt(document.getElementById('fm-fee-min-input').value) || 0,
+                feeMax: parseInt(document.getElementById('fm-fee-max-input').value) || 0,
+                cur: document.getElementById('fm-cur-input').value,
+                rating: 4.0,
+                email: document.getElementById('fm-email-input').value,
+                phone: document.getElementById('fm-phone-input').value,
+                website: document.getElementById('fm-website-input').value,
+                ageRange: document.getElementById('fm-age-input').value,
+                classSize: parseInt(document.getElementById('fm-class-input').value) || null,
+            };
+            if (editId) {
+                const idx = SCHOOLS.findIndex(s => s.id === parseInt(editId));
+                if (idx > -1) SCHOOLS[idx] = newSchool;
+                toast(t('ok_school_edit'), 'ok');
+            } else {
+                SCHOOLS.push(newSchool);
+                document.getElementById('sc-total').textContent = SCHOOLS.length;
+                toast(t('ok_school_add'), 'ok');
+            }
+            document.getElementById('schoolModal').classList.remove('open');
+            renderSchoolTable();
+        }
+
+        /* ═══════════════════════════════════════
+           REVIEWS TABLE
+           ═══════════════════════════════════════ */
+        function renderRevTable(data = null) {
+            const filter = document.getElementById('rev-filter')?.value || 'all';
+            const list = data || (filter === 'all' ? REVIEWS : REVIEWS.filter(r => r.status === filter));
+            document.getElementById('reviews-body').innerHTML = list.map(r => `
+    <tr>
+      <td><div class="tbl-name">${r.user}</div><div class="tbl-sub">${r.date}</div></td>
+      <td style="font-size:.83rem">${r.school}</td>
+      <td><span class="stars">${'★'.repeat(r.rating)}</span></td>
+      <td style="font-size:.83rem;max-width:200px;color:var(--muted)">${r.comment.substring(0, 50)}${r.comment.length > 50 ? '...' : ''}</td>
+      <td><span class="badge ${r.status === 'approved' ? 'b-approved' : 'b-pending'}">${r.status}</span></td>
+      <td>
+        <div class="action-btns">
+          ${r.status === 'pending' ? `<div class="icon-btn app" onclick="approveRev(${r.id})" title="Approve">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+          </div>`: ''}
+          <div class="icon-btn del" onclick="askDelete('review',${r.id},'this review')" title="Delete">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </div>
+        </div>
+      </td>
+    </tr>`).join('');
+            document.getElementById('rev-tbl-info').textContent = `Showing ${list.length} of ${REVIEWS.length} reviews`;
+            document.getElementById('rev-badge').textContent = REVIEWS.filter(r => r.status === 'pending').length;
+        }
+        function filterRevTable() { renderRevTable(); }
+        function approveRev(id) {
+            const r = REVIEWS.find(x => x.id === id);
+            if (r) { r.status = 'approved'; renderRevTable(); toast(t('ok_rev_approve'), 'ok'); }
+        }
+
+        /* ═══════════════════════════════════════
+           APPOINTMENTS TABLE
+           ═══════════════════════════════════════ */
+        function renderApptTable() {
+            const filter = document.getElementById('appt-filter')?.value || 'all';
+            const list = filter === 'all' ? APPOINTMENTS : APPOINTMENTS.filter(a => a.status === filter);
+            document.getElementById('appts-body').innerHTML = list.map(a => `
+    <tr>
+      <td><div class="tbl-name">${a.user}</div><div class="tbl-sub">${a.email}</div></td>
+      <td style="font-size:.83rem">${a.school}</td>
+      <td style="font-size:.83rem;color:var(--muted)">${a.date}</td>
+      <td style="font-size:.8rem;color:var(--muted);max-width:180px">${a.msg.substring(0, 50)}...</td>
+      <td><span class="badge b-${a.status}">${a.status}</span></td>
+      <td>
+        <div class="action-btns">
+          ${a.status === 'pending' ? `
+          <div class="icon-btn app" onclick="updateAppt(${a.id},'confirmed')" title="Confirm">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+          </div>
+          <div class="icon-btn del" onclick="updateAppt(${a.id},'cancelled')" title="Cancel">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>`: '<span style="font-size:.76rem;color:var(--muted)">—</span>'}
+        </div>
+      </td>
+    </tr>`).join('');
+            document.getElementById('ap-tbl-info').textContent = `Showing ${list.length} of ${APPOINTMENTS.length} appointments`;
+            document.getElementById('appt-badge').textContent = APPOINTMENTS.filter(a => a.status === 'pending').length;
+        }
+        function filterApptTable() { renderApptTable(); }
+        function updateAppt(id, status) {
+            const a = APPOINTMENTS.find(x => x.id === id);
+            if (a) {
+                a.status = status;
+                renderApptTable();
+                toast(status === 'confirmed' ? t('ok_appt_confirm') : t('ok_appt_cancel'), status === 'confirmed' ? 'ok' : 'inf');
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           USERS TABLE
+           ═══════════════════════════════════════ */
+        function renderUserTable(data = USERS) {
+            document.getElementById('users-body').innerHTML = data.map(u => `
+    <tr>
+      <td><div class="tbl-name">${u.name}</div></td>
+      <td style="font-size:.83rem;color:var(--muted)">${u.email}</td>
+      <td style="font-size:.8rem;color:var(--muted)">${u.joined}</td>
+      <td style="font-size:.83rem;text-align:center">${u.favs}</td>
+      <td style="font-size:.83rem;text-align:center">${u.reviews}</td>
+      <td>
+        <div class="action-btns">
+          <div class="icon-btn del" onclick="askDelete('user',${u.id},'${u.name}')" title="Remove">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </div>
+        </div>
+      </td>
+    </tr>`).join('');
+            document.getElementById('us-tbl-info').textContent = `Showing ${data.length} of ${USERS.length} users`;
+        }
+        function filterUserTable() {
+            const q = document.getElementById('user-search').value.toLowerCase();
+            renderUserTable(USERS.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)));
+        }
+
+        /* ═══════════════════════════════════════
+           NOTIFICATIONS
+           ═══════════════════════════════════════ */
+        document.addEventListener('DOMContentLoaded', () => {
+            const tgt = document.getElementById('nt-target');
+            if (tgt) tgt.addEventListener('change', function () {
+                document.getElementById('nt-user-field').style.display = this.value === 'user' ? 'block' : 'none';
+            });
+        });
+        function updatePreview() {
+            const title = document.getElementById('nt-title').value || 'Notification Title';
+            const msg = document.getElementById('nt-msg').value || 'Your message will appear here...';
+            document.getElementById('prev-title').textContent = title;
+            document.getElementById('prev-msg').textContent = msg;
+        }
+        function sendNotification() {
+            const title = document.getElementById('nt-title').value.trim();
+            const msg = document.getElementById('nt-msg').value.trim();
+            if (!title || !msg) { toast(t('notif_empty'), 'err'); return; }
+            NOTIF_HISTORY.unshift({ title, target: 'All Users', sent: new Date().toLocaleString(), read: '0/' + USERS.length });
+            document.getElementById('nt-title').value = '';
+            document.getElementById('nt-msg').value = '';
+            updatePreview();
+            renderNotifHistory();
+            toast(t('ok_notif'), 'ok');
+        }
+        function renderNotifHistory() {
+            document.getElementById('notif-history').innerHTML = NOTIF_HISTORY.map(n => `
+    <tr>
+      <td><div class="tbl-name" style="font-size:.85rem">${n.title}</div></td>
+      <td><span class="badge b-approved">${n.target}</span></td>
+      <td style="font-size:.8rem;color:var(--muted)">${n.sent}</td>
+      <td style="font-size:.83rem;font-weight:600;color:var(--teal)">${n.read}</td>
+    </tr>`).join('');
+        }
+
+        /* ═══════════════════════════════════════
+           DELETE FLOW
+           ═══════════════════════════════════════ */
+        function askDelete(type, id, name) {
+            deleteTarget = { type, id };
+            const L = lang === 'ar';
+            document.getElementById('confirm-title').textContent =
+                type === 'school' ? (L ? `حذف مدرسة "${name}"؟` : `Delete "${name}"?`) :
+                    type === 'review' ? (L ? 'حذف هذا التقييم؟' : 'Delete this review?') :
+                        (L ? `حذف المستخدم "${name}"؟` : `Remove user "${name}"?`);
+            document.getElementById('confirm-sub').textContent = L ? 'هذا الإجراء لا يمكن التراجع عنه.' : 'This action cannot be undone.';
+            document.getElementById('confirmModal').classList.add('open');
+        }
+        function confirmDelete() {
+            if (!deleteTarget) return;
+            const { type, id } = deleteTarget;
+            if (type === 'school') {
+                SCHOOLS = SCHOOLS.filter(s => s.id !== id);
+                document.getElementById('sc-total').textContent = SCHOOLS.length;
+                toast(t('ok_school_del'), 'inf');
+                renderSchoolTable();
+            } else if (type === 'review') {
+                REVIEWS = REVIEWS.filter(r => r.id !== id);
+                document.getElementById('rv-total').textContent = REVIEWS.length;
+                toast(t('ok_rev_del'), 'inf');
+                renderRevTable();
+            } else if (type === 'user') {
+                USERS = USERS.filter(u => u.id !== id);
+                document.getElementById('us-total').textContent = USERS.length;
+                toast(t('ok_user_del'), 'inf');
+                renderUserTable();
+            }
+            document.getElementById('confirmModal').classList.remove('open');
+            deleteTarget = null;
+        }
+
+        /* ═══════════════════════════════════════
+           HOMEPAGE MANAGEMENT
+           ═══════════════════════════════════════ */
+
+        // State — in real app this comes from DB via Laravel API
+        let HP_STATE = {
+            badge: '105+ International Schools in Cairo',
+            title: 'Find the Perfect International School for Your Child',
+            subtitle: 'Search, compare, and evaluate international schools in Cairo — all in one place. Save hours of research with powerful filters and real parent reviews.',
+            btnText: 'Search Schools →',
+            ctaText: 'Browse All Schools',
+            stats: [
+                { val: '105+', lbl: 'International Schools' },
+                { val: '7', lbl: 'Curriculum Types' },
+                { val: '500+', lbl: 'Parent Reviews' },
+                { val: 'Free', lbl: 'Always Free to Use' },
+            ],
+            types: [
+                { emoji: '🇬🇧', name: 'British', count: 45, bg: '#EEF2FF' },
+                { emoji: '🇺🇸', name: 'American', count: 28, bg: '#FFF7ED' },
+                { emoji: '🇩🇪', name: 'German', count: 6, bg: '#F0FDF4' },
+                { emoji: '🇫🇷', name: 'French', count: 4, bg: '#FFF1F2' },
+                { emoji: '🌐', name: 'IB / Intl.', count: 22, bg: '#F0F9FF' },
+            ],
+            featured: [1, 2, 3, 4, 5], // school IDs
+        };
+
+        function renderHomepageMgr() {
+            // Fill hero fields
+            document.getElementById('hp-badge').value = HP_STATE.badge;
+            document.getElementById('hp-title').value = HP_STATE.title;
+            document.getElementById('hp-subtitle').value = HP_STATE.subtitle;
+            document.getElementById('hp-btn').value = HP_STATE.btnText;
+            document.getElementById('hp-cta').value = HP_STATE.ctaText;
+            syncHeroPreview();
+
+            // Fill stats fields
+            HP_STATE.stats.forEach((s, i) => {
+                document.getElementById(`st${i + 1}-val`).value = s.val;
+                document.getElementById(`st${i + 1}-lbl`).value = s.lbl;
+            });
+            syncStatsPreview();
+
+            // Render type card editors
+            renderTypeFields();
+            renderTypesPreview();
+
+            // Render featured checkboxes
+            renderFeaturedCheckboxes();
+
+            // Wire live preview updates
+            ['hp-badge', 'hp-title', 'hp-subtitle', 'hp-btn'].forEach(id => {
+                document.getElementById(id).oninput = syncHeroPreview;
+            });
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`st${i}-val`).oninput = syncStatsPreview;
+                document.getElementById(`st${i}-lbl`).oninput = syncStatsPreview;
+            }
+        }
+
+        // ── Hero ──
+        function syncHeroPreview() {
+            document.getElementById('prev-badge').textContent = document.getElementById('hp-badge').value || '...';
+            document.getElementById('prev-title').textContent = document.getElementById('hp-title').value || '...';
+            document.getElementById('prev-subtitle').textContent = document.getElementById('hp-subtitle').value || '...';
+            document.getElementById('prev-btn').textContent = document.getElementById('hp-btn').value || '...';
+        }
+        function saveHero() {
+            HP_STATE.badge = document.getElementById('hp-badge').value;
+            HP_STATE.title = document.getElementById('hp-title').value;
+            HP_STATE.subtitle = document.getElementById('hp-subtitle').value;
+            HP_STATE.btnText = document.getElementById('hp-btn').value;
+            HP_STATE.ctaText = document.getElementById('hp-cta').value;
+            toast(t('ok_hp_hero'), 'ok');
+            // TODO: POST /api/admin/homepage/hero
+        }
+
+        // ── Stats ──
+        function syncStatsPreview() {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`pst${i}-val`).textContent = document.getElementById(`st${i}-val`).value || '—';
+                document.getElementById(`pst${i}-lbl`).textContent = document.getElementById(`st${i}-lbl`).value || '—';
+            }
+        }
+        function saveStats() {
+            for (let i = 0; i < 4; i++) {
+                HP_STATE.stats[i].val = document.getElementById(`st${i + 1}-val`).value;
+                HP_STATE.stats[i].lbl = document.getElementById(`st${i + 1}-lbl`).value;
+            }
+            toast(t('ok_hp_stats'), 'ok');
+            // TODO: POST /api/admin/homepage/stats
+        }
+
+        // ── Type Cards ──
+        function renderTypeFields() {
+            document.getElementById('types-fields').innerHTML = HP_STATE.types.map((tp, i) => `
+    <div style="background:#F8FAFF;border:1.5px solid var(--border);border-radius:10px;padding:.9rem">
+      <div style="font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:.6rem;text-align:center">${tp.emoji} Card ${i + 1}</div>
+      <div class="field" style="margin-bottom:.5rem"><label style="font-size:.75rem">Emoji</label>
+        <input class="fi" style="font-size:1.1rem;text-align:center;padding:.4rem" type="text" id="tc${i}-emoji" value="${tp.emoji}" oninput="syncTypePreview()"></div>
+      <div class="field" style="margin-bottom:.5rem"><label style="font-size:.75rem">Name</label>
+        <input class="fi" style="font-size:.83rem" type="text" id="tc${i}-name" value="${tp.name}" oninput="syncTypePreview()"></div>
+      <div class="field" style="margin-bottom:0"><label style="font-size:.75rem">School Count</label>
+        <input class="fi" style="font-size:.83rem" type="number" id="tc${i}-count" value="${tp.count}" oninput="syncTypePreview()"></div>
+    </div>`).join('');
+        }
+        function renderTypesPreview() {
+            document.getElementById('types-preview').innerHTML = HP_STATE.types.map((tp, i) => `
+    <div id="tp-prev-${i}" style="background:white;border:2px solid var(--border);border-radius:10px;padding:.9rem;text-align:center">
+      <div style="width:40px;height:40px;border-radius:11px;background:${tp.bg};margin:0 auto .5rem;display:flex;align-items:center;justify-content:center;font-size:1.1rem">${tp.emoji}</div>
+      <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;color:var(--navy)">${tp.name}</div>
+      <div style="font-size:.72rem;color:var(--muted)">${tp.count} schools</div>
+    </div>`).join('');
+        }
+        function syncTypePreview() {
+            HP_STATE.types.forEach((tp, i) => {
+                const emoji = document.getElementById(`tc${i}-emoji`)?.value || tp.emoji;
+                const name = document.getElementById(`tc${i}-name`)?.value || tp.name;
+                const count = document.getElementById(`tc${i}-count`)?.value || tp.count;
+                const prev = document.getElementById(`tp-prev-${i}`);
+                if (prev) prev.innerHTML = `
+      <div style="width:40px;height:40px;border-radius:11px;background:${tp.bg};margin:0 auto .5rem;display:flex;align-items:center;justify-content:center;font-size:1.1rem">${emoji}</div>
+      <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;color:var(--navy)">${name}</div>
+      <div style="font-size:.72rem;color:var(--muted)">${count} schools</div>`;
+            });
+        }
+        function saveTypes() {
+            HP_STATE.types.forEach((tp, i) => {
+                tp.emoji = document.getElementById(`tc${i}-emoji`)?.value || tp.emoji;
+                tp.name = document.getElementById(`tc${i}-name`)?.value || tp.name;
+                tp.count = parseInt(document.getElementById(`tc${i}-count`)?.value) || tp.count;
+            });
+            renderTypeFields();
+            renderTypesPreview();
+            toast(t('ok_hp_types'), 'ok');
+            // TODO: POST /api/admin/homepage/types
+        }
+
+        // ── Featured Schools ──
+        function renderFeaturedCheckboxes() {
+            document.getElementById('feat-checkboxes').innerHTML = SCHOOLS.map(s => {
+                const checked = HP_STATE.featured.includes(s.id);
+                return `
+    <label style="display:flex;align-items:center;gap:.7rem;background:${checked ? '#E8F5F2' : '#F8FAFF'};border:1.5px solid ${checked ? 'var(--teal)' : 'var(--border)'};border-radius:10px;padding:.7rem .9rem;cursor:pointer;transition:all .2s" id="feat-label-${s.id}">
+      <input type="checkbox" ${checked ? 'checked' : ''} id="feat-cb-${s.id}" onchange="toggleFeatured(${s.id})" style="accent-color:var(--teal);width:15px;height:15px;cursor:pointer">
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:.84rem;color:var(--navy)">${s.name}</div>
+        <div style="font-size:.74rem;color:var(--muted)">${s.type} · ${s.area}</div>
+      </div>
+    </label>`;
+            }).join('');
+        }
+        function toggleFeatured(id) {
+            const checked = document.getElementById(`feat-cb-${id}`).checked;
+            if (checked) {
+                if (HP_STATE.featured.length >= 6) {
+                    document.getElementById(`feat-cb-${id}`).checked = false;
+                    toast(t('hp_feat_max'), 'err');
+                    return;
+                }
+                HP_STATE.featured.push(id);
+            } else {
+                HP_STATE.featured = HP_STATE.featured.filter(x => x !== id);
+            }
+            const label = document.getElementById(`feat-label-${id}`);
+            label.style.background = checked ? '#E8F5F2' : '#F8FAFF';
+            label.style.border = `1.5px solid ${checked ? 'var(--teal)' : 'var(--border)'}`;
+        }
+        function saveFeatured() {
+            toast(`${t('ok_hp_feat')} (${HP_STATE.featured.length} schools)`, 'ok');
+            // TODO: POST /api/admin/homepage/featured  body: { school_ids: HP_STATE.featured }
+        }
+
+        /* ═══════════════════════════════════════
+           END HOMEPAGE MANAGEMENT
+           ═══════════════════════════════════════ */
+        function doLogout() {
+            localStorage.removeItem('sf_user');
+            window.location.href = 'login.html';
+        }
+
+        /* ═══════════════════════════════════════
+           TOAST
+           ═══════════════════════════════════════ */
+        let ttimer;
+        function toast(msg, type = 'inf') {
+            const el = document.getElementById('toast');
+            el.textContent = msg; el.className = `toast show ${type}`;
+            clearTimeout(ttimer);
+            ttimer = setTimeout(() => el.className = 'toast', 2600);
+        }
+
+        /* ═══════════════════════════════════════
+           INIT
+           ═══════════════════════════════════════ */
+        // Load admin name if logged in
+        const sfUser = JSON.parse(localStorage.getItem('sf_user') || 'null');
+        if (sfUser) document.getElementById('admin-name').textContent = sfUser.name || 'Admin User';
+
+        applyTR();
+        renderActivity();
+
+        // Mobile menu button visibility
+        if (window.innerWidth <= 900) document.getElementById('menu-btn').style.display = 'flex';
+        window.addEventListener('resize', () => {
+            document.getElementById('menu-btn').style.display = window.innerWidth <= 900 ? 'flex' : 'none';
+        });
+    </script>
+</body>
+
+</html>
