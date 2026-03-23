@@ -525,12 +525,4 @@ See [`.github/workflows/laravel.yml`](.github/workflows/laravel.yml)
 
 Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
 
----
 
-<div align="center">
-
-Made with ❤️ by **Omar Ahmed Gooda** — Student ID: 250104265
-
-Egyptian University · Software Engineering · 2026
-
-</div>
