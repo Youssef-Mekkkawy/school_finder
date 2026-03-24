@@ -16,17 +16,17 @@ class AdminSeeder extends Seeder
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
-            'name'     => 'Admin Youssef Elsayed',
+            'name'     => 'Youssef Elsayed',
             'email'    => 'youssef@schoolfinder.com',
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
-            'name'     => 'Admin Omar Goda',
+            'name'     => 'Omar Goda',
             'email'    => 'omar@schoolfinder.com',
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
-            'name'     => 'Admin Ahmed Yasser',
+            'name'     => 'Ahmed Yasser',
             'email'    => 'ahmed@schoolfinder.com',
             'password' => Hash::make('admin123'),
         ]);
