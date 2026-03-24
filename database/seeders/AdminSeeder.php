@@ -12,7 +12,7 @@ class AdminSeeder extends Seeder
     {
         Admin::create([
             'name'     => 'Admin',
-            'email'    => 'Youssef@schoolfinder.com',
+            'email'    => 'youssef@schoolfinder.com',
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
@@ -22,12 +22,12 @@ class AdminSeeder extends Seeder
         ]);
         Admin::create([
             'name'     => 'Admin Omar Goda',
-            'email'    => 'Omar@schoolfinder.com',
+            'email'    => 'omar@schoolfinder.com',
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
             'name'     => 'Admin Ahmed Yasser',
-            'email'    => 'Ahmed@schoolfinder.com',
+            'email'    => 'ahmed@schoolfinder.com',
             'password' => Hash::make('admin123'),
         ]);
     }
