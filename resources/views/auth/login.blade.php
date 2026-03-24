@@ -10,10 +10,12 @@
         href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net"> --}}
+    {{--
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
 
-    @vite(['resources/css/login.css'])
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}" class="css">
     @stack('styles')
 </head>
 
@@ -43,7 +45,8 @@
             adminDashboard: "{{ route('admin.dashboard') }}",
         };
     </script>
-    @vite(['resources/js/login.js'])
+    <script src="{{ asset('js/login.js') }}"></script>
+    @stack('scripts')
 
 </body>
 

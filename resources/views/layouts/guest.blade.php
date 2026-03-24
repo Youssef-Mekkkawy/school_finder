@@ -14,15 +14,15 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    @vite(['resources/css/app.css'])
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" class="css">
 
     @stack('styles')
 </head>
 
 <body>
     @yield('content')
-    {{-- <script src="{{ asset('js/helpers.js') }}"></script> --}}
-    @vite(['resources/js/helpers.js'])
+    <script src="{{ asset('js/helpers.js') }}"></script>
+
     @stack('scripts')
 </body>
 

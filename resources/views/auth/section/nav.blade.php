@@ -1,7 +1,7 @@
 <!-- NAV -->
 <nav>
     <div class="nav-i">
-        <a href="homepage.html" class="logo">
+        <a href="{{ route('home') }}" class="logo">
             <div class="logo-icon">SF</div>
             <span class="logo-txt">School<span>Finder</span></span>
         </a>
@@ -13,7 +13,7 @@
                 </svg>
                 <span id="lang-lbl">EN</span>
             </button>
-            <a href="homepage.html"
+            <a href="{{ route('home') }}"
                 style="color:#a8c4d8;font-size:.85rem;text-decoration:none;font-weight:500;transition:color .2s"
                 id="nav-back">← Back to Schools</a>
         </div>

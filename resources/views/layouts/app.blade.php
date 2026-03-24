@@ -17,7 +17,8 @@
         rel="stylesheet">
     {{--
     <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
-    @vite(['resources/css/app.css', 'resources/js/helpers.js'])
+
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" class="css">
     @stack('styles')
 </head>
 
@@ -26,10 +27,9 @@
     @yield('content')
     @include('partials.footer')
     @include('partials.toast')
-    {{--
-    <script src="{{ asset('js/helpers.js') }}"></script> --}}
-    {{-- @vite([']) --}}
-    {{-- @stack('scripts') --}}
+
+    <script src="{{ asset('js/helpers.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

@@ -2,13 +2,13 @@
    TRANSLATIONS — uses window.LANG set by PHP
    ═══════════════════════════════ */
 const t = (key) => {
-    const keys = key.split('.');
+    const keys = key.split(".");
     let val = window.LANG;
     for (const k of keys) {
         if (val && val[k] !== undefined) val = val[k];
         else return key;
     }
-    return typeof val === 'string' ? val : key;
+    return typeof val === "string" ? val : key;
 };
 
 /* ═══════════════════════════════
@@ -22,47 +22,53 @@ let selectedRole = "user";
    LANGUAGE — apply translations on load
    ═══════════════════════════════ */
 function applyTR() {
-    const set    = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
-    const setHtml= (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML   = t(key); };
-    setHtml('pb-txt',       'login.trusted');
-    setHtml('pl-title',     'login.welcome');
-    set('pl-sub',           'login.sub');
-    set('f1',               'login.f1');
-    set('f2',               'login.f2');
-    set('f3',               'login.f3');
-    set('f4',               'login.f4');
-    set('form-title',       'login.welcome_back');
-    set('form-sub',         'login.sign_in_sub');
-    set('tab-login',        'login.tab_login');
-    set('tab-register',     'login.tab_register');
-    set('role-lbl',         'login.login_as');
-    set('rn-user',          'login.parent');
-    set('rd-user',          'login.parent_sub');
-    set('rn-admin',         'login.admin');
-    set('rd-admin',         'login.admin_sub');
-    set('lbl-email',        'login.email');
-    set('lbl-pass',         'login.password');
-    set('lbl-rem',          'login.remember');
-    set('lnk-forgot',       'login.forgot');
-    set('login-btn-txt',    'login.sign_in');
-    set('sw-login-txt',     'login.no_account');
-    set('sw-login-lnk',     'login.reg_free');
-    set('lbl-name',         'login.full_name');
-    set('lbl-remail',       'login.email');
-    set('lbl-phone',        'login.phone');
-    set('lbl-rpass',        'login.password');
-    set('lbl-cpass',        'login.confirm_pass');
-    set('lbl-lang-pref',    'login.lang_pref');
-    set('lbl-terms',        'login.terms');
-    set('reg-btn-txt',      'login.create_acc');
-    set('sw-reg-txt',       'login.have_acc');
-    set('sw-reg-lnk',       'login.sign_here');
-    set('fg-title',         'login.forgot_title');
-    set('fg-sub',           'login.forgot_sub');
-    set('fg-lbl',           'login.email');
-    set('fg-btn-txt',       'login.send_reset');
-    set('fg-back',          'login.back_login');
-    set('nav-back',         'login.nav_back');
+    const set = (id, key) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = t(key);
+    };
+    const setHtml = (id, key) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = t(key);
+    };
+    setHtml("pb-txt", "login.trusted");
+    setHtml("pl-title", "login.welcome");
+    set("pl-sub", "login.sub");
+    set("f1", "login.f1");
+    set("f2", "login.f2");
+    set("f3", "login.f3");
+    set("f4", "login.f4");
+    set("form-title", "login.welcome_back");
+    set("form-sub", "login.sign_in_sub");
+    set("tab-login", "login.tab_login");
+    set("tab-register", "login.tab_register");
+    set("role-lbl", "login.login_as");
+    set("rn-user", "login.parent");
+    set("rd-user", "login.parent_sub");
+    set("rn-admin", "login.admin");
+    set("rd-admin", "login.admin_sub");
+    set("lbl-email", "login.email");
+    set("lbl-pass", "login.password");
+    set("lbl-rem", "login.remember");
+    set("lnk-forgot", "login.forgot");
+    set("login-btn-txt", "login.sign_in");
+    set("sw-login-txt", "login.no_account");
+    set("sw-login-lnk", "login.reg_free");
+    set("lbl-name", "login.full_name");
+    set("lbl-remail", "login.email");
+    set("lbl-phone", "login.phone");
+    set("lbl-rpass", "login.password");
+    set("lbl-cpass", "login.confirm_pass");
+    set("lbl-lang-pref", "login.lang_pref");
+    set("lbl-terms", "login.terms");
+    set("reg-btn-txt", "login.create_acc");
+    set("sw-reg-txt", "login.have_acc");
+    set("sw-reg-lnk", "login.sign_here");
+    set("fg-title", "login.forgot_title");
+    set("fg-sub", "login.forgot_sub");
+    set("fg-lbl", "login.email");
+    set("fg-btn-txt", "login.send_reset");
+    set("fg-back", "login.back_login");
+    set("nav-back", "login.nav_back");
 }
 
 /* ═══════════════════════════════
@@ -87,10 +93,13 @@ function switchTab(tab) {
         ?.classList.toggle("hidden", tab === "forgot");
     hideAlert();
     if (tab === "login") {
-        document.getElementById("form-title").textContent = t("login.welcome_back");
-        document.getElementById("form-sub").textContent = t("login.sign_in_sub");
+        document.getElementById("form-title").textContent =
+            t("login.welcome_back");
+        document.getElementById("form-sub").textContent =
+            t("login.sign_in_sub");
     } else if (tab === "register") {
-        document.getElementById("form-title").textContent = t("login.create_title");
+        document.getElementById("form-title").textContent =
+            t("login.create_title");
         document.getElementById("form-sub").textContent = t("login.join_free");
     }
 }
@@ -148,7 +157,9 @@ function validateEmail(input) {
         return;
     }
     const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-    ok ? showFieldOk(input, msgId) : showFieldErr(input, msgId, t("errors.email"));
+    ok
+        ? showFieldOk(input, msgId)
+        : showFieldErr(input, msgId, t("errors.email"));
 }
 function validateName(input) {
     const v = input.value.trim();
@@ -270,16 +281,19 @@ async function submitLogin(e) {
             );
             showAlert(t("success.login"), "ok");
             toast(t("success.login"), "ok");
-            const redirect = selectedRole === "admin"
-                ? window.ROUTES.adminDashboard
-                : window.ROUTES.dashboard;
+            const redirect =
+                selectedRole === "admin"
+                    ? window.ROUTES.adminDashboard
+                    : window.ROUTES.dashboard;
             setTimeout(() => {
                 window.location.href = redirect;
             }, 1200);
         } else {
             const msg =
                 json.message ||
-                (selectedRole === "admin" ? t("errors.admin_login") : t("errors.login"));
+                (selectedRole === "admin"
+                    ? t("errors.admin_login")
+                    : t("errors.login"));
             showAlert(msg);
             document.getElementById("loginPass").classList.add("err-field");
         }
@@ -421,9 +435,10 @@ function toast(msg, type = "inf") {
    ═══════════════════════════════ */
 const sfUser = JSON.parse(localStorage.getItem("sf_user") || "null");
 if (sfUser && sfUser.role) {
-    const redirect = sfUser.role === "admin"
-        ? window.ROUTES.adminDashboard
-        : window.ROUTES.dashboard;
+    const redirect =
+        sfUser.role === "admin"
+            ? window.ROUTES.adminDashboard
+            : window.ROUTES.dashboard;
     window.location.replace(redirect);
 }
 applyTR();
