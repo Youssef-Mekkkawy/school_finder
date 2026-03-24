@@ -8,13 +8,11 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    unzip \
+    libzip-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -22,15 +20,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy project files
+# Copy all project files (including your CSS/JS in /public)
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+# Fix for "exit code 1": Ignore platform requirements
+RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-platform-reqs
 
-# Set permissions for Laravel
+# Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Expose port and start the server
+# Expose port and start
 EXPOSE 8080
-CMD php artisan serve --host=0.0.0.0 --port=8080
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080
