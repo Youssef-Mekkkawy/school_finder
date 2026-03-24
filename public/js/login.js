@@ -1,68 +1,165 @@
 /* ═══════════════════════════════
-   TRANSLATIONS — uses window.LANG set by PHP
+   TRANSLATIONS
    ═══════════════════════════════ */
-const t = (key) => {
-    const keys = key.split('.');
-    let val = window.LANG;
-    for (const k of keys) {
-        if (val && val[k] !== undefined) val = val[k];
-        else return key;
-    }
-    return typeof val === 'string' ? val : key;
+const TR = {
+    en: {
+        "pb-txt": "Trusted by Parents in Cairo",
+        "pl-title": `Welcome to <span>SchoolFinder</span> Egypt`,
+        "pl-sub":
+            "Your account gives you access to favorites, reviews, appointment booking, and school comparison tools.",
+        f1: "Save favorite schools and compare them",
+        f2: "Write and read honest parent reviews",
+        f3: "Book school visits directly from the app",
+        f4: "Get notified when school fees are updated",
+        ps1: "Schools",
+        ps2: "Reviews",
+        ps3: "Always",
+        "form-title": "Welcome back",
+        "form-sub": "Sign in to your SchoolFinder account",
+        "tab-login": "Login",
+        "tab-register": "Register",
+        "role-lbl": "Login as",
+        "rn-user": "Parent / Student",
+        "rd-user": "Browse & compare schools",
+        "rn-admin": "Admin",
+        "rd-admin": "Manage platform data",
+        "lbl-email": "Email Address",
+        "lbl-pass": "Password",
+        "lbl-rem": "Remember me",
+        "lnk-forgot": "Forgot password?",
+        "login-btn-txt": "Sign In →",
+        "sw-login-txt": "Don't have an account?",
+        "sw-login-lnk": "Register for free",
+        "lbl-name": "Full Name",
+        "lbl-remail": "Email Address",
+        "lbl-phone": "Phone Number",
+        "lbl-rpass": "Password",
+        "lbl-cpass": "Confirm Password",
+        "lbl-lang-pref": "Preferred Language",
+        "lbl-terms": "I agree to the Terms of Service and Privacy Policy",
+        "reg-btn-txt": "Create Account →",
+        "sw-reg-txt": "Already have an account?",
+        "sw-reg-lnk": "Sign in here",
+        "fg-title": "Forgot Password?",
+        "fg-sub": "Enter your email and we\'ll send you a reset link.",
+        "fg-lbl": "Email Address",
+        "fg-btn-txt": "Send Reset Link →",
+        "fg-back": "← Back to Login",
+        "nav-back": "← Back to Schools",
+        err_email: "Please enter a valid email address.",
+        err_pass: "Password must be at least 8 characters.",
+        err_name: "Please enter your full name.",
+        err_match: "Passwords do not match.",
+        err_terms: "Please accept the terms to continue.",
+        err_fields: "Please fill in all required fields.",
+        err_login: "Invalid email or password.",
+        err_admin: "Invalid admin credentials.",
+        ok_login: "Login successful! Redirecting...",
+        ok_register: "Account created! Welcome to SchoolFinder.",
+        ok_forgot: "Reset link sent! Check your email.",
+        str_weak: "Weak",
+        str_med: "Medium",
+        str_strong: "Strong",
+        str_vstrong: "Very Strong",
+    },
+    ar: {
+        "pb-txt": "موثوق به من آلاف الآباء في القاهرة",
+        "pl-title": `مرحباً بك في <span>SchoolFinder</span> مصر`,
+        "pl-sub":
+            "حسابك يمنحك الوصول إلى المفضلة والتقييمات وحجز المواعيد ومقارنة المدارس.",
+        f1: "احفظ مدارسك المفضلة وقارنها",
+        f2: "اكتب واقرأ تقييمات صادقة من أولياء الأمور",
+        f3: "احجز زيارات للمدارس مباشرة من التطبيق",
+        f4: "احصل على إشعارات عند تحديث مصاريف المدارس",
+        ps1: "مدرسة",
+        ps2: "تقييم",
+        ps3: "دائماً",
+        "form-title": "مرحباً بعودتك",
+        "form-sub": "سجل الدخول إلى حسابك",
+        "tab-login": "تسجيل الدخول",
+        "tab-register": "إنشاء حساب",
+        "role-lbl": "تسجيل الدخول كـ",
+        "rn-user": "ولي أمر / طالب",
+        "rd-user": "تصفح ومقارنة المدارس",
+        "rn-admin": "مسؤول",
+        "rd-admin": "إدارة بيانات المنصة",
+        "lbl-email": "البريد الإلكتروني",
+        "lbl-pass": "كلمة المرور",
+        "lbl-rem": "تذكرني",
+        "lnk-forgot": "نسيت كلمة المرور؟",
+        "login-btn-txt": "تسجيل الدخول →",
+        "sw-login-txt": "ليس لديك حساب؟",
+        "sw-login-lnk": "إنشاء حساب مجاني",
+        "lbl-name": "الاسم الكامل",
+        "lbl-remail": "البريد الإلكتروني",
+        "lbl-phone": "رقم الهاتف",
+        "lbl-rpass": "كلمة المرور",
+        "lbl-cpass": "تأكيد كلمة المرور",
+        "lbl-lang-pref": "اللغة المفضلة",
+        "lbl-terms": "أوافق على شروط الخدمة وسياسة الخصوصية",
+        "reg-btn-txt": "إنشاء الحساب →",
+        "sw-reg-txt": "لديك حساب بالفعل؟",
+        "sw-reg-lnk": "تسجيل الدخول هنا",
+        "fg-title": "نسيت كلمة المرور؟",
+        "fg-sub": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.",
+        "fg-lbl": "البريد الإلكتروني",
+        "fg-btn-txt": "إرسال رابط الإعادة →",
+        "fg-back": "← العودة لتسجيل الدخول",
+        "nav-back": "← العودة للمدارس",
+        err_email: "يرجى إدخال بريد إلكتروني صحيح.",
+        err_pass: "يجب أن تكون كلمة المرور 8 أحرف على الأقل.",
+        err_name: "يرجى إدخال اسمك الكامل.",
+        err_match: "كلمتا المرور غير متطابقتين.",
+        err_terms: "يرجى قبول الشروط للمتابعة.",
+        err_fields: "يرجى ملء جميع الحقول المطلوبة.",
+        err_login: "بيانات الدخول غير صحيحة.",
+        err_admin: "بيانات المسؤول غير صحيحة.",
+        ok_login: "تم تسجيل الدخول بنجاح! جاري التحويل...",
+        ok_register: "تم إنشاء الحساب! مرحباً بك في SchoolFinder.",
+        ok_forgot: "تم إرسال رابط الإعادة! تحقق من بريدك.",
+        str_weak: "ضعيفة",
+        str_med: "متوسطة",
+        str_strong: "قوية",
+        str_vstrong: "قوية جداً",
+    },
 };
 
 /* ═══════════════════════════════
    STATE
    ═══════════════════════════════ */
-let lang = window.APP_LOCALE || "en";
+let lang = "en";
 let activeTab = "login";
 let selectedRole = "user";
 
+const t = (k) => TR[lang][k] || TR.en[k] || k;
+
 /* ═══════════════════════════════
-   LANGUAGE — apply translations on load
+   LANGUAGE
    ═══════════════════════════════ */
+function toggleLang() {
+    lang = lang === "en" ? "ar" : "en";
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.getElementById("lang-lbl").textContent =
+        lang === "en" ? "EN" : "AR";
+    applyTR();
+}
 function applyTR() {
-    const set    = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
-    const setHtml= (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML   = t(key); };
-    setHtml('pb-txt',       'login.trusted');
-    setHtml('pl-title',     'login.welcome');
-    set('pl-sub',           'login.sub');
-    set('f1',               'login.f1');
-    set('f2',               'login.f2');
-    set('f3',               'login.f3');
-    set('f4',               'login.f4');
-    set('form-title',       'login.welcome_back');
-    set('form-sub',         'login.sign_in_sub');
-    set('tab-login',        'login.tab_login');
-    set('tab-register',     'login.tab_register');
-    set('role-lbl',         'login.login_as');
-    set('rn-user',          'login.parent');
-    set('rd-user',          'login.parent_sub');
-    set('rn-admin',         'login.admin');
-    set('rd-admin',         'login.admin_sub');
-    set('lbl-email',        'login.email');
-    set('lbl-pass',         'login.password');
-    set('lbl-rem',          'login.remember');
-    set('lnk-forgot',       'login.forgot');
-    set('login-btn-txt',    'login.sign_in');
-    set('sw-login-txt',     'login.no_account');
-    set('sw-login-lnk',     'login.reg_free');
-    set('lbl-name',         'login.full_name');
-    set('lbl-remail',       'login.email');
-    set('lbl-phone',        'login.phone');
-    set('lbl-rpass',        'login.password');
-    set('lbl-cpass',        'login.confirm_pass');
-    set('lbl-lang-pref',    'login.lang_pref');
-    set('lbl-terms',        'login.terms');
-    set('reg-btn-txt',      'login.create_acc');
-    set('sw-reg-txt',       'login.have_acc');
-    set('sw-reg-lnk',       'login.sign_here');
-    set('fg-title',         'login.forgot_title');
-    set('fg-sub',           'login.forgot_sub');
-    set('fg-lbl',           'login.email');
-    set('fg-btn-txt',       'login.send_reset');
-    set('fg-back',          'login.back_login');
-    set('nav-back',         'login.nav_back');
+    Object.keys(TR.en).forEach((k) => {
+        if (k.startsWith("err_") || k.startsWith("ok_") || k.startsWith("str_"))
+            return;
+        const el = document.getElementById(k);
+        if (!el) return;
+        if (k === "pl-title") {
+            el.innerHTML = t(k);
+            return;
+        }
+        if (k === "lbl-terms") {
+            el.innerHTML = `I agree to the <a href="#" style="color:var(--teal);text-decoration:none">${lang === "ar" ? "شروط الخدمة" : "Terms of Service"}</a> ${lang === "ar" ? "و" : "and"} <a href="#" style="color:var(--teal);text-decoration:none">${lang === "ar" ? "سياسة الخصوصية" : "Privacy Policy"}</a>`;
+            return;
+        }
+        el.textContent = t(k);
+    });
 }
 
 /* ═══════════════════════════════
@@ -87,11 +184,15 @@ function switchTab(tab) {
         ?.classList.toggle("hidden", tab === "forgot");
     hideAlert();
     if (tab === "login") {
-        document.getElementById("form-title").textContent = t("login.welcome_back");
-        document.getElementById("form-sub").textContent = t("login.sign_in_sub");
+        document.getElementById("form-title").textContent = t("form-title");
+        document.getElementById("form-sub").textContent = t("form-sub");
     } else if (tab === "register") {
-        document.getElementById("form-title").textContent = t("login.create_title");
-        document.getElementById("form-sub").textContent = t("login.join_free");
+        document.getElementById("form-title").textContent =
+            lang === "ar" ? "إنشاء حساب جديد" : "Create your account";
+        document.getElementById("form-sub").textContent =
+            lang === "ar"
+                ? "انضم إلى SchoolFinder مجاناً"
+                : "Join SchoolFinder for free";
     }
 }
 
@@ -148,7 +249,7 @@ function validateEmail(input) {
         return;
     }
     const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-    ok ? showFieldOk(input, msgId) : showFieldErr(input, msgId, t("errors.email"));
+    ok ? showFieldOk(input, msgId) : showFieldErr(input, msgId, t("err_email"));
 }
 function validateName(input) {
     const v = input.value.trim();
@@ -158,7 +259,7 @@ function validateName(input) {
     }
     v.length >= 2
         ? showFieldOk(input, "name-msg")
-        : showFieldErr(input, "name-msg", t("errors.name"));
+        : showFieldErr(input, "name-msg", t("err_name"));
 }
 function checkMatch(input) {
     const pass = document.getElementById("regPass").value;
@@ -168,7 +269,7 @@ function checkMatch(input) {
     }
     input.value === pass
         ? showFieldOk(input, "conf-msg")
-        : showFieldErr(input, "conf-msg", t("errors.match"));
+        : showFieldErr(input, "conf-msg", t("err_match"));
 }
 
 /* ═══════════════════════════════
@@ -184,11 +285,11 @@ function checkStrength(input) {
     const bars = [1, 2, 3, 4].map((i) => document.getElementById("sb" + i));
     const cls = score <= 1 ? "weak" : score === 2 ? "med" : "strong";
     const labels = [
-        t("login.str_weak"),
-        t("login.str_weak"),
-        t("login.str_med"),
-        t("login.str_strong"),
-        t("login.str_vstrong"),
+        t("str_weak"),
+        t("str_weak"),
+        t("str_med"),
+        t("str_strong"),
+        t("str_vstrong"),
     ];
     const colors = { weak: "#e74c3c", med: "#f39c12", strong: "var(--ok)" };
     bars.forEach((b, i) => {
@@ -233,7 +334,7 @@ async function submitLogin(e) {
     const email = document.getElementById("loginEmail").value.trim();
     const pass = document.getElementById("loginPass").value;
     if (!email || !pass) {
-        showAlert(t("errors.fields"));
+        showAlert(t("err_fields"));
         return;
     }
 
@@ -268,18 +369,19 @@ async function submitLogin(e) {
                     role: json.data.user.role,
                 }),
             );
-            showAlert(t("success.login"), "ok");
-            toast(t("success.login"), "ok");
-            const redirect = selectedRole === "admin"
-                ? window.ROUTES.adminDashboard
-                : window.ROUTES.dashboard;
+            showAlert(t("ok_login"), "ok");
+            toast(t("ok_login"), "ok");
+            const redirect =
+                selectedRole === "admin"
+                    ? window.ROUTES.adminDashboard
+                    : window.ROUTES.dashboard;
             setTimeout(() => {
                 window.location.href = redirect;
             }, 1200);
         } else {
             const msg =
                 json.message ||
-                (selectedRole === "admin" ? t("errors.admin_login") : t("errors.login"));
+                (selectedRole === "admin" ? t("err_admin") : t("err_login"));
             showAlert(msg);
             document.getElementById("loginPass").classList.add("err-field");
         }
@@ -304,23 +406,23 @@ async function submitRegister(e) {
     const agree = document.getElementById("agreeTerms").checked;
 
     if (!name || !email || !pass || !conf) {
-        showAlert(t("errors.fields"));
+        showAlert(t("err_fields"));
         return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showAlert(t("errors.email"));
+        showAlert(t("err_email"));
         return;
     }
     if (pass.length < 8) {
-        showAlert(t("errors.password"));
+        showAlert(t("err_pass"));
         return;
     }
     if (pass !== conf) {
-        showAlert(t("errors.match"));
+        showAlert(t("err_match"));
         return;
     }
     if (!agree) {
-        showAlert(t("errors.terms"));
+        showAlert(t("err_terms"));
         return;
     }
 
@@ -355,8 +457,8 @@ async function submitRegister(e) {
                     role: "user",
                 }),
             );
-            showAlert(t("success.register"), "ok");
-            toast(t("success.register"), "ok");
+            showAlert(t("ok_register"), "ok");
+            toast(t("ok_register"), "ok");
             setTimeout(() => {
                 window.location.href = window.ROUTES.dashboard;
             }, 1300);
@@ -365,7 +467,7 @@ async function submitRegister(e) {
                 json.message ||
                 (json.errors
                     ? Object.values(json.errors)[0][0]
-                    : t("errors.fields"));
+                    : t("err_fields"));
             showAlert(msg);
         }
     } catch (err) {
@@ -390,7 +492,7 @@ function submitForgot(e) {
     e.preventDefault();
     const email = document.getElementById("forgotEmail").value.trim();
     if (!email) {
-        showAlert(t("errors.fields"));
+        showAlert(t("err_fields"));
         return;
     }
     const btn = e.target.querySelector(".sub-btn");
@@ -399,8 +501,8 @@ function submitForgot(e) {
     setTimeout(() => {
         btn.classList.remove("loading");
         btn.disabled = false;
-        showAlert(t("success.forgot"), "ok");
-        toast(t("success.forgot"), "ok");
+        showAlert(t("ok_forgot"), "ok");
+        toast(t("ok_forgot"), "ok");
     }, 900);
 }
 
@@ -421,9 +523,10 @@ function toast(msg, type = "inf") {
    ═══════════════════════════════ */
 const sfUser = JSON.parse(localStorage.getItem("sf_user") || "null");
 if (sfUser && sfUser.role) {
-    const redirect = sfUser.role === "admin"
-        ? window.ROUTES.adminDashboard
-        : window.ROUTES.dashboard;
+    const redirect =
+        sfUser.role === "admin"
+            ? window.ROUTES.adminDashboard
+            : window.ROUTES.dashboard;
     window.location.replace(redirect);
 }
 applyTR();
