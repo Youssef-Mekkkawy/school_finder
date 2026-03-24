@@ -22,7 +22,7 @@
                 </button>
             </form>
             <a href="{{ route('login') }}" class="btn-ghost" id="nl-login">{{ __('messages.nav.login') }}</a>
-            <a href="{{ route('register') }}" class="btn-teal" id="nl-reg">{{ __('messages.nav.register') }}</a>
+            {{-- <a href="{{ route('register') }}" class="btn-teal" id="nl-reg">{{ __('messages.nav.register') }}</a> --}}
 
             <!-- USER MENU (shown when logged in via JS) -->
             <div class="user-menu" id="user-menu" style="display:none">
