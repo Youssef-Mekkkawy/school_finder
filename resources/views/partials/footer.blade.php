@@ -31,8 +31,15 @@
             </div>
         </div>
         <div class="fbot">
+            <span class="dev">
+                Developed by
+                <a href="https://github.com/youssef-mahmoud" target="_blank">
+                    Youssef Mahmoud
+                    <i class="fab fa-github"></i>
+                </a>
+            </span>
+
             <span>© {{ date('Y') }} SchoolFinder Egypt. All rights reserved.</span>
-            <span>International Schools Database — Phase 1 (Demo)</span>
         </div>
     </div>
 </footer>
