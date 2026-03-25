@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\HomeController;
 // ── PUBLIC PAGES ─────────────────────────────────────────────
 // These controllers just return the blade views.
 // All real logic is handled by the API + JavaScript.
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/login', function () {
     return view('auth.login');
