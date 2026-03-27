@@ -4,12 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        window.APP_LOCALE = "{{ app()->getLocale() }}";
-        window.IS_RTL     = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};
-        window.LANG       = @json(trans('messages'));
-        if (window.APP_LOCALE) localStorage.setItem('sf_locale', window.APP_LOCALE);
-    </script>
     <title>@yield('title', 'Admin Dashboard — SchoolFinder Egypt')</title>
 
 
@@ -22,7 +16,7 @@
 
 </head>
 
-<body style="visibility:hidden">
+<body>
     @yield('content')
     @include('partials.toast')
     <script src="{{ asset('js/helpers.js') }}"></script>

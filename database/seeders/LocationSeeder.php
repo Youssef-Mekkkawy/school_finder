@@ -2,23 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\Location;
 use Illuminate\Database\Seeder;
 
+/**
+ * LocationSeeder
+ *
+ * Locations are now created inline inside SchoolSeeder.
+ * Each school creates its own Location row.
+ * This file is kept for backwards compatibility only.
+ */
 class LocationSeeder extends Seeder
 {
     public function run(): void
     {
-        $locations = [
-            ['area' => 'Beverly Hills', 'city' => 'Sheikh Zayed',    'compound' => null, 'address' => 'Beverly Hills, Sheikh Zayed, Giza'],
-            ['area' => 'Maadi',         'city' => 'Cairo',           'compound' => null, 'address' => 'Maadi, Cairo'],
-            ['area' => 'El-Shorouk',    'city' => 'El-Shorouk City', 'compound' => null, 'address' => 'El-Shorouk City, Cairo'],
-            ['area' => 'NewGiza',       'city' => '6th of October',  'compound' => null, 'address' => 'NewGiza, 6th of October, Giza'],
-            ['area' => 'Maadi',         'city' => 'Cairo',           'compound' => null, 'address' => 'Maadi, Cairo'],
-        ];
-
-        foreach ($locations as $location) {
-            Location::create($location);
-        }
+        // Locations are now handled inline in SchoolSeeder.
+        // Each school creates its own Location row with full address data.
     }
 }

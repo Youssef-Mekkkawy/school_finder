@@ -200,7 +200,7 @@ const TR = {
 /* ═══════════════════════════════════════
            STATE
            ═══════════════════════════════════════ */
-let lang = localStorage.getItem("sf_locale") || window.APP_LOCALE || "en",
+let lang = window.APP_LOCALE || "en",
     activeTab = "overview",
     revStar = 0;
 const t = (k) => TR[lang][k] || TR.en[k] || k;

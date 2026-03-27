@@ -3,18 +3,6 @@
 @section('title', 'Admin Dashboard — SchoolFinder Egypt')
 
 @section('content')
-<script>
-(function() {
-    var token = localStorage.getItem('sf_token');
-    var user  = JSON.parse(localStorage.getItem('sf_user') || '{}');
-    if (!token || user.role !== 'admin') {
-        window.location.replace('/login');
-    } else {
-        document.body.style.visibility = 'visible';
-    }
-})();
-</script>
-
 <!-- ── SIDEBAR ── -->
     <div class="sidebar" id="sidebar">
         <div class="sb-logo">
@@ -136,7 +124,7 @@
                 </div>
             </div>
             <div class="topbar-right">
-                <form method="POST" action="{{ route('lang.switch', app()->getLocale() === 'en' ? 'ar' : 'en') }}" style="display:inline" onsubmit="localStorage.setItem('sf_locale','{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}')">
+                <form method="POST" action="{{ route('lang.switch', app()->getLocale() === 'en' ? 'ar' : 'en') }}" style="display:inline">
                     @csrf
                     <button type="submit" class="lang-btn">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -953,7 +941,7 @@
         /* ═══════════════════════════════════════
            STATE
            ═══════════════════════════════════════ */
-        let lang = localStorage.getItem('sf_locale') || window.APP_LOCALE || 'en', activePage = 'dashboard', deleteTarget = null, deleteType = null;
+        let lang = '{{ app()->getLocale() }}', activePage = 'dashboard', deleteTarget = null, deleteType = null;
         const t = k => (TR[lang][k] || TR.en[k] || k);
 
         /* ═══════════════════════════════════════

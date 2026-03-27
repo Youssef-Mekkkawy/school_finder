@@ -127,7 +127,7 @@ const TR = {
 /* ═══════════════════════════════
    STATE
    ═══════════════════════════════ */
-let lang = "en";
+let lang = (typeof window.INITIAL_LOCALE !== 'undefined') ? window.INITIAL_LOCALE : "en";
 let activeTab = "login";
 let selectedRole = "user";
 
@@ -369,6 +369,18 @@ async function submitLogin(e) {
                     role: json.data.user.role,
                 }),
             );
+            // Establish Laravel session so server-side middleware works
+            const sessionEndpoint = selectedRole === "admin"
+                ? "/auth/admin-session"
+                : "/auth/session";
+            await fetch(sessionEndpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name=csrf-token]')?.content || "",
+                },
+                body: JSON.stringify({ email, password: pass }),
+            });
             showAlert(t("ok_login"), "ok");
             toast(t("ok_login"), "ok");
             const redirect =
@@ -519,14 +531,6 @@ function toast(msg, type = "inf") {
 }
 
 /* ═══════════════════════════════
-   INIT                   ← CHANGED
+   INIT
    ═══════════════════════════════ */
-const sfUser = JSON.parse(localStorage.getItem("sf_user") || "null");
-if (sfUser && sfUser.role) {
-    const redirect =
-        sfUser.role === "admin"
-            ? window.ROUTES.adminDashboard
-            : window.ROUTES.dashboard;
-    window.location.replace(redirect);
-}
 applyTR();

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 // ── PUBLIC PAGES ─────────────────────────────────────────────
@@ -18,18 +19,33 @@ Route::get('/register', function () {
 })->name('register');
 
 
-// ── PROTECTED PAGES (JS auth guard handles redirect) ─────────
-// No server-side middleware needed here.
-// The JavaScript on each page checks localStorage for sf_token
-// and redirects to /login if not found.
-
+// ── PROTECTED PAGES ──────────────────────────────────────────
 Route::get('/dashboard', function () {
     return view('user.dashboard');
-})->name('dashboard');
+})->name('dashboard')->middleware('auth');
 
 Route::get('/admin', function () {
     return view('admin.dashboard');
-})->name('admin.dashboard');
+})->name('admin.dashboard')->middleware('auth:admin');
+
+// ── WEB SESSION ENDPOINTS (called by login.js to establish session) ──
+Route::post('/auth/session', function (Illuminate\Http\Request $request) {
+    $credentials = $request->validate(['email' => 'required|email', 'password' => 'required']);
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+        return response()->json(['success' => true]);
+    }
+    return response()->json(['success' => false], 401);
+})->name('auth.session');
+
+Route::post('/auth/admin-session', function (Illuminate\Http\Request $request) {
+    $credentials = $request->validate(['email' => 'required|email', 'password' => 'required']);
+    if (Auth::guard('admin')->attempt($credentials)) {
+        $request->session()->regenerate();
+        return response()->json(['success' => true]);
+    }
+    return response()->json(['success' => false], 401);
+})->name('auth.admin.session');
 
 Route::post('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar'])) {
@@ -37,3 +53,11 @@ Route::post('/lang/{locale}', function ($locale) {
     }
     return back();
 })->name('lang.switch');
+
+Route::post('/logout', function () {
+    Auth::logout();
+    Auth::guard('admin')->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');

@@ -4,11 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        window.APP_LOCALE = "{{ app()->getLocale() }}";
-        window.IS_RTL = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};
-        if (window.APP_LOCALE) localStorage.setItem('sf_locale', window.APP_LOCALE);
-    </script>
     <title>My Dashboard — SchoolFinder Egypt</title>
 
     <link
@@ -19,16 +14,7 @@
     @stack('styles')
 </head>
 
-<body style="visibility:hidden">
-
-    <!-- AUTH GUARD — synchronous, runs before any paint -->
-    <script>
-        (function () {
-            var token = localStorage.getItem('sf_token');
-            if (!token) { window.location.replace('/login'); return; }
-            document.body.style.visibility = 'visible';
-        })();
-    </script>
+<body>
 
     <!-- NAV -->
     <nav>
@@ -39,8 +25,7 @@
             </a>
             <div class="nav-right">
                 <form method="POST" action="{{ route('lang.switch', app()->getLocale() === 'en' ? 'ar' : 'en') }}"
-                    style="display:inline"
-                    onsubmit="localStorage.setItem('sf_locale','{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}')">
+                    style="display:inline">
                     @csrf
                     <button type="submit" class="lang-btn">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -511,6 +496,7 @@
 
     <div class="toast" id="toast"></div>
 
+    <script>window.APP_LOCALE = '{{ app()->getLocale() }}';</script>
     <script src="{{ asset('js/user.js') }}"></script>
 
 </body>

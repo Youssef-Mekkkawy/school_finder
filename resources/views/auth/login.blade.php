@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}" class="css">
     <style>
         .fbot {
@@ -88,6 +89,7 @@
             dashboard: "{{ route('dashboard') }}",
             adminDashboard: "{{ route('admin.dashboard') }}",
         };
+        window.INITIAL_LOCALE = "{{ app()->getLocale() }}";
     </script>
     <script src="{{ asset('js/login.js') }}"></script>
     @stack('scripts')

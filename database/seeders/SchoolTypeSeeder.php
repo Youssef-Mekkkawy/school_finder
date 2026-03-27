@@ -9,10 +9,20 @@ class SchoolTypeSeeder extends Seeder
 {
     public function run(): void
     {
-        $types = ['British', 'American', 'German', 'French', 'Egyptian', 'International'];
+        $types = [
+            ['name' => 'British'],       // 1
+            ['name' => 'American'],      // 2
+            ['name' => 'German'],        // 3
+            ['name' => 'French'],        // 4
+            ['name' => 'Egyptian'],      // 5
+            ['name' => 'International'], // 6
+            ['name' => 'Canadian'],      // 7
+            ['name' => 'Montessori'],    // 8
+            ['name' => 'IB World'],      // 9
+        ];
 
         foreach ($types as $type) {
-            SchoolType::create(['name' => $type]);
+            SchoolType::create($type);
         }
     }
 }

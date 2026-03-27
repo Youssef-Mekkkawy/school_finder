@@ -18,6 +18,9 @@
 @endsection
 
 @push('scripts')
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&loading=async&callback=Function.prototype">
+    </script>
     <script>
         /* ═══════════════════════════════════════
            API CONFIG
@@ -118,7 +121,7 @@
         /* ═══════════════════════════════════════
            STATE
            ═══════════════════════════════════════ */
-        let lang = window.APP_LOCALE || 'en';
+        let lang = '{{ app()->getLocale() }}';
         let favs = JSON.parse(localStorage.getItem('sf_favs') || '[]');
         let cmps = [];
         let filtered = [];
@@ -478,7 +481,10 @@
         <!-- Map -->
         <div class="msec">
           <h4>${L ? 'الموقع على الخريطة' : 'Location on Map'}</h4>
-          <div class="map-ph">📍 ${loc} — <span style="font-size:.8rem">${L ? 'الخريطة ستتوفر عبر Google Maps API' : 'Map will be available via Google Maps API'}</span></div>
+          ${(s.location && s.location.latitude && s.location.longitude)
+            ? `<div id="school-map-canvas" style="width:100%;height:280px;border-radius:10px;border:1.5px solid var(--border);overflow:hidden"></div>`
+            : `<div class="map-ph">📍 ${loc}</div>`
+          }
         </div>
         <!-- Reviews -->
         <div class="msec">
@@ -509,7 +515,9 @@
             <div style="background:#FFF8F2;border:1.5px solid var(--warn);border-radius:10px;padding:1rem 1.1rem">
               <div style="font-weight:700;color:var(--warn);margin-bottom:.35rem;font-family:'Sora',sans-serif;font-size:.9rem">Visit Required</div>
               <div style="font-size:.84rem;color:var(--muted);margin-bottom:.7rem">Only parents who have visited this school can submit a review. Book an appointment to schedule your visit.</div>
-              <button class="sub-btn" onclick="scrollToAppt()" style="background:var(--warn);width:auto;padding:.45rem 1.4rem">Book Appointment →</button>
+              <a href="{{ route('dashboard') }}">
+                <button class="sub-btn" onclick="scrollToAppt()" style="background:var(--warn);width:auto;padding:.45rem 1.4rem">Book Appointment →</button>
+              </a>
             </div>
           `}
         </div>
@@ -523,10 +531,24 @@
           <button class="sub-btn" onclick="submitAppt(${s.id})">${t('apptSend')}</button>
         </div>
       `;
+            if (s.location && s.location.latitude && s.location.longitude) {
+                initSchoolMap(s.location.latitude, s.location.longitude, s.name);
+            }
         }
 
         function mr(lbl, val) { return `<div><div class="mlbl">${lbl}</div><div class="mval">${val}</div></div>`; }
         function closeSch(e) { if (e.target === document.getElementById('schMod')) document.getElementById('schMod').classList.remove('open'); }
+        function initSchoolMap(lat, lng, name) {
+            const tryInit = () => {
+                if (typeof google === 'undefined' || !google.maps) { setTimeout(tryInit, 150); return; }
+                const el = document.getElementById('school-map-canvas');
+                if (!el) return;
+                const pos = { lat: parseFloat(lat), lng: parseFloat(lng) };
+                const map = new google.maps.Map(el, { center: pos, zoom: 15 });
+                new google.maps.Marker({ position: pos, map, title: name });
+            };
+            tryInit();
+        }
         function setStar(n) { selStar = n; for (let i = 1; i <= 5; i++)document.getElementById('st' + i).classList.toggle('on', i <= n); }
         function scrollToAppt() { const el = document.getElementById('appt-section'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         async function submitRev(id) {
