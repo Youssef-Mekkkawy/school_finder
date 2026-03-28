@@ -7,7 +7,7 @@
                 <h2 class="sec-title" id="ttl-sc">International Schools in Cairo</h2>
                 <p class="sec-sub" id="sub-sc">Verified information and real parent reviews.</p>
             </div>
-            <a href="#"
+            <a href="{{ route('schools.index') }}"
                 style="color:var(--teal);font-weight:600;font-size:.86rem;text-decoration:none;white-space:nowrap"
                 id="va-link">View all →</a>
         </div>

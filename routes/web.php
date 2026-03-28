@@ -18,6 +18,10 @@ Route::get('/register', function () {
     return;
 })->name('register');
 
+Route::get('/schools', function () {
+    return view('schools.index');
+})->name('schools.index');
+
 
 // ── PROTECTED PAGES ──────────────────────────────────────────
 Route::get('/dashboard', function () {

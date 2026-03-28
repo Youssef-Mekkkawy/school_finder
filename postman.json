@@ -1,0 +1,1448 @@
+{
+    "info": {
+        "name": "SchoolFinder Egypt API",
+        "description": "Complete API collection for SchoolFinder Egypt.\n\n**How to use:**\n1. Set `base_url` variable to your server URL\n2. Run **Login (User)** or **Login (Admin)** — token is saved automatically\n3. All protected endpoints use the token automatically\n\n**Variables:**\n- `base_url` → http://localhost:8000/api\n- `token` → auto-set after login\n- `admin_token` → auto-set after admin login",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "admin_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "school_id",
+            "value": "42",
+            "type": "string"
+        },
+        {
+            "key": "appointment_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "review_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "notification_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "user_id",
+            "value": "1",
+            "type": "string"
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "🔐 Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"phone\": \"01012345678\",\n  \"language\": \"en\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "register"]
+                        },
+                        "description": "Register a new parent/user account."
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data && res.data.token) {",
+                                    "    pm.collectionVariables.set('token', res.data.token);",
+                                    "    console.log('✅ Token saved:', res.data.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Login (User)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"omar@test.com\",\n  \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "login"]
+                        },
+                        "description": "Login as a parent/user. Token is automatically saved to collection variable."
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data && res.data.token) {",
+                                    "    pm.collectionVariables.set('token', res.data.token);",
+                                    "    console.log('✅ User token saved:', res.data.token);",
+                                    "    pm.test('Login successful', () => pm.response.to.have.status(200));",
+                                    "} else {",
+                                    "    console.log('❌ Login failed:', JSON.stringify(res));",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Login (Admin)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"admin@schoolfinder.com\",\n  \"password\": \"admin123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/admin/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "admin", "login"]
+                        },
+                        "description": "Login as admin. Admin token is automatically saved separately."
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data && res.data.token) {",
+                                    "    pm.collectionVariables.set('admin_token', res.data.token);",
+                                    "    pm.collectionVariables.set('token', res.data.token);",
+                                    "    console.log('✅ Admin token saved:', res.data.token);",
+                                    "    pm.test('Admin login successful', () => pm.response.to.have.status(200));",
+                                    "} else {",
+                                    "    console.log('❌ Admin login failed:', JSON.stringify(res));",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Get Current User",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/me",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "me"]
+                        },
+                        "description": "Get the currently authenticated user's data."
+                    }
+                },
+
+                {
+                    "name": "Update Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Omar Ahmed Updated\",\n  \"phone\": \"01099999999\",\n  \"language\": \"ar\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/profile",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "profile"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Change Password",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"current_password\": \"password123\",\n  \"password\": \"newpassword123\",\n  \"password_confirmation\": \"newpassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/password",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "password"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Forgot Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"omar@test.com\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/forgot-password",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "forgot-password"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "logout"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.collectionVariables.set('token', '');",
+                                    "console.log('✅ Token cleared');"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "name": "🏫 Schools",
+            "item": [
+                {
+                    "name": "List Schools",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/schools?page=1&per_page=12",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools"],
+                            "query": [
+                                { "key": "page", "value": "1" },
+                                { "key": "per_page", "value": "12" },
+                                {
+                                    "key": "search",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "curriculum",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "fee_min",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "fee_max",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                { "key": "sort", "value": "", "disabled": true }
+                            ]
+                        },
+                        "description": "Get paginated list of schools.\n\n**Query params:**\n- search: school name or area\n- type: British / American / German / French / International / Canadian / Montessori / IB World\n- curriculum: IGCSE / IB Diploma / American Diploma / Abitur / French Baccalaureate / A-Levels\n- location: area name (Maadi, New Cairo, Sheikh Zayed, etc)\n- fee_min / fee_max: integer in EGP\n- sort: name / fee_low / fee_high / rating\n- per_page: max 50"
+                    }
+                },
+
+                {
+                    "name": "List Schools (with filters)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/schools?search=BISC&type=British&sort=rating&per_page=12",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools"],
+                            "query": [
+                                { "key": "search", "value": "BISC" },
+                                { "key": "type", "value": "British" },
+                                { "key": "sort", "value": "rating" },
+                                { "key": "per_page", "value": "12" }
+                            ]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Get School Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/schools/{{school_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools", "{{school_id}}"]
+                        },
+                        "description": "Get full detail of a single school including location, fees, curricula."
+                    }
+                },
+
+                {
+                    "name": "Compare Schools",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/schools/compare?ids[]=42&ids[]=76&ids[]=29",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools", "compare"],
+                            "query": [
+                                { "key": "ids[]", "value": "42" },
+                                { "key": "ids[]", "value": "76" },
+                                { "key": "ids[]", "value": "29" }
+                            ]
+                        },
+                        "description": "Compare up to 3 schools side by side."
+                    }
+                },
+
+                {
+                    "name": "Get School Reviews",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/schools/{{school_id}}/reviews",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools", "{{school_id}}", "reviews"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Check Can Review",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/schools/{{school_id}}/can-review",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools", "{{school_id}}", "can-review"]
+                        },
+                        "description": "Check if the current user can review this school (needs confirmed appointment)."
+                    }
+                },
+
+                {
+                    "name": "Submit Review",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excellent school with world-class facilities and highly qualified teachers.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/schools/{{school_id}}/reviews",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools", "{{school_id}}", "reviews"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Delete Own Review",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/reviews/{{review_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["reviews", "{{review_id}}"]
+                        }
+                    }
+                }
+            ]
+        },
+
+        {
+            "name": "❤️ Favorites",
+            "item": [
+                {
+                    "name": "Get My Favorites",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/favorites",
+                            "host": ["{{base_url}}"],
+                            "path": ["favorites"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Add to Favorites",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/favorites/{{school_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["favorites", "{{school_id}}"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Remove from Favorites",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/favorites/{{school_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["favorites", "{{school_id}}"]
+                        }
+                    }
+                }
+            ]
+        },
+
+        {
+            "name": "📅 Appointments",
+            "item": [
+                {
+                    "name": "Get My Appointments",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/appointments",
+                            "host": ["{{base_url}}"],
+                            "path": ["appointments"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Book Appointment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"school_id\": 42,\n  \"preferred_date\": \"2026-04-20\",\n  \"message\": \"We are interested in the IB programme for our daughter entering Grade 9.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/appointments",
+                            "host": ["{{base_url}}"],
+                            "path": ["appointments"]
+                        },
+                        "description": "Book a school visit appointment.\n\n- school_id: required\n- preferred_date: required (YYYY-MM-DD, must be future date)\n- message: optional"
+                    }
+                },
+
+                {
+                    "name": "Cancel Appointment",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/appointments/{{appointment_id}}/cancel",
+                            "host": ["{{base_url}}"],
+                            "path": [
+                                "appointments",
+                                "{{appointment_id}}",
+                                "cancel"
+                            ]
+                        },
+                        "description": "User can only cancel their own PENDING appointments."
+                    }
+                }
+            ]
+        },
+
+        {
+            "name": "🔔 Notifications",
+            "item": [
+                {
+                    "name": "Get All Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications",
+                            "host": ["{{base_url}}"],
+                            "path": ["notifications"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Get Unread Count",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/unread-count",
+                            "host": ["{{base_url}}"],
+                            "path": ["notifications", "unread-count"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Mark Notification as Read",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+                            "host": ["{{base_url}}"],
+                            "path": [
+                                "notifications",
+                                "{{notification_id}}",
+                                "read"
+                            ]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Mark All as Read",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/read-all",
+                            "host": ["{{base_url}}"],
+                            "path": ["notifications", "read-all"]
+                        }
+                    }
+                }
+            ]
+        },
+
+        {
+            "name": "🛠️ Admin",
+            "description": "All admin endpoints. Run 'Login (Admin)' first — token is saved automatically.",
+            "item": [
+                {
+                    "name": "Dashboard Stats",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/stats",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "stats"]
+                        }
+                    }
+                },
+
+                {
+                    "name": "Schools",
+                    "item": [
+                        {
+                            "name": "List All Schools (Admin)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/schools",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "schools"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Create School",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"New Test International School\",\n  \"type_id\": 1,\n  \"email\": \"info@testschool.com\",\n  \"phone\": \"+202 1234 5678\",\n  \"website\": \"https://testschool.com\",\n  \"age_min\": 3,\n  \"age_max\": 18,\n  \"class_size_avg\": 20,\n  \"transport\": \"Available\",\n  \"location\": {\n    \"area\": \"New Cairo\",\n    \"city\": \"Cairo\",\n    \"compound\": null,\n    \"address\": \"New Cairo, Egypt\"\n  },\n  \"curricula\": [1, 2],\n  \"fee\": {\n    \"tuition_min\": 100000,\n    \"tuition_max\": 200000,\n    \"currency\": \"EGP\",\n    \"academic_year\": \"2025/2026\"\n  }\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/schools",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "schools"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Update School",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"name\": \"Updated School Name\",\n  \"email\": \"updated@school.com\",\n  \"phone\": \"+202 9999 9999\",\n  \"transport\": \"Available on request\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/schools/{{school_id}}",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "schools",
+                                        "{{school_id}}"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Delete School",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/schools/{{school_id}}",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "schools",
+                                        "{{school_id}}"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Set School of the Month",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/schools/{{school_id}}/set-featured",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "schools",
+                                        "{{school_id}}",
+                                        "set-featured"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Remove School of the Month",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/schools/{{school_id}}/remove-featured",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "schools",
+                                        "{{school_id}}",
+                                        "remove-featured"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Reviews",
+                    "item": [
+                        {
+                            "name": "List All Reviews",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/reviews",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "reviews"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Approve Review",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/reviews/{{review_id}}/approve",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "reviews",
+                                        "{{review_id}}",
+                                        "approve"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Delete Review",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/reviews/{{review_id}}",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "reviews",
+                                        "{{review_id}}"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Appointments",
+                    "item": [
+                        {
+                            "name": "List All Appointments",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/appointments",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "appointments"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Confirm Appointment",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"status\": \"confirmed\",\n  \"confirmed_date\": \"2026-04-25\",\n  \"admin_note\": \"Your appointment has been confirmed. Please arrive 10 minutes early.\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/appointments/{{appointment_id}}/status",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "appointments",
+                                        "{{appointment_id}}",
+                                        "status"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Cancel Appointment (Admin)",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"status\": \"cancelled\",\n  \"cancel_reason\": \"The school is not accepting visits this week due to exam period.\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/appointments/{{appointment_id}}/status",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "appointments",
+                                        "{{appointment_id}}",
+                                        "status"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Mark Attention Needed",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"status\": \"attention\",\n  \"attention_note\": \"Please provide your child's current grade level and preferred curriculum track.\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/appointments/{{appointment_id}}/status",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "appointments",
+                                        "{{appointment_id}}",
+                                        "status"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Delete Appointment",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/appointments/{{appointment_id}}",
+                                    "host": ["{{base_url}}"],
+                                    "path": [
+                                        "admin",
+                                        "appointments",
+                                        "{{appointment_id}}"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Users",
+                    "item": [
+                        {
+                            "name": "List All Users",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/users",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "users"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Delete User",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/users/{{user_id}}",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "users", "{{user_id}}"]
+                                }
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Notifications",
+                    "item": [
+                        {
+                            "name": "Send Notification to All Users",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"target\": \"all\",\n  \"title\": \"New Schools Added!\",\n  \"body\": \"We have added 100 new international schools to SchoolFinder Egypt. Check them out now!\",\n  \"type\": \"announcement\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/notifications/send",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "notifications", "send"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Send Notification to Specific User",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"target\": \"specific\",\n  \"user_id\": 1,\n  \"title\": \"Your appointment is confirmed!\",\n  \"body\": \"Your visit to BISC has been confirmed for April 25, 2026 at 10:00 AM.\",\n  \"type\": \"appointment\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/notifications/send",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "notifications", "send"]
+                                }
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Homepage Settings",
+                    "item": [
+                        {
+                            "name": "Get Homepage Settings",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/homepage",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "homepage"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Update Hero Section",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"section\": \"hero\",\n  \"content\": {\n    \"badge\": \"Trusted by Parents in Cairo\",\n    \"title\": \"Find the Perfect School for Your Child\",\n    \"subtitle\": \"Browse 105+ international schools in Cairo. Compare fees, curricula, and reviews — all in one place.\",\n    \"btn_text\": \"Explore Schools\",\n    \"cta_text\": \"Free to use. No sign-up required to browse.\"\n  }\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/homepage/hero",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "homepage", "hero"]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "Update Stats Bar",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"section\": \"stats\",\n  \"content\": [\n    { \"value\": \"105+\", \"label\": \"Schools Listed\" },\n    { \"value\": \"500+\", \"label\": \"Parent Reviews\" },\n    { \"value\": \"12\",   \"label\": \"Curricula Types\" },\n    { \"value\": \"Free\", \"label\": \"Always Free\" }\n  ]\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/homepage/stats",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["admin", "homepage", "stats"]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "name": "🧪 Quick Tests",
+            "description": "Quick sanity-check requests to verify the API is running.",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/schools?per_page=1",
+                            "host": ["{{base_url}}"],
+                            "path": ["schools"],
+                            "query": [{ "key": "per_page", "value": "1" }]
+                        },
+                        "description": "Quick check that the API is responding."
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('API is online', () => pm.response.to.have.status(200));",
+                                    "pm.test('Returns JSON', () => pm.response.to.be.json);",
+                                    "const res = pm.response.json();",
+                                    "pm.test('Success flag is true', () => pm.expect(res.success).to.be.true);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "name": "Full Auth Flow",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"omar@test.com\",\n  \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "login"]
+                        },
+                        "description": "Login + auto-save token + test response shape."
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                                    "pm.test('Returns token', () => {",
+                                    "    const res = pm.response.json();",
+                                    "    pm.expect(res.data.token).to.be.a('string');",
+                                    "    pm.collectionVariables.set('token', res.data.token);",
+                                    "    console.log('✅ Token:', res.data.token);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

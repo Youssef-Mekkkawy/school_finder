@@ -6,35 +6,40 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
+
             $table->string('name');
             $table->foreignId('type_id')->constrained('school_types');
             $table->foreignId('location_id')->constrained('locations');
-            $table->string('email');
-            $table->string('phone');
+
+            // Contact
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
-            $table->tinyInteger('age_min');
-            $table->tinyInteger('age_max');
-            $table->tinyInteger('class_size_avg')->nullable();
-            $table->string('num_students')->nullable();
+
+            // School info
+            $table->integer('age_min')->nullable();
+            $table->integer('age_max')->nullable();
+            $table->integer('class_size_avg')->nullable();
+            $table->integer('num_students')->nullable();
             $table->decimal('foreign_ratio')->nullable();
             $table->string('transport')->nullable();
+
+            // Status
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_school_of_month')->default(false);
+            $table->string('featured_badge_text')->nullable();
+            $table->date('featured_until')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('schools');
