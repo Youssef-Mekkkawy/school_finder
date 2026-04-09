@@ -1007,3 +1007,14 @@ nav {
     right: auto;
     left: 1.5rem;
 }
+
+/* ═══════════════════════════════
+   RTL OVERRIDES (Arabic)
+   ═══════════════════════════════ */
+[dir="rtl"] .sidebar { border-right: none; border-left: 1px solid var(--border, #D6E4F0); }
+[dir="rtl"] .user-card { text-align: center; }
+[dir="rtl"] .appt-item { text-align: right; }
+[dir="rtl"] .notif-item { flex-direction: row-reverse; text-align: right; }
+[dir="rtl"] input,
+[dir="rtl"] select,
+[dir="rtl"] textarea { text-align: right; }

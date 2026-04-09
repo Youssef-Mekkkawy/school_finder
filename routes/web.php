@@ -22,6 +22,10 @@ Route::get('/schools', function () {
     return view('schools.index');
 })->name('schools.index');
 
+Route::get('/compare', function () {
+    return view('schools.compare');
+})->name('schools.compare');
+
 
 // ── PROTECTED PAGES ──────────────────────────────────────────
 Route::get('/dashboard', function () {

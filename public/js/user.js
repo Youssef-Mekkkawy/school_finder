@@ -1,7 +1,7 @@
 /* ── Token expiry check (async) ── */
 (function () {
     const token = localStorage.getItem("sf_token");
-    if (!token) return;
+    if (!token) { window.location.href = '/login'; return; }
     fetch("/api/auth/me", {
         headers: {
             Authorization: "Bearer " + token,

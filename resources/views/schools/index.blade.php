@@ -622,10 +622,298 @@
 
         </div>
     </div>
+
+    @include('home.sections.school-modal')
+    @include('home.sections.compare-modal')
+    @include('partials.toast')
 @endsection
 
 @push('scripts')
     <script>
+        /* ═══════════════════════════════════════
+           SHARED CONFIG — required by school modal
+           ═══════════════════════════════════════ */
+        const API_BASE = '/api';
+        const getToken = () => localStorage.getItem('sf_token');
+        const authHeaders = () => {
+            const h = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
+            if (getToken()) h['Authorization'] = 'Bearer ' + getToken();
+            return h;
+        };
+
+        let lang = '{{ app()->getLocale() }}';
+        let favs = JSON.parse(localStorage.getItem('sf_favs') || '[]');
+        let cmps = [];
+        let allData = [];
+        let selStar = 0;
+
+        const TR_SP = {
+            en: {
+                addFav: "Added to favorites ♥", remFav: "Removed from favorites",
+                addCmp: "added to compare", remCmp: "Removed from compare",
+                maxCmp: "Maximum 3 schools to compare", loginReq: "Please login to save favorites",
+                viewBtn: "View Details →", cmpTitle: "Compare Schools",
+                cmpEmpty: "Add schools using the compare button on each card.",
+                selMore: "Select at least 2 schools to compare.",
+                pickStar: "Please select a star rating first.",
+                writeFirst: "Please write your review first.",
+                apptSent: "Appointment request sent! ✓", revSent: "Review submitted! ✓",
+                revTitle: "Parent Reviews", submitRev: "Submit Review",
+                writeRev: "Write your review...", apptTitle: "Book Appointment",
+                apptMsg: "Message (optional)", apptSend: "Send Request",
+            },
+            ar: {
+                addFav: "تم الحفظ في المفضلة ♥", remFav: "تم الإزالة من المفضلة",
+                addCmp: "أضيف للمقارنة", remCmp: "تم الإزالة من المقارنة",
+                maxCmp: "الحد الأقصى 3 مدارس", loginReq: "سجل دخول لحفظ المفضلة",
+                viewBtn: "عرض التفاصيل →", cmpTitle: "مقارنة المدارس",
+                cmpEmpty: "أضف مدارس باستخدام زر المقارنة على كل بطاقة.",
+                selMore: "اختر مدرستين على الأقل للمقارنة.",
+                pickStar: "اختر عدد النجوم أولاً.",
+                writeFirst: "اكتب تقييمك أولاً.",
+                apptSent: "تم إرسال طلب الموعد! ✓", revSent: "تم إرسال التقييم! ✓",
+                revTitle: "تقييمات أولياء الأمور", submitRev: "إرسال التقييم",
+                writeRev: "اكتب تقييمك...", apptTitle: "حجز موعد",
+                apptMsg: "رسالة (اختياري)", apptSend: "إرسال الطلب",
+            }
+        };
+        const t = k => (TR_SP[lang] && TR_SP[lang][k]) || TR_SP.en[k] || k;
+
+        /* ═══════════════════════════════════════
+           SCHOOL MODAL FUNCTIONS
+           ═══════════════════════════════════════ */
+        async function openSch(id) {
+            selStar = 0;
+            document.getElementById('mod-title').textContent = 'Loading...';
+            document.getElementById('mod-body').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)">Loading...</div>';
+            document.getElementById('schMod').classList.add('open');
+
+            let s;
+            try {
+                const res = await fetch(`${API_BASE}/schools/${id}`, { headers: authHeaders() });
+                const json = await res.json();
+                s = json.data;
+            } catch (e) {
+                document.getElementById('mod-body').innerHTML = '<div style="padding:2rem;color:red">Failed to load school data.</div>';
+                return;
+            }
+
+            const L = lang === 'ar';
+            const loc = s.location ? (s.location.area + ', ' + s.location.city) : (s.area || '—');
+            const avg = s.rating || 0;
+            const reviews = s.reviews || [];
+
+            let canReviewData = { can_review: false, reason: 'not_logged_in', has_appointment: false };
+            try {
+                const crRes = await fetch(`${API_BASE}/schools/${id}/can-review`, { headers: authHeaders() });
+                if (crRes.ok) canReviewData = await crRes.json();
+            } catch (e) { /* fall back to not_logged_in */ }
+
+            document.getElementById('mod-title').textContent = s.name;
+            document.getElementById('mod-body').innerHTML = `
+        <!-- Info -->
+        <div class="msec">
+          <h4>${L ? 'معلومات المدرسة' : 'School Information'}</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .8rem">
+            ${mr(L ? 'النوع' : 'Type', s.type || '—')}
+            ${mr(L ? 'الموقع' : 'Location', loc)}
+            ${mr(L ? 'العمر' : 'Age Range', `${s.age_min || '?'}–${s.age_max || '?'} ${L ? 'سنة' : 'yrs'}`)}
+            ${mr(L ? 'حجم الفصل' : 'Class Size', s.class_size_avg ? `~${s.class_size_avg}` : 'N/A')}
+            ${mr(L ? 'عدد الطلاب' : 'Students', s.num_students || 'N/A')}
+            ${mr(L ? 'المواصلات' : 'Transport', s.transport || '—')}
+          </div>
+        </div>
+        <!-- Fees -->
+        <div class="msec">
+          <h4>${L ? 'المصاريف' : 'Fees'}</h4>
+          <div style="background:#F8FAFF;border-radius:10px;padding:.9rem 1rem;border:1.5px solid var(--border)">
+            <div style="font-family:'Sora',sans-serif;font-size:1.25rem;font-weight:800;color:var(--navy)">${s.feeDisplay || '—'}</div>
+            <div style="font-size:.8rem;color:var(--muted);margin-top:.15rem">${L ? 'سنوياً — العام الدراسي 2024/2025' : 'per year — Academic Year 2024/2025'}</div>
+          </div>
+        </div>
+        <!-- Curricula -->
+        <div class="msec">
+          <h4>${L ? 'المناهج والشهادات' : 'Curricula & Certificates'}</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem">${(s.curricula || []).map(c => `<span class="tag" style="font-size:.84rem;padding:.28rem .75rem">${c}</span>`).join('')}</div>
+        </div>
+        <!-- Contact -->
+        <div class="msec">
+          <h4>${L ? 'التواصل' : 'Contact'}</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .8rem">
+            ${s.phone ? mr(L ? 'الهاتف' : 'Phone', `<a href="tel:${s.phone}" style="color:var(--teal);text-decoration:none">${s.phone}</a>`) : ''}
+            ${s.email ? mr(L ? 'الإيميل' : 'Email', `<a href="mailto:${s.email}" style="color:var(--teal);text-decoration:none">${s.email}</a>`) : ''}
+            ${s.website ? mr(L ? 'الموقع' : 'Website', `<a href="${s.website}" target="_blank" style="color:var(--teal);text-decoration:none">${s.website.replace('https://', '')}</a>`) : ''}
+            ${s.facebook ? mr('Facebook', `<a href="${s.facebook}" target="_blank" style="color:var(--teal);text-decoration:none">View Page</a>`) : ''}
+            ${s.instagram ? mr('Instagram', `<a href="${s.instagram}" target="_blank" style="color:var(--teal);text-decoration:none">View Profile</a>`) : ''}
+          </div>
+        </div>
+        <!-- Map -->
+        <div class="msec">
+          <h4>${L ? 'الموقع على الخريطة' : 'Location on Map'}</h4>
+          ${(s.location && s.location.latitude && s.location.longitude)
+            ? `<div id="school-map-canvas" style="width:100%;height:280px;border-radius:10px;border:1.5px solid var(--border);overflow:hidden"></div>`
+            : `<div class="map-ph">📍 ${loc}</div>`
+          }
+        </div>
+        <!-- Reviews -->
+        <div class="msec">
+          <h4>${t('revTitle')} — ★ ${avg} (${s.reviewCount || 0})</h4>
+          ${reviews.length ? reviews.map(r => `
+            <div class="rev-item">
+              <div class="rev-auth">${r.user || 'Anonymous'}${r.is_verified ? `<span style="background:#E8F5F2;color:var(--teal);font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;margin-left:.4rem;font-family:'Sora',sans-serif">✓ Verified Parent</span>` : ''}</div>
+              <div class="rev-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+              <div class="rev-txt">${r.comment}</div>
+            </div>`).join('') : `<div style="color:var(--muted);font-size:.87rem;padding:.5rem 0">${L ? 'لا توجد تقييمات بعد.' : 'No reviews yet.'}</div>`}
+        </div>
+        <!-- Write Review -->
+        <div class="msec">
+          <h4>${t('submitRev')}</h4>
+          ${canReviewData.can_review ? `
+            <div style="background:#E8F5F2;border:1.5px solid var(--teal);border-radius:10px;padding:.7rem 1rem;margin-bottom:.9rem;font-size:.85rem;color:var(--teal);font-weight:600">
+              ✓ You visited this school — your review will be marked as Verified.
+            </div>
+            <div class="star-r" id="stars">${[1,2,3,4,5].map(i=>`<span class="star" id="st${i}" onclick="setStar(${i})">★</span>`).join('')}</div>
+            <textarea class="ri" id="revTxt" rows="3" placeholder="${t('writeRev')}"></textarea>
+            <button class="sub-btn" onclick="submitRev(${s.id})">${t('submitRev')}</button>
+          ` : canReviewData.reason === 'not_logged_in' ? `
+            <div style="background:#F0F6FF;border:1.5px solid var(--border);border-radius:10px;padding:1rem 1.1rem;text-align:center">
+              <div style="font-size:.9rem;color:var(--muted);margin-bottom:.6rem">Sign in to leave a review for this school.</div>
+              <button class="sub-btn" onclick="document.getElementById('loginBtn')?.click()" style="width:auto;padding:.45rem 1.4rem">Login / Sign Up</button>
+            </div>
+          ` : `
+            <div style="background:#FFF8F2;border:1.5px solid var(--warn);border-radius:10px;padding:1rem 1.1rem">
+              <div style="font-weight:700;color:var(--warn);margin-bottom:.35rem;font-family:'Sora',sans-serif;font-size:.9rem">Visit Required</div>
+              <div style="font-size:.84rem;color:var(--muted);margin-bottom:.7rem">Only parents who have visited this school can submit a review.</div>
+              <button class="sub-btn" onclick="window.location.href='/dashboard'" style="background:var(--warn);width:auto;padding:.45rem 1.4rem">Book Appointment →</button>
+            </div>
+          `}
+        </div>
+        <!-- Appointment -->
+        <div class="msec" id="appt-section">
+          <h4>${t('apptTitle')}</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.7rem">
+            <input class="fi-input" id="apptDate" type="date">
+            <input class="fi-input" id="apptMsg" placeholder="${t('apptMsg')}">
+          </div>
+          <button class="sub-btn" onclick="submitAppt(${s.id})">${t('apptSend')}</button>
+        </div>
+      `;
+            if (s.location && s.location.latitude && s.location.longitude) {
+                initSchoolMap(s.location.latitude, s.location.longitude, s.name);
+            }
+        }
+
+        function mr(lbl, val) { return `<div><div class="mlbl">${lbl}</div><div class="mval">${val}</div></div>`; }
+        function closeSch(e) { if (e.target === document.getElementById('schMod')) document.getElementById('schMod').classList.remove('open'); }
+        function initSchoolMap(lat, lng, name) {
+            const tryInit = () => {
+                if (typeof google === 'undefined' || !google.maps) { setTimeout(tryInit, 150); return; }
+                const el = document.getElementById('school-map-canvas');
+                if (!el) return;
+                const pos = { lat: parseFloat(lat), lng: parseFloat(lng) };
+                const map = new google.maps.Map(el, { center: pos, zoom: 15 });
+                new google.maps.Marker({ position: pos, map, title: name });
+            };
+            tryInit();
+        }
+        function setStar(n) { selStar = n; for (let i = 1; i <= 5; i++) document.getElementById('st' + i).classList.toggle('on', i <= n); }
+        function scrollToAppt() { const el = document.getElementById('appt-section'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        async function submitRev(id) {
+            if (!selStar) { toast(t('pickStar'), 'err'); return; }
+            const txt = document.getElementById('revTxt').value.trim();
+            if (!txt) { toast(t('writeFirst'), 'err'); return; }
+            if (!getToken()) { toast(t('loginReq'), 'err'); return; }
+            try {
+                const res = await fetch(`${API_BASE}/schools/${id}/reviews`, {
+                    method: 'POST', headers: authHeaders(),
+                    body: JSON.stringify({ rating: selStar, comment: txt }),
+                });
+                const json = await res.json();
+                if (res.ok && json.success) { toast(t('revSent'), 'ok'); openSch(id); }
+                else toast(json.message || 'Failed to submit review', 'err');
+            } catch (e) { toast('Network error', 'err'); }
+        }
+        async function submitAppt(id) {
+            if (!getToken()) { toast(t('loginReq'), 'err'); return; }
+            const preferred_date = document.getElementById('apptDate')?.value;
+            const message = document.getElementById('apptMsg')?.value || '';
+            if (!preferred_date) { toast('Please select a date', 'err'); return; }
+            try {
+                const res = await fetch(`${API_BASE}/appointments`, {
+                    method: 'POST', headers: authHeaders(),
+                    body: JSON.stringify({ school_id: id, preferred_date, message }),
+                });
+                const json = await res.json();
+                if (res.ok && json.success) { toast(t('apptSent'), 'ok'); setTimeout(() => document.getElementById('schMod').classList.remove('open'), 700); }
+                else toast(json.message || 'Failed to send request', 'err');
+            } catch (e) { toast('Network error', 'err'); }
+        }
+
+        function toggleCmp(id) {
+            if (cmps.includes(id)) { cmps = cmps.filter(x => x !== id); toast(t('remCmp'), 'inf'); }
+            else {
+                if (cmps.length >= 3) { toast(t('maxCmp'), 'err'); return; }
+                cmps.push(id);
+                toast(`${t('addCmp')}`, 'ok');
+            }
+            updateCBar();
+        }
+        function clearCmp() { cmps = []; updateCBar(); }
+        function updateCBar() {
+            const bar = document.getElementById('cbar'), items = document.getElementById('cbitems');
+            if (!bar || !items) return;
+            items.innerHTML = cmps.map(id => `<div class="ci">School<span class="cir" onclick="toggleCmp(${id})">✕</span></div>`).join('');
+            bar.classList.toggle('on', cmps.length > 0);
+        }
+        async function showCmpModal() {
+            if (!cmps.length) { toast(t('cmpEmpty'), 'inf'); return; }
+            if (cmps.length < 2) { toast(t('selMore'), 'inf'); return; }
+            const params = cmps.map(id => `ids[]=${id}`).join('&');
+            let schools;
+            try {
+                const res = await fetch(`${API_BASE}/schools/compare?${params}`, { headers: authHeaders() });
+                const json = await res.json();
+                schools = json.data;
+            } catch (e) {
+                schools = [];
+            }
+            const fields = [
+                { k: lang === 'ar' ? 'النوع' : 'Type', v: s => s.type || '—' },
+                { k: lang === 'ar' ? 'الموقع' : 'Location', v: s => s.area || s.location || '—' },
+                { k: lang === 'ar' ? 'المناهج' : 'Curricula', v: s => (s.curricula || []).join(', ') },
+                { k: lang === 'ar' ? 'المصاريف' : 'Fees', v: s => s.feeDisplay || '—' },
+                { k: lang === 'ar' ? 'العمر' : 'Age Range', v: s => `${s.age_min || '?'}–${s.age_max || '?'} ${lang === 'ar' ? 'سنة' : 'yrs'}` },
+                { k: lang === 'ar' ? 'حجم الفصل' : 'Class Size', v: s => s.class_size_avg ? `~${s.class_size_avg}` : 'N/A' },
+                { k: lang === 'ar' ? 'التقييم' : 'Rating', v: s => s.rating != null ? `★ ${s.rating}` : '★ —' },
+                { k: lang === 'ar' ? 'المواصلات' : 'Transport', v: s => s.transport || '—' },
+            ];
+            const cw = Math.floor(100 / (schools.length + 1));
+            const html = `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.84rem;min-width:500px">
+        <thead><tr>
+          <th style="padding:.55rem .8rem;text-align:${lang === 'ar' ? 'right' : 'left'};border-bottom:2px solid var(--border);color:var(--muted);font-weight:600;width:${cw}%">${lang === 'ar' ? 'الخاصية' : 'Feature'}</th>
+          ${schools.map(s => `<th style="padding:.55rem .8rem;text-align:${lang === 'ar' ? 'right' : 'left'};border-bottom:2px solid var(--teal);color:var(--navy);font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;width:${cw}%">${s.name}</th>`).join('')}
+        </tr></thead>
+        <tbody>${fields.map((f, idx) => `
+          <tr style="background:${idx % 2 === 0 ? '#F8FAFF' : 'white'}">
+            <td style="padding:.55rem .8rem;color:var(--muted);font-weight:500">${f.k}</td>
+            ${schools.map(s => `<td style="padding:.55rem .8rem;color:var(--text);font-weight:500">${f.v(s)}</td>`).join('')}
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+            document.getElementById('cmp-mod-t').textContent = t('cmpTitle');
+            document.getElementById('cmp-body').innerHTML = html;
+            document.getElementById('cmpMod').classList.add('open');
+        }
+
+        let ttimer;
+        function toast(msg, type = 'inf') {
+            const el = document.getElementById('toast');
+            if (!el) return;
+            el.textContent = msg; el.className = `toast show ${type}`;
+            clearTimeout(ttimer);
+            ttimer = setTimeout(() => el.className = 'toast', 2500);
+        }
+
         // ── State ─────────────────────────────────────────────────────────────────────
         const SP = {
             page: 1,
@@ -853,13 +1141,7 @@
 
         // ── School actions ────────────────────────────────────────────────────────────
         function spOpenSchool(id) {
-            // Delegate to existing showSchoolModal if it exists (from home page JS)
-            if (typeof showSchoolModal === 'function') {
-                showSchoolModal(id);
-            } else {
-                // Fallback: open API in new tab (replace with your modal call)
-                window.dispatchEvent(new CustomEvent('openSchool', { detail: { id } }));
-            }
+            openSch(id);
         }
 
         function spToggleFav(id) {
@@ -897,7 +1179,7 @@
         }
 
         function spAddCompare(id) {
-            if (typeof addToCompare === 'function') addToCompare(id);
+            toggleCmp(id);
         }
 
         function spShowError() {

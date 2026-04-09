@@ -838,7 +838,11 @@
 
 @push('scripts')
 <script>
-        /* ── Auth Guard (admin) — handled by inline script in the content section above ── */
+        /* ── Auth Guard (admin) ── */
+        (function () {
+            const token = localStorage.getItem('sf_token');
+            if (!token) { window.location.href = '/login'; return; }
+        })();
 
         /* ═══════════════════════════════════════
            DUMMY DATA

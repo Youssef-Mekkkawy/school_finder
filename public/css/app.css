@@ -1563,3 +1563,10 @@
        [dir="rtl"] .step-arrow {
            transform: scaleX(-1);
        }
+
+       /* ═══════════════════════════════
+          RTL OVERRIDES — inputs
+          ═══════════════════════════════ */
+       [dir="rtl"] input,
+       [dir="rtl"] select,
+       [dir="rtl"] textarea { text-align: right; }

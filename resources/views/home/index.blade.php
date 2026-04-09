@@ -649,33 +649,6 @@
         }
         init();
 
-        /* ── Nav auth state ── */
-        function initNav() {
-            var token = localStorage.getItem('sf_token');
-            var raw   = localStorage.getItem('sf_user');
-            if (!token || !raw) return;
-
-            var user  = JSON.parse(raw);
-            var parts = user.name.trim().split(/\s+/);
-            var inits = parts.length >= 2
-                ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-                : user.name.slice(0, 2).toUpperCase();
-
-            document.getElementById('avatar-initials').textContent = inits;
-            document.getElementById('ud-name').textContent         = user.name;
-            document.getElementById('ud-email').textContent        = user.email;
-
-            if (user.role === 'admin') {
-                document.getElementById('ud-dashboard').href = '/admin';
-                var s = document.getElementById('ud-settings');
-                if (s) s.style.display = 'none';
-            }
-
-            document.getElementById('nl-login').style.display  = 'none';
-            document.getElementById('nl-reg').style.display    = 'none';
-            document.getElementById('user-menu').style.display = 'flex';
-        }
-
         function toggleUserMenu(e) {
             e.stopPropagation();
             var dd  = document.getElementById('user-dropdown');
@@ -698,6 +671,5 @@
             window.location.href = '/login';
         }
 
-        initNav();
     </script>
 @endpush
