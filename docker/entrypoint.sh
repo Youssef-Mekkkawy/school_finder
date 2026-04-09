@@ -3,11 +3,34 @@ set -e
 
 echo "🚀 Starting SchoolFinder Egypt..."
 
-# ── Generate app key if not set ───────────────────────────────────────────────
-if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "base64:your-key-here" ]; then
-    echo "⚙️  Generating APP_KEY..."
-    php artisan key:generate --force
-fi
+# ── Create .env from Railway environment variables ────────────────────────────
+echo "⚙️  Creating .env file..."
+cat > /var/www/.env << EOF
+APP_NAME="${APP_NAME:-SchoolFinder Egypt}"
+APP_ENV="${APP_ENV:-production}"
+APP_KEY="${APP_KEY}"
+APP_DEBUG="${APP_DEBUG:-false}"
+APP_URL="${APP_URL:-http://localhost}"
+ASSET_URL="${ASSET_URL:-}"
+
+LOG_CHANNEL="${LOG_CHANNEL:-stderr}"
+LOG_LEVEL=error
+
+DB_CONNECTION="${DB_CONNECTION:-mysql}"
+DB_HOST="${DB_HOST}"
+DB_PORT="${DB_PORT:-3306}"
+DB_DATABASE="${DB_DATABASE}"
+DB_USERNAME="${DB_USERNAME}"
+DB_PASSWORD="${DB_PASSWORD}"
+
+CACHE_DRIVER="${CACHE_DRIVER:-file}"
+SESSION_DRIVER="${SESSION_DRIVER:-file}"
+SESSION_LIFETIME=120
+QUEUE_CONNECTION=sync
+
+GOOGLE_MAPS_KEY="${GOOGLE_MAPS_KEY:-}"
+EOF
+echo "✅ .env file created"
 
 # ── Cache config/routes/views ─────────────────────────────────────────────────
 echo "⚙️  Caching config, routes, views..."
