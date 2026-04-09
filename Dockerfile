@@ -1,6 +1,6 @@
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
-# Install system dependencies
+# Install system dependencies + nginx
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,7 +9,10 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    libzip-dev
+    libzip-dev \
+    nginx \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
@@ -20,16 +23,27 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy all project files (including your CSS/JS in /public)
+# Copy project files
 COPY . .
 
-# Fix for "exit code 1": Ignore platform requirements
+# Install dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-platform-reqs
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Expose port and start
-EXPOSE 8000
-CMD php artisan migrate:fresh --seed --force && php artisan config:cache && php artisan route:cache && php artisan serve --host 0.0.0.0 --port $PORT
+# Copy nginx config
+COPY docker/nginx.conf /etc/nginx/sites-available/default
+
+# Enable the site
+RUN rm -f /etc/nginx/sites-enabled/default \
+    && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# Copy and set up entrypoint
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 8080
+
+CMD ["/entrypoint.sh"]
