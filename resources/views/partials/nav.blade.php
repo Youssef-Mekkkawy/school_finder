@@ -2,8 +2,8 @@
 <nav>
     <div class="nav-i">
         <a href="#" class="logo">
-            <div class="logo-icon">SF</div>
-            <span class="logo-txt">School<span>Finder</span></span>
+            <div class="logo-icon">MCP</div>
+            <div class="logo-txt">Masar<span> Education Platform</span></div>
         </a>
         <div class="nav-links">
             <a href="#schools" id="nl-browse">{{ __('messages.nav.browse') }}</a>

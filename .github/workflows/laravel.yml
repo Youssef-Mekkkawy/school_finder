@@ -1,4 +1,4 @@
-name: SchoolFinder Egypt CI
+name: Masar Education Platform Egypt CI
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: schoolfinder_test
+          MYSQL_DATABASE: Masar Education Platform_test
         ports:
           - 3306:3306
         options: >-
@@ -48,7 +48,7 @@ jobs:
           echo "DB_CONNECTION=mysql" >> .env.testing
           echo "DB_HOST=127.0.0.1" >> .env.testing
           echo "DB_PORT=3306" >> .env.testing
-          echo "DB_DATABASE=schoolfinder_test" >> .env.testing
+          echo "DB_DATABASE=Masar Education Platform_test" >> .env.testing
           echo "DB_USERNAME=root" >> .env.testing
           echo "DB_PASSWORD=root" >> .env.testing
 

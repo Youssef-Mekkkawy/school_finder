@@ -1,5 +1,5 @@
 /**
- * SchoolFinder Egypt — API Helper
+ * Masar Education Platform Egypt — API Helper
  * All fetch calls go through these helpers.
  * Replace API_BASE if your domain changes.
  */

@@ -2,8 +2,8 @@
 <nav>
     <div class="nav-i">
         <a href="{{ route('home') }}" class="logo">
-            <div class="logo-icon">SF</div>
-            <span class="logo-txt">School<span>Finder</span></span>
+            <div class="logo-icon">MCP</div>
+            <div class="logo-txt">Masar<span> Education Platform</span></div>
         </a>
         <div style="display:flex;align-items:center;gap:.8rem">
             <form method="POST" action="{{ route('lang.switch', app()->getLocale() === 'en' ? 'ar' : 'en') }}" style="display:inline">

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — SchoolFinder Egypt</title>
+    <title>Login — Masar Education Platform Egypt</title>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
@@ -64,7 +64,7 @@
         </div><!-- end wrap -->
     </div><!-- end main -->
 
-    {{-- <div class="foot">© 2026 SchoolFinder Egypt — International Schools Database in Cairo</div>
+    {{-- <div class="foot">© 2026 Masar Education Platform Egypt — International Schools Database in Cairo</div>
     --}}
     <div class="foot">
         <span class="dev">
@@ -75,7 +75,7 @@
             </a>
         </span>
 
-        <span>© {{ date('Y') }} SchoolFinder Egypt. All rights reserved.</span>
+        <span>© {{ date('Y') }} Masar Education Platform Egypt. All rights reserved.</span>
     </div>
     <div class="toast" id="toast"></div>
 

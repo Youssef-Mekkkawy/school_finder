@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — SchoolFinder Egypt</title>
+<title>Login — Masar Education Platform Egypt</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -145,8 +145,8 @@ nav{background:var(--navy);box-shadow:0 2px 20px rgba(15,41,66,.4);}
 <nav>
   <div class="nav-i">
     <a href="homepage.html" class="logo">
-      <div class="logo-icon">SF</div>
-      <span class="logo-txt">School<span>Finder</span></span>
+      <div class="logo-icon">MCP</div>
+      <div class="logo-txt">Masar<span> Education Platform</span></div>
     </a>
     <div style="display:flex;align-items:center;gap:.8rem">
       <button class="lang-btn" onclick="toggleLang()">
@@ -169,7 +169,7 @@ nav{background:var(--navy);box-shadow:0 2px 20px rgba(15,41,66,.4);}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           <span id="pb-txt">Trusted by Parents in Cairo</span>
         </div>
-        <h2 id="pl-title">Welcome to <span>SchoolFinder</span> Egypt</h2>
+        <h2 id="pl-title">Welcome to <span>Masar Education Platform</span> Egypt</h2>
         <p id="pl-sub">Your account gives you access to favorites, reviews, appointment booking, and school comparison tools.</p>
         <div class="feature-list">
           <div class="feature">
@@ -210,7 +210,7 @@ nav{background:var(--navy);box-shadow:0 2px 20px rgba(15,41,66,.4);}
 
       <div class="form-header">
         <h3 id="form-title">Welcome back</h3>
-        <p id="form-sub">Sign in to your SchoolFinder account</p>
+        <p id="form-sub">Sign in to your Masar Education Platform account</p>
       </div>
 
       <!-- TABS -->
@@ -403,7 +403,7 @@ nav{background:var(--navy);box-shadow:0 2px 20px rgba(15,41,66,.4);}
   </div><!-- end wrap -->
 </div><!-- end main -->
 
-<div class="foot">© 2026 SchoolFinder Egypt — International Schools Database in Cairo</div>
+<div class="foot">© 2026 Masar Education Platform Egypt — International Schools Database in Cairo</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -413,14 +413,14 @@ nav{background:var(--navy);box-shadow:0 2px 20px rgba(15,41,66,.4);}
 const TR = {
   en:{
     "pb-txt":"Trusted by Parents in Cairo",
-    "pl-title":`Welcome to <span>SchoolFinder</span> Egypt`,
+    "pl-title":`Welcome to <span>Masar Education Platform</span> Egypt`,
     "pl-sub":"Your account gives you access to favorites, reviews, appointment booking, and school comparison tools.",
     f1:"Save favorite schools and compare them",
     f2:"Write and read honest parent reviews",
     f3:"Book school visits directly from the app",
     f4:"Get notified when school fees are updated",
     ps1:"Schools", ps2:"Reviews", ps3:"Always",
-    "form-title":"Welcome back","form-sub":"Sign in to your SchoolFinder account",
+    "form-title":"Welcome back","form-sub":"Sign in to your Masar Education Platform account",
     "tab-login":"Login","tab-register":"Register",
     "role-lbl":"Login as",
     "rn-user":"Parent / Student","rd-user":"Browse & compare schools",
@@ -445,15 +445,15 @@ const TR = {
     err_terms:"Please accept the terms to continue.",
     err_fields:"Please fill in all required fields.",
     err_login:"Invalid email or password. Try: user@test.com / password123",
-    err_admin:"Invalid admin credentials. Try: admin@schoolfinder.com / admin123",
+    err_admin:"Invalid admin credentials. Try: admin@Masar Education Platform.com / admin123",
     ok_login:"Login successful! Redirecting...",
-    ok_register:"Account created! Welcome to SchoolFinder.",
+    ok_register:"Account created! Welcome to Masar Education Platform.",
     ok_forgot:"Reset link sent! Check your email.",
     str_weak:"Weak", str_med:"Medium", str_strong:"Strong", str_vstrong:"Very Strong",
   },
   ar:{
     "pb-txt":"موثوق به من آلاف الآباء في القاهرة",
-    "pl-title":`مرحباً بك في <span>SchoolFinder</span> مصر`,
+    "pl-title":`مرحباً بك في <span>Masar Education Platform</span> مصر`,
     "pl-sub":"حسابك يمنحك الوصول إلى المفضلة والتقييمات وحجز المواعيد ومقارنة المدارس.",
     f1:"احفظ مدارسك المفضلة وقارنها",
     f2:"اكتب واقرأ تقييمات صادقة من أولياء الأمور",
@@ -485,9 +485,9 @@ const TR = {
     err_terms:"يرجى قبول الشروط للمتابعة.",
     err_fields:"يرجى ملء جميع الحقول المطلوبة.",
     err_login:"بيانات الدخول غير صحيحة. جرب: user@test.com / password123",
-    err_admin:"بيانات المسؤول غير صحيحة. جرب: admin@schoolfinder.com / admin123",
+    err_admin:"بيانات المسؤول غير صحيحة. جرب: admin@Masar Education Platform.com / admin123",
     ok_login:"تم تسجيل الدخول بنجاح! جاري التحويل...",
-    ok_register:"تم إنشاء الحساب! مرحباً بك في SchoolFinder.",
+    ok_register:"تم إنشاء الحساب! مرحباً بك في Masar Education Platform.",
     ok_forgot:"تم إرسال رابط الإعادة! تحقق من بريدك.",
     str_weak:"ضعيفة", str_med:"متوسطة", str_strong:"قوية", str_vstrong:"قوية جداً",
   }
@@ -503,7 +503,7 @@ let selectedRole = 'user';
 /* DUMMY CREDENTIALS — replace with Laravel API later */
 const CREDS = {
   user:  { email:'user@test.com',  pass:'password123', redirect:'user-dashboard.html' },
-  admin: { email:'admin@schoolfinder.com', pass:'admin123', redirect:'admin-dashboard.html' },
+  admin: { email:'admin@Masar Education Platform.com', pass:'admin123', redirect:'admin-dashboard.html' },
 };
 
 const t = k => (TR[lang][k] || TR.en[k] || k);
@@ -546,7 +546,7 @@ function switchTab(tab) {
     document.getElementById('form-sub').textContent   = t('form-sub');
   } else if (tab==='register') {
     document.getElementById('form-title').textContent = lang==='ar'?'إنشاء حساب جديد':'Create your account';
-    document.getElementById('form-sub').textContent   = lang==='ar'?'انضم إلى SchoolFinder مجاناً':'Join SchoolFinder for free';
+    document.getElementById('form-sub').textContent   = lang==='ar'?'انضم إلى Masar Education Platform مجاناً':'Join Masar Education Platform for free';
   }
 }
 

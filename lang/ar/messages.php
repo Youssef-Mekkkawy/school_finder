@@ -86,7 +86,7 @@ return [
         'step4_title'  => 'احجز زيارة',
         'step4_body'   => 'أرسل طلب موعد مباشرة للمدرسة.',
         'cta_title'    => 'هل أنت مستعد للعثور على المدرسة؟',
-        'cta_sub'      => 'انضم إلى آلاف الآباء الذين يستخدمون SchoolFinder.',
+        'cta_sub'      => 'انضم إلى آلاف الآباء الذين يستخدمون Masar Education Platform.',
         'cta_browse'   => 'تصفح كل المدارس',
         'cta_register' => 'إنشاء حساب مجاني',
     ],
@@ -136,7 +136,7 @@ return [
     // LOGIN PAGE
     'login' => [
         'trusted'      => 'موثوق به من آلاف الآباء في القاهرة',
-        'welcome'      => 'مرحباً بك في SchoolFinder مصر',
+        'welcome'      => 'مرحباً بك في Masar Education Platform مصر',
         'sub'          => 'حسابك يمنحك الوصول إلى المفضلة والتقييمات وحجز المواعيد ومقارنة المدارس.',
         'f1'           => 'احفظ مدارسك المفضلة وقارنها',
         'f2'           => 'اكتب واقرأ تقييمات صادقة من أولياء الأمور',
@@ -171,7 +171,7 @@ return [
         'welcome_back' => 'مرحباً بعودتك',
         'sign_in_sub'  => 'سجل الدخول إلى حسابك',
         'create_title' => 'إنشاء حساب جديد',
-        'join_free'    => 'انضم إلى SchoolFinder مجاناً',
+        'join_free'    => 'انضم إلى Masar Education Platform مجاناً',
         'str_weak'     => 'ضعيفة',
         'str_med'      => 'متوسطة',
         'str_strong'   => 'قوية',
@@ -295,7 +295,7 @@ return [
     // SUCCESS MESSAGES
     'success' => [
         'login'      => 'تم تسجيل الدخول بنجاح! جاري التحويل...',
-        'register'   => 'تم إنشاء الحساب! مرحباً بك في SchoolFinder.',
+        'register'   => 'تم إنشاء الحساب! مرحباً بك في Masar Education Platform.',
         'forgot'     => 'تم إرسال رابط الإعادة! تحقق من بريدك.',
         'profile'    => 'تم تحديث الملف الشخصي!',
         'password'   => 'تم تحديث كلمة المرور!',

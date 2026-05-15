@@ -1,5 +1,5 @@
 /**
- * SchoolFinder Egypt — Shared UI Helpers
+ * Masar Education Platform Egypt — Shared UI Helpers
  * Toast, language toggle base, and common utilities.
  */
 

@@ -136,7 +136,7 @@ return [
     // LOGIN PAGE
     'login' => [
         'trusted'      => 'Trusted by Parents in Cairo',
-        'welcome'      => 'Welcome to SchoolFinder Egypt',
+        'welcome'      => 'Welcome to Masar Education Platform Egypt',
         'sub'          => 'Your account gives you access to favorites, reviews, appointment booking, and school comparison tools.',
         'f1'           => 'Save favorite schools and compare them',
         'f2'           => 'Write and read honest parent reviews',
@@ -169,9 +169,9 @@ return [
         'send_reset'   => 'Send Reset Link →',
         'back_login'   => '← Back to Login',
         'welcome_back' => 'Welcome back',
-        'sign_in_sub'  => 'Sign in to your SchoolFinder account',
+        'sign_in_sub'  => 'Sign in to your Masar Education Platform account',
         'create_title' => 'Create your account',
-        'join_free'    => 'Join SchoolFinder for free',
+        'join_free'    => 'Join Masar Education Platform for free',
         'str_weak'     => 'Weak',
         'str_med'      => 'Medium',
         'str_strong'   => 'Strong',
@@ -295,7 +295,7 @@ return [
     // SUCCESS MESSAGES
     'success' => [
         'login'      => 'Login successful! Redirecting...',
-        'register'   => 'Account created! Welcome to SchoolFinder.',
+        'register'   => 'Account created! Welcome to Masar Education Platform.',
         'forgot'     => 'Reset link sent! Check your email.',
         'profile'    => 'Profile updated!',
         'password'   => 'Password updated!',

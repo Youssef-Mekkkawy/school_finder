@@ -1,7 +1,7 @@
 {
     "info": {
-        "name": "SchoolFinder Egypt API",
-        "description": "Complete API collection for SchoolFinder Egypt.\n\n**How to use:**\n1. Set `base_url` variable to your server URL\n2. Run **Login (User)** or **Login (Admin)** — token is saved automatically\n3. All protected endpoints use the token automatically\n\n**Variables:**\n- `base_url` → http://localhost:8000/api\n- `token` → auto-set after login\n- `admin_token` → auto-set after admin login",
+        "name": "Masar Education Platform Egypt API",
+        "description": "Complete API collection for Masar Education Platform Egypt.\n\n**How to use:**\n1. Set `base_url` variable to your server URL\n2. Run **Login (User)** or **Login (Admin)** — token is saved automatically\n3. All protected endpoints use the token automatically\n\n**Variables:**\n- `base_url` → http://localhost:8000/api\n- `token` → auto-set after login\n- `admin_token` → auto-set after admin login",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "variable": [
@@ -154,7 +154,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"email\": \"admin@schoolfinder.com\",\n  \"password\": \"admin123\"\n}"
+                            "raw": "{\n  \"email\": \"admin@Masar Education Platform.com\",\n  \"password\": \"admin123\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/auth/admin/login",
@@ -1236,7 +1236,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"target\": \"all\",\n  \"title\": \"New Schools Added!\",\n  \"body\": \"We have added 100 new international schools to SchoolFinder Egypt. Check them out now!\",\n  \"type\": \"announcement\"\n}"
+                                    "raw": "{\n  \"target\": \"all\",\n  \"title\": \"New Schools Added!\",\n  \"body\": \"We have added 100 new international schools to Masar Education Platform Egypt. Check them out now!\",\n  \"type\": \"announcement\"\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/admin/notifications/send",

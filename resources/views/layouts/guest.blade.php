@@ -9,7 +9,7 @@
         window.IS_RTL = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};
         window.LANG = @json(trans('messages'));
     </script>
-    <title>@yield('title', 'SchoolFinder Egypt')</title>
+    <title>@yield('title', 'Masar Education Platform Egypt')</title>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"

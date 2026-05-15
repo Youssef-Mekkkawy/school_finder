@@ -8,7 +8,7 @@
             </svg>
             <span id="pb-txt">Trusted by Parents in Cairo</span>
         </div>
-        <h2 id="pl-title">Welcome to <span>SchoolFinder</span> Egypt</h2>
+        <h2 id="pl-title">Welcome to <span>Masar Education Platform</span> Egypt</h2>
         <p id="pl-sub">Your account gives you access to favorites, reviews, appointment booking, and school
             comparison tools.</p>
         <div class="feature-list">
@@ -67,7 +67,7 @@
 
     <div class="form-header">
         <h3 id="form-title">Welcome back</h3>
-        <p id="form-sub">Sign in to your SchoolFinder account</p>
+        <p id="form-sub">Sign in to your Masar Education Platform account</p>
     </div>
 
     <!-- TABS -->

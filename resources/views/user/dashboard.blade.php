@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard — SchoolFinder Egypt</title>
+    <title>My Dashboard — Masar Education Platform Egypt</title>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
@@ -20,8 +20,8 @@
     <nav>
         <div class="nav-i">
             <a href="{{ url('/') }}" class="logo">
-                <div class="logo-icon">SF</div>
-                <span class="logo-txt">School<span>Finder</span></span>
+                <div class="logo-icon">MCP</div>
+                <div class="logo-txt">Masar<span> Education Platform</span></div>
             </a>
             <div class="nav-right">
                 <form method="POST" action="{{ route('lang.switch', app()->getLocale() === 'en' ? 'ar' : 'en') }}"

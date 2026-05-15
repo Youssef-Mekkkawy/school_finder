@@ -1,4 +1,4 @@
-# SchoolFinder Egypt — Web Fixes & Features
+# Masar Education Platform Egypt — Web Fixes & Features
 # Claude Code Task File
 
 ## ═══════════════════════════════════════════════════════════
@@ -433,7 +433,7 @@ Test each fix:
 2. Login as omar@test.com → nav shows user avatar ✓
 3. Refresh any page while logged in → nav still shows user avatar ✓
 4. /dashboard → real data loads (favorites, appointments, etc.) ✓
-5. /admin → login as admin@schoolfinder.com → stats load ✓
+5. /admin → login as admin@Masar Education Platform.com → stats load ✓
 6. Switch to Arabic → layout flips RTL properly ✓
 7. /compare?ids[]=8&ids[]=15 → comparison table renders ✓
 

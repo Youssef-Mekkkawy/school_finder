@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SchoolFinder Egypt — Find the Right International School')
+@section('title', 'Masar Education Platform Egypt — Find the Right International School')
 
 @section('content')
     @include('home.sections.hero')
@@ -94,7 +94,7 @@
                 "s2t": "اعرض الملفات", "s2b": "استكشف ملفات المدارس التفصيلية.",
                 "s3t": "قارن المدارس", "s3b": "أضف حتى 3 مدارس وقارنها جنباً إلى جنب.",
                 "s4t": "احجز زيارة", "s4b": "أرسل طلب موعد مباشرة للمدرسة.",
-                "cta-t": "هل أنت مستعد للعثور على المدرسة؟", "cta-s": "انضم إلى آلاف الآباء الذين يستخدمون SchoolFinder.",
+                "cta-t": "هل أنت مستعد للعثور على المدرسة؟", "cta-s": "انضم إلى آلاف الآباء الذين يستخدمون Masar Education Platform.",
                 "cta-b": "تصفح كل المدارس", "cta-r": "إنشاء حساب مجاني",
                 "ft-desc": "الدليل الأشمل للمدارس الدولية في مصر.",
                 "ft-s": "المدارس", "ft-p": "المنصة", "ft-a": "الحساب",

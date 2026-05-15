@@ -4,7 +4,7 @@
         <div class="fg">
             <div class="fb">
                 <a href="#" class="logo" style="display:inline-flex">
-                    <div class="logo-icon">SF</div><span class="logo-txt">School<span>Finder</span></span>
+                    <div class="logo-icon">MCP</div><div class="logo-txt">Masar<span> Education Platform</span></div>
                 </a>
                 <p id="ft-desc">Egypt's most comprehensive directory of international schools.</p>
             </div>
@@ -39,7 +39,7 @@
                 </a>
             </span>
 
-            <span>© {{ date('Y') }} SchoolFinder Egypt. All rights reserved.</span>
+            <span>© {{ date('Y') }} Masar Education Platform Egypt. All rights reserved.</span>
         </div>
     </div>
 </footer>

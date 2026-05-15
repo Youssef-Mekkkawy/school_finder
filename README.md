@@ -6,7 +6,7 @@
 <img src="https://img.shields.io/badge/Android-Java-3DDC84?style=for-the-badge&logo=android&logoColor=white"/>
 <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge"/>
 
-# SchoolFinder Egypt 🏫
+# Masar Education Platform Egypt 🏫
 
 **The ultimate platform for finding international schools in Egypt**
 
@@ -36,7 +36,7 @@ Browse · Compare · Book Appointments · Read Verified Reviews
 
 ## About
 
-SchoolFinder Egypt helps Egyptian parents **discover, compare, and contact** international schools across Cairo and Egypt. Parents can search by curriculum, location, and fees — then book a school visit appointment directly through the platform.
+Masar Education Platform Egypt helps Egyptian parents **discover, compare, and contact** international schools across Cairo and Egypt. Parents can search by curriculum, location, and fees — then book a school visit appointment directly through the platform.
 
 ### Key Highlights
 
@@ -148,8 +148,8 @@ Node.js (optional, for assets)
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/your-username/schoolfinder-egypt.git
-cd schoolfinder-egypt
+git clone https://github.com/your-username/Masar Education Platform-egypt.git
+cd Masar Education Platform-egypt
 ```
 
 **2. Install PHP dependencies**
@@ -171,7 +171,7 @@ php artisan key:generate
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=schoolfinder
+DB_DATABASE=Masar Education Platform
 DB_USERNAME=root
 DB_PASSWORD=your_password
 ```
@@ -200,7 +200,7 @@ API:      http://localhost:8000/api
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@schoolfinder.com | admin123 |
+| Admin | admin@Masar Education Platform.com | admin123 |
 | Parent | omar@test.com | password123 |
 | Parent | sara@test.com | password123 |
 
@@ -416,7 +416,7 @@ stateDiagram-v2
 
 ### Setup
 
-1. Open `schoolfinder-android/` in Android Studio
+1. Open `Masar Education Platform-android/` in Android Studio
 2. Update `BASE_URL` in `ApiClient.java`:
 
 ```java
@@ -446,7 +446,7 @@ utils/       → SessionManager, NetworkUtils
 ## Project Structure
 
 ```
-schoolfinder-egypt/
+Masar Education Platform-egypt/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/
@@ -487,7 +487,7 @@ schoolfinder-egypt/
 ├── .github/
 │   └── workflows/
 │       └── laravel.yml   ← CI/CD pipeline
-├── schoolfinder-android/ ← Android app source
+├── Masar Education Platform-android/ ← Android app source
 └── README.md
 ```
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Compare Schools — SchoolFinder Egypt')
+@section('title', 'Compare Schools — Masar Education Platform Egypt')
 
 @push('styles')
 <style>

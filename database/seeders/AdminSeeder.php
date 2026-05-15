@@ -12,22 +12,22 @@ class AdminSeeder extends Seeder
     {
         Admin::create([
             'name'     => 'Admin',
-            'email'    => 'admin@schoolfinder.com',
+            'email'    => 'admin@Masar Education Platform.com',
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
             'name'     => 'Youssef Elsayed',
-            'email'    => 'youssef@schoolfinder.com',
+            'email'    => 'youssef@Masar Education Platform.com',
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
             'name'     => 'Omar Goda',
-            'email'    => 'omar@schoolfinder.com',
+            'email'    => 'omar@Masar Education Platform.com',
             'password' => Hash::make('admin123'),
         ]);
         Admin::create([
             'name'     => 'Ahmed Yasser',
-            'email'    => 'ahmed@schoolfinder.com',
+            'email'    => 'ahmed@Masar Education Platform.com',
             'password' => Hash::make('admin123'),
         ]);
     }

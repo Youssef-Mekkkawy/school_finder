@@ -4,7 +4,7 @@
 const TR = {
     en: {
         "pb-txt": "Trusted by Parents in Cairo",
-        "pl-title": `Welcome to <span>SchoolFinder</span> Egypt`,
+        "pl-title": `Welcome to <span>Masar Education Platform</span> Egypt`,
         "pl-sub":
             "Your account gives you access to favorites, reviews, appointment booking, and school comparison tools.",
         f1: "Save favorite schools and compare them",
@@ -15,7 +15,7 @@ const TR = {
         ps2: "Reviews",
         ps3: "Always",
         "form-title": "Welcome back",
-        "form-sub": "Sign in to your SchoolFinder account",
+        "form-sub": "Sign in to your Masar Education Platform account",
         "tab-login": "Login",
         "tab-register": "Register",
         "role-lbl": "Login as",
@@ -55,7 +55,7 @@ const TR = {
         err_login: "Invalid email or password.",
         err_admin: "Invalid admin credentials.",
         ok_login: "Login successful! Redirecting...",
-        ok_register: "Account created! Welcome to SchoolFinder.",
+        ok_register: "Account created! Welcome to Masar Education Platform.",
         ok_forgot: "Reset link sent! Check your email.",
         str_weak: "Weak",
         str_med: "Medium",
@@ -64,7 +64,7 @@ const TR = {
     },
     ar: {
         "pb-txt": "موثوق به من آلاف الآباء في القاهرة",
-        "pl-title": `مرحباً بك في <span>SchoolFinder</span> مصر`,
+        "pl-title": `مرحباً بك في <span>Masar Education Platform</span> مصر`,
         "pl-sub":
             "حسابك يمنحك الوصول إلى المفضلة والتقييمات وحجز المواعيد ومقارنة المدارس.",
         f1: "احفظ مدارسك المفضلة وقارنها",
@@ -115,7 +115,7 @@ const TR = {
         err_login: "بيانات الدخول غير صحيحة.",
         err_admin: "بيانات المسؤول غير صحيحة.",
         ok_login: "تم تسجيل الدخول بنجاح! جاري التحويل...",
-        ok_register: "تم إنشاء الحساب! مرحباً بك في SchoolFinder.",
+        ok_register: "تم إنشاء الحساب! مرحباً بك في Masar Education Platform.",
         ok_forgot: "تم إرسال رابط الإعادة! تحقق من بريدك.",
         str_weak: "ضعيفة",
         str_med: "متوسطة",
@@ -191,8 +191,8 @@ function switchTab(tab) {
             lang === "ar" ? "إنشاء حساب جديد" : "Create your account";
         document.getElementById("form-sub").textContent =
             lang === "ar"
-                ? "انضم إلى SchoolFinder مجاناً"
-                : "Join SchoolFinder for free";
+                ? "انضم إلى Masar Education Platform مجاناً"
+                : "Join Masar Education Platform for free";
     }
 }
 

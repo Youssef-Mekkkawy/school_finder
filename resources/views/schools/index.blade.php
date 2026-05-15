@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('messages.nav.browse') . ' — SchoolFinder Egypt')
+@section('title', __('messages.nav.browse') . ' — Masar Education Platform Egypt')
 
 @push('styles')
     <style>

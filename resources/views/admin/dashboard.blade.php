@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Dashboard — SchoolFinder Egypt')
+@section('title', 'Admin Dashboard — Masar Education Platform Egypt')
 
 @section('content')
 <!-- ── SIDEBAR ── -->
     <div class="sidebar" id="sidebar">
         <div class="sb-logo">
-            <div class="logo-icon">SF</div>
+            <div class="logo-icon">MCP</div>
             <div>
                 <div class="logo-txt">School<span>Finder</span></div>
             </div>
